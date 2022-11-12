@@ -23,7 +23,7 @@ internal class ChoiceNode : BaseNode
 
         foreach (ChoiceData cdata in choiceData)
         {
-            if (cdata.index != -1)
+            if (cdata.enabled)
             {
                 ChoiceNode node = new ChoiceNode(cdata);
                 graphView.AddElement(node);
@@ -36,7 +36,7 @@ internal class ChoiceNode : BaseNode
         //ノードを接続する
         foreach (ChoiceNode node in nodes)
         {
-            if (node == null || node.data.index == -1) continue;
+            if (node == null) continue;
             //ChoiceからParagraphにつなぐ
             if (node.data.nextParagraphIndex == -1)
                 continue;

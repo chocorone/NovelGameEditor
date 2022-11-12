@@ -68,18 +68,19 @@ public class NovelData : ScriptableObject
         _paragraphList.Clear();
 
         ParagraphData pdata = new ParagraphData();
+        pdata.SetEnable(true);
         pdata.dialogueList.Add(new ParagraphData.Dialogue());
         pdata.dialogueList[0].text = "FirstParagraph";
         pdata.SetIndex(0);
         pdata.ResetNext(Next.End);
 
         _paragraphList.Add(pdata);
-        EditorUtility.SetDirty(this);
     }
 
     public ParagraphData CreateParagraph()
     {
         ParagraphData data = new ParagraphData();
+        data.SetEnable(true);
         data.SetIndex(MaxParagraphID);
         data.dialogueList.Add(new ParagraphData.Dialogue());
         data.dialogueList[0].text = "Paragraph";
@@ -87,23 +88,24 @@ public class NovelData : ScriptableObject
         data.dialogueList[0].howCharas = new CharaChangeStyle[locations.Count];
         data.ResetNext(Next.End);
         _paragraphList.Add(data);
-        EditorUtility.SetDirty(this);
+
         return data;
     }
 
     public ParagraphData CreateParagraphFromJson(string sdata)
     {
         ParagraphData data = JsonUtility.FromJson<ParagraphData>(sdata);
+        data.SetEnable(true);
         data.SetIndex(MaxParagraphID);
         data.ResetNext(Next.End);
         _paragraphList.Add(data);
-        EditorUtility.SetDirty(this);
         return data;
     }
 
     public ChoiceData CreateChoice()
     {
         ChoiceData data = new ChoiceData();
+        data.SetEnable(true);
         data.text = "Choice";
         data.SetIndex(MaxChoiceCnt);
         _choiceList.Add(data);
@@ -117,13 +119,14 @@ public class NovelData : ScriptableObject
     public class NodeData
     {
         #region ノード基本データ
+        [SerializeField, HideInInspector] bool _enabled = true;
         [SerializeField, HideInInspector] int _index;
         [SerializeField, HideInInspector] Rect _nodePosition;
-
         [SerializeField, HideInInspector] int _nextParagraphIndex = -1;
         #endregion
 
         #region プロパティ
+        public bool enabled => _enabled;
         public int index => _index;
         public int nextParagraphIndex => _nextParagraphIndex;
         public Rect nodePosition => _nodePosition;
@@ -133,22 +136,23 @@ public class NovelData : ScriptableObject
         public void SavePosition(Rect rect)
         {
             _nodePosition = rect;
-            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
         public void SetNodeDeleted()
         {
-            _index = -1;
-            EditorUtility.SetDirty(NovelEditorWindow.editingData);
+            _enabled = false;
         }
         public void ChangeNextParagraph(int nextIndex)
         {
             _nextParagraphIndex = nextIndex;
-            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
         public void SetIndex(int newIndex)
         {
             _index = newIndex;
-            EditorUtility.SetDirty(NovelEditorWindow.editingData);
+        }
+
+        public void SetEnable(bool flag)
+        {
+            _enabled = flag;
         }
 
     }
@@ -190,12 +194,10 @@ public class NovelData : ScriptableObject
         internal void RemoveChoice(int removeIndex)
         {
             _nextChoiceIndexes.RemoveAt(removeIndex);
-            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
         internal void ChangeNextChoice(int portIndex, int nextIndex)
         {
             _nextChoiceIndexes[portIndex] = nextIndex;
-            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
         internal void ResetNext(Next newNext)
         {
@@ -203,12 +205,10 @@ public class NovelData : ScriptableObject
             _nextChoiceIndexes.Clear();
             _nextChoiceIndexes.Add(-1);
             ChangeNextParagraph(-1);
-            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
         internal void AddNext()
         {
             _nextChoiceIndexes.Add(-1);
-            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
 
         //会話文ごとのデータ

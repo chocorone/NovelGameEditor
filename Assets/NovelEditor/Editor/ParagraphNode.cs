@@ -19,8 +19,7 @@ internal class ParagraphNode : BaseNode
 
     public static void RestoreNode(GraphView graphView, List<ParagraphData> paragraphData)
     {
-        nodes = new List<ParagraphNode>();
-        Debug.Log(paragraphData.Count);
+        nodes.Clear();
         for (int i = 0; i < paragraphData.Count; i++)
         {
             nodes.Add(null);
@@ -28,7 +27,7 @@ internal class ParagraphNode : BaseNode
 
         foreach (ParagraphData pdata in paragraphData)
         {
-            if (pdata.index != -1)
+            if (pdata.enabled)
             {
                 ParagraphNode node = new ParagraphNode(pdata);
                 graphView.AddElement(node);
@@ -41,7 +40,7 @@ internal class ParagraphNode : BaseNode
         //ノードを接続する
         foreach (ParagraphNode node in nodes)
         {
-            if (node == null || node.data.index == -1) continue;
+            if (node == null) continue;
 
             if (node.data.next == Next.Continue)
             {
@@ -60,9 +59,8 @@ internal class ParagraphNode : BaseNode
                 {
                     int index = node.data.nextChoiceIndexes[i];
                     if (index == -1)
-                    {
                         continue;
-                    }
+
                     Edge edge = node.choicePorts[i].ConnectTo(ChoiceNode.nodes[index].InputPort);
                     graphView.AddElement(edge);
                 }
@@ -102,8 +100,6 @@ internal class ParagraphNode : BaseNode
         {
             titleContainer.style.backgroundColor = new Color(0.2f, 0.2f, 0.4f);
         }
-
-
 
         SetTitle();
 

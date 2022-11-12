@@ -92,7 +92,7 @@ internal class GraphController
                 }
             }
         }
-
+        EditorUtility.SetDirty(NovelEditorWindow.editingData);
         return change;
     }
 }

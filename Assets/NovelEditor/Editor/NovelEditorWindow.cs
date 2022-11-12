@@ -10,7 +10,6 @@ using UnityEngine.UIElements;
 /// <summary>
 /// ウィンドウを表示するためのクラス
 /// </summary>
-//internalにしたいが継承なので動くかどうか
 public class NovelEditorWindow : EditorWindow
 {
     [SerializeField] NovelData _editingData;
@@ -46,6 +45,7 @@ public class NovelEditorWindow : EditorWindow
         Undo.undoRedoPerformed += () =>
             {
                 rootVisualElement.Clear();
+                rootVisualElement.Bind(new SerializedObject(this));
                 Draw();
             };
     }
@@ -58,7 +58,6 @@ public class NovelEditorWindow : EditorWindow
 
     void Draw()
     {
-
         GraphController controller = new GraphController();
         NovelGraphView graphView = controller.CreateGraph();
         rootVisualElement.Add(graphView);
@@ -72,7 +71,6 @@ public class NovelEditorWindow : EditorWindow
         var box = new Box();
         box.Add(new Label() { text = name });
         rootVisualElement.Add(box);
-
     }
 
 }
