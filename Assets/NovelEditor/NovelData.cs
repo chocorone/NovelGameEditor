@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 
 
 [CreateAssetMenu(menuName = "Scriptable/Create NovelData")]
@@ -73,6 +74,7 @@ public class NovelData : ScriptableObject
         pdata.ResetNext(Next.End);
 
         _paragraphList.Add(pdata);
+        EditorUtility.SetDirty(this);
     }
 
     public ParagraphData CreateParagraph()
@@ -85,6 +87,7 @@ public class NovelData : ScriptableObject
         data.dialogueList[0].howCharas = new CharaChangeStyle[locations.Count];
         data.ResetNext(Next.End);
         _paragraphList.Add(data);
+        EditorUtility.SetDirty(this);
         return data;
     }
 
@@ -94,6 +97,7 @@ public class NovelData : ScriptableObject
         data.SetIndex(MaxParagraphID);
         data.ResetNext(Next.End);
         _paragraphList.Add(data);
+        EditorUtility.SetDirty(this);
         return data;
     }
 
@@ -103,6 +107,7 @@ public class NovelData : ScriptableObject
         data.text = "Choice";
         data.SetIndex(MaxChoiceCnt);
         _choiceList.Add(data);
+        EditorUtility.SetDirty(this);
         return data;
     }
 
@@ -121,24 +126,29 @@ public class NovelData : ScriptableObject
         #region プロパティ
         public int index => _index;
         public int nextParagraphIndex => _nextParagraphIndex;
+        public Rect nodePosition => _nodePosition;
 
         #endregion
 
         public void SavePosition(Rect rect)
         {
             _nodePosition = rect;
+            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
         public void SetNodeDeleted()
         {
             _index = -1;
+            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
         public void ChangeNextParagraph(int nextIndex)
         {
             _nextParagraphIndex = nextIndex;
+            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
         public void SetIndex(int newIndex)
         {
             _index = newIndex;
+            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
 
     }
@@ -180,10 +190,12 @@ public class NovelData : ScriptableObject
         internal void RemoveChoice(int removeIndex)
         {
             _nextChoiceIndexes.RemoveAt(removeIndex);
+            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
         internal void ChangeNextChoice(int portIndex, int nextIndex)
         {
             _nextChoiceIndexes[portIndex] = nextIndex;
+            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
         internal void ResetNext(Next newNext)
         {
@@ -191,10 +203,12 @@ public class NovelData : ScriptableObject
             _nextChoiceIndexes.Clear();
             _nextChoiceIndexes.Add(-1);
             ChangeNextParagraph(-1);
+            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
         internal void AddNext()
         {
             _nextChoiceIndexes.Add(-1);
+            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
 
         //会話文ごとのデータ

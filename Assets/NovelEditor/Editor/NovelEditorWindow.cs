@@ -14,6 +14,24 @@ using UnityEngine.UIElements;
 public class NovelEditorWindow : EditorWindow
 {
     [SerializeField] NovelData _editingData;
+    internal static NovelData editingData => Instance._editingData;
+
+    private static NovelEditorWindow instance;
+    private static NovelEditorWindow Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = EditorWindow.GetWindow<NovelEditorWindow>("EditorWindow", typeof(UnityEditor.SceneView));
+                if (instance == null)
+                {
+                    Debug.LogError("NullRefarenceException NovelEditorWindow SingltonError");
+                }
+            }
+            return instance;
+        }
+    }
 
 
     /// <summary>
@@ -41,19 +59,19 @@ public class NovelEditorWindow : EditorWindow
     void Draw()
     {
 
-        // GraphController controller = new GraphController();
-        // NovelGraphView graphView = controller.CreateGraph();
-        // rootVisualElement.Add(graphView);
+        GraphController controller = new GraphController();
+        NovelGraphView graphView = controller.CreateGraph();
+        rootVisualElement.Add(graphView);
 
-        // string name = "NoData";
-        // if (SaveUtility.Current.Data != null)
-        // {
-        //     name = SaveUtility.Current.DataName;
-        // }
+        string name = "NoData";
+        if (_editingData != null)
+        {
+            name = _editingData.name;
+        }
 
-        // var box = new Box();
-        // box.Add(new Label() { text = name });
-        // rootVisualElement.Add(box);
+        var box = new Box();
+        box.Add(new Label() { text = name });
+        rootVisualElement.Add(box);
 
     }
 
