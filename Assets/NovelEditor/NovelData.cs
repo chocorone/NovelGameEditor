@@ -46,11 +46,11 @@ public class NovelData : ScriptableObject
 
     //使っていないデータを入れるスタック
     [SerializeField, HideInInspector]
-    internal List<ParagraphData> ParagraphStack = new List<ParagraphData>();
+    internal Stack<ParagraphData> ParagraphStack = new Stack<ParagraphData>();
 
     //使ってないデータを入れるスタック
     [SerializeField, HideInInspector]
-    internal List<ChoiceData> ChoiceStack = new List<ChoiceData>();
+    internal Stack<ChoiceData> ChoiceStack = new Stack<ChoiceData>();
 
 
     #endregion
@@ -79,15 +79,26 @@ public class NovelData : ScriptableObject
 
     public ParagraphData CreateParagraph()
     {
-        ParagraphData data = new ParagraphData();
+        ParagraphData data;
+        if (ParagraphStack.Count == 0)
+        {
+            data = new ParagraphData();
+            data.SetIndex(MaxParagraphID);
+            _paragraphList.Add(data);
+        }
+        else
+        {
+            data = ParagraphStack.Pop();
+        }
+
         data.SetEnable(true);
-        data.SetIndex(MaxParagraphID);
         data.dialogueList.Add(new ParagraphData.Dialogue());
         data.dialogueList[0].text = "Paragraph";
         data.dialogueList[0].charas = new Sprite[locations.Count];
         data.dialogueList[0].howCharas = new CharaChangeStyle[locations.Count];
         data.ResetNext(Next.End);
-        _paragraphList.Add(data);
+
+        Debug.Log(data.index);
 
         return data;
     }
@@ -104,22 +115,30 @@ public class NovelData : ScriptableObject
 
     public ChoiceData CreateChoice()
     {
-        ChoiceData data = new ChoiceData();
-        data.SetEnable(true);
+        ChoiceData data;
+        if (ChoiceStack.Count == 0)
+        {
+            data = new ChoiceData();
+            data.SetIndex(MaxChoiceCnt);
+            _choiceList.Add(data);
+        }
+        else
+        {
+            data = ChoiceStack.Pop();
+        }
         data.text = "Choice";
-        data.SetIndex(MaxChoiceCnt);
-        _choiceList.Add(data);
-        EditorUtility.SetDirty(this);
+        data.SetEnable(true);
+
         return data;
     }
 
 
 
     [System.SerializableAttribute]
-    public class NodeData
+    public abstract class NodeData
     {
         #region ノード基本データ
-        [SerializeField, HideInInspector] bool _enabled = true;
+        [SerializeField, HideInInspector] protected bool _enabled = true;
         [SerializeField, HideInInspector] int _index;
         [SerializeField, HideInInspector] Rect _nodePosition;
         [SerializeField, HideInInspector] int _nextParagraphIndex = -1;
@@ -137,10 +156,7 @@ public class NovelData : ScriptableObject
         {
             _nodePosition = rect;
         }
-        public void SetNodeDeleted()
-        {
-            _enabled = false;
-        }
+        public abstract void SetNodeDeleted();
         public void ChangeNextParagraph(int nextIndex)
         {
             _nextParagraphIndex = nextIndex;
@@ -161,6 +177,12 @@ public class NovelData : ScriptableObject
     public class ChoiceData : NodeData
     {
         public string text;
+
+        public override void SetNodeDeleted()
+        {
+            this.SetEnable(false);
+            NovelEditorWindow.editingData.ChoiceStack.Push(this);
+        }
     }
 
 
@@ -209,6 +231,15 @@ public class NovelData : ScriptableObject
         internal void AddNext()
         {
             _nextChoiceIndexes.Add(-1);
+        }
+
+        public override void SetNodeDeleted()
+        {
+            this.ChangeNextParagraph(-1);
+            this._dialogueList.Clear();
+            this.SetEnable(false);
+            //ここよくない
+            NovelEditorWindow.editingData.ParagraphStack.Push(this);
         }
 
         //会話文ごとのデータ

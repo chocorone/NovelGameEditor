@@ -132,7 +132,7 @@ internal class ParagraphNode : BaseNode
     protected override void SetTitle()
     {
         title = "Paragraph";
-        if (data != null)
+        if (data != null && data.dialogueList.Count > 0)
         {
             title = data.dialogueList[0].text.Substring(0, Math.Min(data.dialogueList[0].text.Length, 10));
         }
