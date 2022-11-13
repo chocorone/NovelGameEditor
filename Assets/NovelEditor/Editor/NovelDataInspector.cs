@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
@@ -7,6 +6,7 @@ using System.IO;
 using System.Linq;
 using static NovelData;
 using static NovelData.ParagraphData;
+using UnityEngine.UIElements;
 
 [CustomEditor(typeof(NovelData))]
 internal class NovelDataInspector : Editor
@@ -18,28 +18,29 @@ internal class NovelDataInspector : Editor
         noveldata = target as NovelData;
     }
 
-    public override void OnInspectorGUI()
+    public override VisualElement CreateInspectorGUI()
     {
-        serializedObject.Update();
-        base.OnInspectorGUI();
+        var visualElement = new VisualElement();
+        visualElement.styleSheets.Add(Resources.Load<StyleSheet>("NovelDataUSS"));
 
-        if (GUILayout.Button("プレハブをセットしたら押す　同じ名前なら引き継がれます"))
+        var container = new IMGUIContainer(OnInspectorGUI);
+        visualElement.Add(container);
+        var visualTree = Resources.Load<VisualTreeAsset>("NovelDataUXML");
+        visualTree.CloneTree(visualElement);
+
+        var button = visualElement.Q<Button>("open_button");
+        button.clickable.clicked += OpenEditor;
+
+        return visualElement;
+    }
+
+    void OpenEditor()
+    {
+        if (noveldata.newData)
         {
-            //ここどうにかしたい
-            //ResetLocations();
+            noveldata.ResetData();
         }
-
-        GUILayout.Space(10);
-
-        if (GUILayout.Button("Open"))
-        {
-            if (noveldata.newData)
-            {
-                noveldata.ResetData();
-            }
-            NovelEditor.Open(noveldata);
-        }
-        serializedObject.ApplyModifiedProperties();
+        NovelEditor.Open(noveldata);
     }
 
 
