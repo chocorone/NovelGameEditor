@@ -31,15 +31,33 @@ internal class NovelGraphView : GraphView
 
     void SettingGraph()
     {
-        //元の位置などを復元するようにしたい
-        // スクロールでズームインアウトができるように
+        //ズームの設定
         SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
+
+        Debug.Log("position" + this.viewTransform.position);
+        Debug.Log("position" + this.viewTransform.scale);
+        // スクロールでズームインアウトができるように
+        if (NovelEditorWindow.editingData != null)
+        {
+            this.UpdateViewTransform(NovelEditorWindow.editingData.graphPosition, NovelEditorWindow.editingData.graphScale);
+        }
+        viewTransformChanged = viewChanged;
         // ドラッグで描画範囲を動かせるように
         this.AddManipulator(new ContentDragger());
         // ドラッグで選択した要素を動かせるように
         this.AddManipulator(new SelectionDragger());
         // ドラッグで範囲選択ができるように
         this.AddManipulator(new RectangleSelector());
+    }
+
+    void viewChanged(GraphView graphView)
+    {
+        if (NovelEditorWindow.editingData != null)
+        {
+            NovelEditorWindow.editingData.graphScale = graphView.viewTransform.scale;
+            NovelEditorWindow.editingData.graphPosition = graphView.viewTransform.position;
+            EditorUtility.SetDirty(NovelEditorWindow.editingData);
+        }
     }
 
     //ノードのルールの設定
