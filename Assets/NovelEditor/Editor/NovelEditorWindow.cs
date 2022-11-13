@@ -16,7 +16,7 @@ public class NovelEditorWindow : EditorWindow
     internal static NovelData editingData => Instance._editingData;
 
     private static NovelEditorWindow instance;
-    private static NovelEditorWindow Instance
+    public static NovelEditorWindow Instance
     {
         get
         {
@@ -66,14 +66,6 @@ public class NovelEditorWindow : EditorWindow
         var box = new Box();
         box.Add(new Label() { text = name });
         rootVisualElement.Add(box);
-
-        Undo.undoRedoPerformed += () =>
-        {
-            Debug.Log("Undo");
-            rootVisualElement.Clear();
-            rootVisualElement.Bind(new SerializedObject(this));
-            Draw();
-        };
     }
 
 }
