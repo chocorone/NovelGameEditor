@@ -11,6 +11,7 @@ using UnityEditor;
 public class NovelData : ScriptableObject
 {
     #region 会話基本データ
+    [SerializeField] TextMode textMode = TextMode.TextMeshPro;
 
     //立ち絵の位置
     [SerializeField] List<Image> _locations = new List<Image>();
@@ -27,7 +28,8 @@ public class NovelData : ScriptableObject
 
     #region グラフ情報
     //グラフのズーム量
-    [SerializeField, HideInInspector] internal float graphZoomValue;
+    [SerializeField, HideInInspector] internal Vector3 graphScale = new Vector3(1, 1, 1);
+    [SerializeField, HideInInspector] internal Vector3 graphPosition = new Vector3(0, 0, 0);
     #endregion
 
     #region エディタから使用する情報
