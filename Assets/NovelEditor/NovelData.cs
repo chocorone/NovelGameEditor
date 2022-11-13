@@ -100,8 +100,6 @@ public class NovelData : ScriptableObject
         data.dialogueList[0].howCharas = new CharaChangeStyle[locations.Count];
         data.ResetNext(Next.End);
 
-        Debug.Log(data.index);
-
         return data;
     }
 

@@ -18,23 +18,30 @@ internal class NovelDataInspector : Editor
         noveldata = target as NovelData;
     }
 
-
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
+        base.OnInspectorGUI();
+
+        if (GUILayout.Button("プレハブをセットしたら押す　同じ名前なら引き継がれます"))
+        {
+            //ここどうにかしたい
+            //ResetLocations();
+        }
+
+        GUILayout.Space(10);
+
         if (GUILayout.Button("Open"))
         {
             if (noveldata.newData)
             {
                 noveldata.ResetData();
-                Debug.Log("NewData");
             }
             NovelEditor.Open(noveldata);
-            Debug.Log(noveldata.MaxParagraphID);
-
-
         }
         serializedObject.ApplyModifiedProperties();
     }
+
+
 
 }
