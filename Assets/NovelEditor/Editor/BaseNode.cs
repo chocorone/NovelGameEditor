@@ -50,20 +50,24 @@ internal abstract class BaseNode : Node
 
     public abstract void ResetNext(Edge edge);
 
-    // public override void OnSelected()
-    // {
-    //     try
-    //     {
-    //         TempChoice temp = ScriptableObject.CreateInstance<TempChoice>();
-    //         //ノードのデータをインスペクターに反映
-    //         temp.data = data;
-    //         Selection.activeObject = temp;
-    //     }
-    //     catch
-    //     {
-    //         Selection.activeObject = null;
-    //     }
-    // }
+    public override void OnSelected()
+    {
+        if (nodeData != null)
+        {
+            if (nodeData is ChoiceData)
+            {
+                TempChoice temp = ScriptableObject.CreateInstance<TempChoice>();
+                //ノードのデータをインスペクターに反映
+                temp.data = (ChoiceData)nodeData;
+                Selection.activeObject = temp;
+            }
+        }
+        else
+        {
+            Selection.activeObject = null;
+        }
+
+    }
 
     public override void OnUnselected()
     {
