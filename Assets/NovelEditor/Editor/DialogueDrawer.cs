@@ -15,27 +15,28 @@ internal class DialogueDrawer : PropertyDrawer
     [SerializeField] private Sprite[] tempBack = new Sprite[1];
     int index;
 
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
-        var height = EditorGUIUtility.singleLineHeight;
-        int elementNum = property.FindPropertyRelative("elementNum").intValue;
-        height *= elementNum;
-
-        return height;
-    }
-
     public override VisualElement CreatePropertyGUI(SerializedProperty property)
     {
-        var visualElement = new VisualElement();
+        var root = new VisualElement();
+        root.styleSheets.Add(Resources.Load<StyleSheet>("DialogueUSS"));
 
-        //var container = new IMGUIContainer(OnInspectorGUI);
-        //visualElement.Add(container);
-        var button = new Button()
+        var DialogueUXML = Resources.Load<VisualTreeAsset>("DialogueUXML");
+        DialogueUXML.CloneTree(root);
+
+        var imageFold = root.Q<Foldout>("ImageFold");
+        var charaUXML = Resources.Load<VisualTreeAsset>("CharaSettingUXML");
+
+        int rand = UnityEngine.Random.Range(1, 5);
+        for (int i = 0; i < rand; i++)
         {
-            text = "Example Button"
-        };
-        visualElement.Add(button);
+            VisualElement charaTree = new VisualElement();
+            charaUXML.CloneTree(charaTree);
+            imageFold.Add(charaTree);
+        }
 
-        return visualElement;
+
+
+
+        return root;
     }
 }

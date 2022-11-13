@@ -48,8 +48,8 @@ internal class ParagraphInspector : Editor
         list.showBorder = true;
         list.showAddRemoveFooter = true;
         list.bindingPath = "dialogueList";
-        //list.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
-        list.fixedItemHeight = 80;
+        list.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+
 
         visualElement.Add(list);
 
