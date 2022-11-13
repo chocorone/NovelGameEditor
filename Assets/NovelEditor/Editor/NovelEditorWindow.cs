@@ -41,13 +41,8 @@ public class NovelEditorWindow : EditorWindow
         _editingData = data;
         rootVisualElement.Clear();
         rootVisualElement.Bind(new SerializedObject(this));
+
         Draw();
-        Undo.undoRedoPerformed += () =>
-            {
-                rootVisualElement.Clear();
-                rootVisualElement.Bind(new SerializedObject(this));
-                Draw();
-            };
     }
 
     void OnEnable()
@@ -71,6 +66,14 @@ public class NovelEditorWindow : EditorWindow
         var box = new Box();
         box.Add(new Label() { text = name });
         rootVisualElement.Add(box);
+
+        Undo.undoRedoPerformed += () =>
+        {
+            Debug.Log("Undo");
+            rootVisualElement.Clear();
+            rootVisualElement.Bind(new SerializedObject(this));
+            Draw();
+        };
     }
 
 }

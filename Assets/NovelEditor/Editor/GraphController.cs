@@ -9,8 +9,11 @@ using static NovelData;
 internal class GraphController
 {
     NovelGraphView graphView;
+
+    //Stack<GraphViewChange> changes = new Stack<GraphViewChange>();
     internal NovelGraphView CreateGraph()
     {
+
         graphView = new NovelGraphView();
 
         if (NovelEditorWindow.editingData != null)
@@ -38,9 +41,12 @@ internal class GraphController
     //グラフが変化した時の処理
     public GraphViewChange OnGraphChange(GraphViewChange change)
     {
+
         //エッジが作成されたとき、接続情報を保存
         if (change.edgesToCreate != null)
         {
+            Undo.RecordObject(NovelEditorWindow.editingData, "Create Edge");
+            Debug.Log("Create Edge");
             //作成された全てのエッジを取得
             foreach (Edge edge in change.edgesToCreate)
             {
@@ -56,6 +62,8 @@ internal class GraphController
         //何かが削除された時
         if (change.elementsToRemove != null)
         {
+            Undo.RecordObject(NovelEditorWindow.editingData, "Delete");
+            Debug.Log("Delete Node");
             //全ての削除された要素を取得
             foreach (GraphElement e in change.elementsToRemove)
             {
@@ -86,7 +94,9 @@ internal class GraphController
                 }
             }
         }
-        EditorUtility.SetDirty(NovelEditorWindow.editingData);
+        if (NovelEditorWindow.editingData != null)
+            EditorUtility.SetDirty(NovelEditorWindow.editingData);
+
         return change;
     }
 }

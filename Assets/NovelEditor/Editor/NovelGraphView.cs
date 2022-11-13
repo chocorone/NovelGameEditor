@@ -32,9 +32,6 @@ internal class NovelGraphView : GraphView
     {
         //ズームの設定
         SetupZoom(ContentZoomer.DefaultMinScale, ContentZoomer.DefaultMaxScale);
-
-        Debug.Log("position" + this.viewTransform.position);
-        Debug.Log("position" + this.viewTransform.scale);
         // スクロールでズームインアウトができるように
         if (NovelEditorWindow.editingData != null)
         {

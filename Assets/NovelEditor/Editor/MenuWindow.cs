@@ -40,6 +40,8 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
     bool ISearchWindowProvider.OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
     {
         var type = searchTreeEntry.userData as Type;
+        Undo.RecordObject(NovelEditorWindow.editingData, "Create Node");
+        Debug.Log("Create Node");
         var node = Activator.CreateInstance(type) as BaseNode;
 
         // マウスの位置にノードを追加

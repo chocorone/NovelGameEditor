@@ -38,7 +38,7 @@ public static class NodeCreator
 
     static void RestoreChoiceNode(GraphView graphView, List<ChoiceData> choiceData)
     {
-        ChoiceNode.nodes = new List<ChoiceNode>();
+        ChoiceNode.nodes.Clear();
         for (int i = 0; i < choiceData.Count; i++)
         {
             ChoiceNode.nodes.Add(null);
