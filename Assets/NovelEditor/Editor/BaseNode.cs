@@ -65,6 +65,7 @@ internal abstract class BaseNode : Node
             {
                 TempParagraph temp = ScriptableObject.CreateInstance<TempParagraph>();
                 temp.data = (ParagraphData)nodeData;
+                temp.dialogueList = ((ParagraphData)nodeData).dialogueList;
                 Selection.activeObject = temp;
             }
         }

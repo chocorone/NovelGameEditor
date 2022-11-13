@@ -5,6 +5,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using static NovelData;
 using static NovelData.ParagraphData;
+using UnityEngine.UIElements;
 
 [CustomEditor(typeof(TempParagraph))]
 internal class ParagraphInspector : Editor
@@ -20,101 +21,40 @@ internal class ParagraphInspector : Editor
         tmpdata = target as TempParagraph;
 
         SerializedProperty data = serializedObject.FindProperty(nameof(tmpdata.data));
-        daialogueDataList = data.FindPropertyRelative("_dialogueList");
-        SetReorderableList();
         index = tmpdata.data.index;
     }
 
-
-    public override void OnInspectorGUI()
+    public override VisualElement CreateInspectorGUI()
     {
+        var visualElement = new VisualElement();
+
+        Label label = new Label();
         if (index == 0)
         {
-            EditorGUILayout.LabelField("最初に表示される会話です");
+            label.text = "最初に表示される会話です";
         }
         else
         {
-            EditorGUILayout.LabelField("！現在の立ち絵や背景に注意");
+            label.text = "！現在の立ち絵や背景に注意";
         }
+        visualElement.Add(label);
 
-        bool flag = EditorGUILayout.ToggleLeft("詳細設定全部開く", tmpdata.data.detailOpen);
+        Toggle toggle = new Toggle();
+        toggle.text = "詳細設定全部開く";
+        visualElement.Add(toggle);
 
-        // if (flag != tmpdata.data.detailOpen)
-        // {
-        //     //ここで全部をひらく処理
-        //     foreach (Dialogue data in tmpdata.data.dialogueList)
-        //     {
-        //         data.open = flag;
-        //     }
+        var list = new ListView();
+        list.reorderable = true;
+        list.showBorder = true;
+        list.showAddRemoveFooter = true;
+        list.bindingPath = "dialogueList";
+        //list.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+        list.fixedItemHeight = 80;
 
-        //     tmpdata.data.detailOpen = flag;
-        //     dataChanged = true;
-        // }
-
-        // //表示するParagraphDataが変わったとき
-        // if (dataChanged)
-        // {
-        //     SetReorderableList();
-        //     dataChanged = false;
-        // }
-
-        serializedObject.Update();
-        reorderableList.DoLayoutList();
-        serializedObject.ApplyModifiedProperties();
-    }
-
-    void SetReorderableList()
-    {
-        reorderableList = new ReorderableList(serializedObject, daialogueDataList);
-        reorderableList.drawElementCallback = (rect, index, active, focused) =>
-        {
-            var actionData = daialogueDataList.GetArrayElementAtIndex(index);
-            EditorGUI.PropertyField(rect, actionData);
-        };
-
-        reorderableList.drawHeaderCallback = (rect) => EditorGUI.LabelField(rect, "会話のリスト");
-
-        reorderableList.elementHeightCallback = index => EditorGUI.GetPropertyHeight(daialogueDataList.GetArrayElementAtIndex(index));
-
-        //2個以上の時しか削除できないように
-        reorderableList.onCanRemoveCallback = (ReorderableList list) =>
-        {
-            return reorderableList.count > 1;
-        };
-
-        reorderableList.onAddCallback = (ReorderableList l) =>
-        {
-            var index = l.serializedProperty.arraySize;
-            l.serializedProperty.arraySize++;
-            l.index = index;
-            var element = l.serializedProperty.GetArrayElementAtIndex(index);
-            SerializedProperty howChara = element.FindPropertyRelative("howCharas");
-            for (int i = 0; i < howChara.arraySize; i++)
-            {
-                howChara.GetArrayElementAtIndex(i).enumValueIndex = (int)CharaChangeStyle.UnChange;
-            }
-
-            element.FindPropertyRelative("howBack").enumValueIndex = (int)BackChangeStyle.UnChange;
-
-            element.FindPropertyRelative("index").intValue = index;
-
-            element.FindPropertyRelative("BGMStyle").enumValueIndex = (int)SoundStyle.UnChange;
-            element.FindPropertyRelative("SEStyle").enumValueIndex = (int)SoundStyle.UnChange;
-        };
+        visualElement.Add(list);
 
 
-        reorderableList.onChangedCallback = (ReorderableList list) =>
-        {
-            //Changed();
-        };
-    }
-
-    void Changed()
-    {
-        for (int i = 0; i < tmpdata.data.dialogueList.Count; i++)
-        {
-            tmpdata.data.dialogueList[i].index = i;
-        }
+        return visualElement;
     }
 
 }

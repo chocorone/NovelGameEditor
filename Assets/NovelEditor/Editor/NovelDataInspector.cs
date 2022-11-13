@@ -43,6 +43,4 @@ internal class NovelDataInspector : Editor
         NovelEditor.Open(noveldata);
     }
 
-
-
 }
