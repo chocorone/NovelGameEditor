@@ -13,60 +13,11 @@ using Newtonsoft.Json.Linq;
 
 internal class ParagraphNode : BaseNode
 {
+    //編集しているデータにあるParagraphDataから作られたノード
     public static List<ParagraphNode> nodes = new List<ParagraphNode>();
     public ParagraphData data => (ParagraphData)nodeData;
     internal List<Port> choicePorts = new List<Port>();
 
-    public static void RestoreNode(GraphView graphView, List<ParagraphData> paragraphData)
-    {
-        nodes.Clear();
-        for (int i = 0; i < paragraphData.Count; i++)
-        {
-            nodes.Add(null);
-        }
-
-        foreach (ParagraphData pdata in paragraphData)
-        {
-            if (pdata.enabled)
-            {
-                ParagraphNode node = new ParagraphNode(pdata);
-                graphView.AddElement(node);
-            }
-        }
-    }
-
-    public static void RestoreEdge(GraphView graphView, List<ParagraphData> paragraphData)
-    {
-        //ノードを接続する
-        foreach (ParagraphNode node in nodes)
-        {
-            if (node == null) continue;
-
-            if (node.data.next == Next.Continue)
-            {
-                //ParagraphからParagraphにつなぐ
-                if (node.data.nextParagraphIndex == -1)
-                    continue;
-
-                Edge edge = node.CountinuePort.ConnectTo(nodes[node.data.nextParagraphIndex].InputPort);
-                graphView.AddElement(edge);
-            }
-
-            else if (node.data.next == Next.Choice)
-            {
-                //ParagraphからChoiceにつなぐ
-                for (int i = 0; i < node.data.nextChoiceIndexes.Count; i++)
-                {
-                    int index = node.data.nextChoiceIndexes[i];
-                    if (index == -1)
-                        continue;
-
-                    Edge edge = node.choicePorts[i].ConnectTo(ChoiceNode.nodes[index].InputPort);
-                    graphView.AddElement(edge);
-                }
-            }
-        }
-    }
 
     //0から作られるとき
     public ParagraphNode()

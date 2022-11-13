@@ -32,13 +32,7 @@ internal class GraphController
     {
         NovelData data = NovelEditorWindow.editingData;
         //データからノードを作る
-        ParagraphNode.RestoreNode(graphView, data.paragraphsList);
-
-        ChoiceNode.RestoreNode(graphView, data.choiceList);
-
-        ParagraphNode.RestoreEdge(graphView, data.paragraphsList);
-
-        ChoiceNode.RestoreEdge(graphView);
+        NodeCreator.RestoreGraph(graphView, data);
     }
 
     //グラフが変化した時の処理

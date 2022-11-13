@@ -10,41 +10,9 @@ using static NovelData.ParagraphData;
 
 internal class ChoiceNode : BaseNode
 {
+    //編集しているデータにあるChoiceDataから作られたノード
     public static List<ChoiceNode> nodes = new List<ChoiceNode>();
     public ChoiceData data => (ChoiceData)nodeData;
-
-    public static void RestoreNode(GraphView graphView, List<ChoiceData> choiceData)
-    {
-        nodes = new List<ChoiceNode>();
-        for (int i = 0; i < choiceData.Count; i++)
-        {
-            nodes.Add(null);
-        }
-
-        foreach (ChoiceData cdata in choiceData)
-        {
-            if (cdata.enabled)
-            {
-                ChoiceNode node = new ChoiceNode(cdata);
-                graphView.AddElement(node);
-            }
-        }
-    }
-
-    public static void RestoreEdge(GraphView graphView)
-    {
-        //ノードを接続する
-        foreach (ChoiceNode node in nodes)
-        {
-            if (node == null) continue;
-            //ChoiceからParagraphにつなぐ
-            if (node.data.nextParagraphIndex == -1)
-                continue;
-
-            Edge edge = node.CountinuePort.ConnectTo(ParagraphNode.nodes[node.data.nextParagraphIndex].InputPort);
-            graphView.AddElement(edge);
-        }
-    }
 
     //0から作られるとき
     public ChoiceNode()

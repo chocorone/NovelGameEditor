@@ -9,7 +9,6 @@ internal class NovelGraphView : GraphView
 {
     public System.Action<DropdownMenuAction> OnContextMenuNodeCreate;
     public SerializeGraphElementsDelegate OnContextMenuNodeCopy;
-
     public System.Action<string, BaseNode> PasteNode;
 
     public NovelGraphView()
