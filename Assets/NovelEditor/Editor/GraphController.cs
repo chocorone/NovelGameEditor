@@ -25,6 +25,18 @@ internal class GraphController
 
             LoadNodes();
 
+            Undo.undoRedoPerformed += () =>
+            {
+                foreach (var element in graphView.graphElements)
+                {
+                    if (element is BaseNode || element is Edge)
+                    {
+                        element.RemoveFromHierarchy();
+                    }
+                }
+                LoadNodes();
+            };
+
         }
 
         return graphView;
@@ -32,9 +44,8 @@ internal class GraphController
 
     internal void LoadNodes()
     {
-        NovelData data = NovelEditorWindow.editingData;
         //データからノードを作る
-        NodeCreator.RestoreGraph(graphView, data);
+        NodeCreator.RestoreGraph(graphView, NovelEditorWindow.editingData);
     }
 
     //グラフが変化した時の処理
@@ -43,6 +54,7 @@ internal class GraphController
         //エッジが作成されたとき、接続情報を保存
         if (change.edgesToCreate != null)
         {
+            Undo.RecordObject(NovelEditorWindow.editingData, "Create Edge");
             //作成された全てのエッジを取得
             foreach (Edge edge in change.edgesToCreate)
             {
@@ -58,6 +70,7 @@ internal class GraphController
         //何かが削除された時
         if (change.elementsToRemove != null)
         {
+            Undo.RecordObject(NovelEditorWindow.editingData, "Delete Graph Elememts");
             //全ての削除された要素を取得
             foreach (GraphElement e in change.elementsToRemove)
             {
