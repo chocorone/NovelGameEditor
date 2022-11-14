@@ -265,12 +265,11 @@ public class NovelData : ScriptableObject
             public bool changeFont = false;
             public TMP_FontAsset font;
             public Color fontColor = Color.white;
-            public FontStyle fontStyle;
             public int fontSize = 30;
 
+            public bool changeNameFont = false;
             public Font nameFont;
             public Color nameColor = Color.white;
-            public FontStyle nameFontStyle;
 
 
             public AudioClip BGM;
