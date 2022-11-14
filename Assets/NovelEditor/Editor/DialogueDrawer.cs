@@ -11,7 +11,6 @@ using UnityEngine.UIElements;
 [CustomPropertyDrawer(typeof(Dialogue))]
 internal class DialogueDrawer : PropertyDrawer
 {
-
     public override VisualElement CreatePropertyGUI(SerializedProperty data)
     {
         //UI作成
@@ -21,11 +20,23 @@ internal class DialogueDrawer : PropertyDrawer
         var DialogueUXML = Resources.Load<VisualTreeAsset>("DialogueUXML");
         DialogueUXML.CloneTree(root);
 
+        CharaSetting(root, data);
+
+        //データバインド
+        BindData(root, data);
+
+        SetUpUIByValue(root, data);
+
+        return root;
+    }
+
+    void CharaSetting(VisualElement root, SerializedProperty data)
+    {
         //立ち絵の数に応じて作成
         var charaImageBox = root.Q<Box>("charaImage");
         var charaUXML = Resources.Load<VisualTreeAsset>("CharaSettingUXML");
 
-        int rand = UnityEngine.Random.Range(1, 5);
+        int rand = UnityEngine.Random.Range(0, 5);
         for (int i = 0; i < rand; i++)
         {
             VisualElement charaTree = new VisualElement();
@@ -43,16 +54,6 @@ internal class DialogueDrawer : PropertyDrawer
             charaTree.Q<Label>("charaName").text = "キャラ" + (i + 1);
             charaEffectBox.Add(charaTree);
         }
-
-        //データバインド
-        BindData(root, data);
-
-        return root;
-    }
-
-    void CharaSetting(VisualElement root, SerializedProperty data)
-    {
-
     }
 
     void BindData(VisualElement root, SerializedProperty data)
@@ -71,7 +72,6 @@ internal class DialogueDrawer : PropertyDrawer
         var howBack = root.Q<EnumField>("howBack");
         howBack.Init((BackChangeStyle)data.FindPropertyRelative("howBack").enumValueIndex);
         howBack.BindProperty(data.FindPropertyRelative("howBack"));
-
 
         var BackSprite = root.Q<ObjectField>("backSprite");
         BackSprite.BindProperty(data.FindPropertyRelative("back"));
@@ -180,5 +180,39 @@ internal class DialogueDrawer : PropertyDrawer
 
         var AllEffectStrength = root.Q<SliderInt>("AllEffectStrength");
         AllEffectStrength.BindProperty(data.FindPropertyRelative("AllEffectStrength"));
+    }
+
+    void SetUpUIByValue(VisualElement root, SerializedProperty data)
+    {
+        var howBack = root.Q<EnumField>("howBack");
+        howBack.RegisterValueChangedCallback(x =>
+        {
+            Debug.Log(x.newValue);
+
+            BackChangeStyle value;
+
+            var e = root.Q<Box>("changeBackBox");
+
+            if (x.newValue == null)
+            {
+                value = (BackChangeStyle)data.FindPropertyRelative("howBack").enumValueIndex;
+            }
+            else
+            {
+                value = (BackChangeStyle)x.newValue;
+            }
+
+
+            if (value == BackChangeStyle.UnChange)
+            {
+                e.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                e.style.display = DisplayStyle.Flex;
+            }
+        });
+
+
     }
 }

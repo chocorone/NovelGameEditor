@@ -15,10 +15,12 @@
 
                 <ui:Label text="背景" display-tooltip-when-elided="true" />
                 <uie:EnumField label="切り替え" name="howBack" />
-                <uie:ObjectField name="backSprite" type="UnityEngine.Sprite, UnityEngine.CoreModule" />
-                <uie:ColorField name="backFadeColor" label="フェード色" />
-                <uie:FloatField name="backFadeSpeed" label="フェード秒数" value="0" />
-
+                <ui:Box name="changeBackBox">
+                    <uie:ObjectField name="backSprite" type="UnityEngine.Sprite, UnityEngine.CoreModule" />
+                    <uie:ColorField name="backFadeColor" label="フェード色" />
+                    <uie:FloatField name="backFadeSpeed" label="フェード秒数" value="0" />
+                </ui:Box>
+                
                 <ui:Box name="charaImage" />
 
                 <ui:Foldout text="フォント設定" value="false">
