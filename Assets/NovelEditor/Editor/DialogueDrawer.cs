@@ -41,7 +41,7 @@ internal class DialogueDrawer : PropertyDrawer
         {
             VisualElement charaTree = new VisualElement();
             charaUXML.CloneTree(charaTree);
-            charaTree.Q<Label>("charaName").text = "キャラ" + (i + 1);
+            charaTree.Q<EnumField>().label = "キャラ" + (i + 1);
             charaImageBox.Add(charaTree);
         }
 
@@ -51,7 +51,7 @@ internal class DialogueDrawer : PropertyDrawer
         {
             VisualElement charaTree = new VisualElement();
             charaUXML.CloneTree(charaTree);
-            charaTree.Q<Label>("charaName").text = "キャラ" + (i + 1);
+            charaTree.Q<EnumField>().label = "キャラ" + (i + 1);
             charaEffectBox.Add(charaTree);
         }
     }
