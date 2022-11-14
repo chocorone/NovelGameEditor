@@ -1,28 +1,27 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using static NovelData;
 using static NovelData.ParagraphData;
+using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
 [CustomPropertyDrawer(typeof(Dialogue))]
 internal class DialogueDrawer : PropertyDrawer
 {
 
-    [SerializeField] private Sprite[] tempSp = null;
-    [SerializeField] private Sprite[] tempBack = new Sprite[1];
-    int index;
-
-    public override VisualElement CreatePropertyGUI(SerializedProperty property)
+    public override VisualElement CreatePropertyGUI(SerializedProperty data)
     {
+        //UI作成
         var root = new VisualElement();
         root.styleSheets.Add(Resources.Load<StyleSheet>("DialogueUSS"));
 
         var DialogueUXML = Resources.Load<VisualTreeAsset>("DialogueUXML");
         DialogueUXML.CloneTree(root);
 
+        //立ち絵の数に応じて作成
         var charaImageBox = root.Q<Box>("charaImage");
         var charaUXML = Resources.Load<VisualTreeAsset>("CharaSettingUXML");
 
@@ -45,8 +44,126 @@ internal class DialogueDrawer : PropertyDrawer
             charaEffectBox.Add(charaTree);
         }
 
-
+        //データバインド
+        BindData(root, data);
 
         return root;
+    }
+
+    void CharaSetting(VisualElement root, SerializedProperty data)
+    {
+
+    }
+
+    void BindData(VisualElement root, SerializedProperty data)
+    {
+        root.Bind(data.serializedObject);
+
+
+        var nameElement = root.Q<TextField>("name");
+        nameElement.BindProperty(data.FindPropertyRelative("Name"));
+
+        var textElement = root.Q<TextField>("serihu");
+        textElement.BindProperty(data.FindPropertyRelative("text"));
+
+
+        //背景
+        var howBack = root.Q<DropdownField>("backSprite");
+        //howBack.BindProperty(data.FindPropertyRelative("howBack"));
+
+        var BackSprite = root.Q<ObjectField>("backSprite");
+        BackSprite.BindProperty(data.FindPropertyRelative("back"));
+
+        var backFadeColor = root.Q<ColorField>("backFadeColor");
+        backFadeColor.BindProperty(data.FindPropertyRelative("backFadeColor"));
+
+        var backFadeSpeed = root.Q<FloatField>("backFadeSpeed");
+        backFadeSpeed.BindProperty(data.FindPropertyRelative("backFadeSpeed"));
+
+
+        //フォント
+        var changeFont = root.Q<Toggle>("changeFont");
+        changeFont.BindProperty(data.FindPropertyRelative("changeFont"));
+
+        var font = root.Q<ObjectField>("font");
+        font.BindProperty(data.FindPropertyRelative("font"));
+
+        var fontColor = root.Q<ColorField>("fontColor");
+        fontColor.BindProperty(data.FindPropertyRelative("fontColor"));
+
+        var Style = root.Q<MaskField>("Style");
+        //Style.BindProperty(data.FindPropertyRelative("Style"));
+
+        var fontSize = root.Q<IntegerField>("fontSize");
+        fontSize.BindProperty(data.FindPropertyRelative("fontSize"));
+
+        var nameFont = root.Q<ObjectField>("nameFont");
+        nameFont.BindProperty(data.FindPropertyRelative("nameFont"));
+
+        var nameColor = root.Q<ColorField>("nameColor");
+        nameColor.BindProperty(data.FindPropertyRelative("nameColor"));
+
+        var nameFontStyle = root.Q<MaskField>("nameFontStyle");
+        //nameFontStyle.BindProperty(data.FindPropertyRelative("nameFontStyle"));
+
+
+        //BGM
+        var BGMStyle = root.Q<DropdownField>("BGMStyle");
+        BGMStyle.BindProperty(data.FindPropertyRelative("BGMStyle"));
+
+        var BGM = root.Q<ObjectField>("BGM");
+        BGM.BindProperty(data.FindPropertyRelative("BGM"));
+
+        var BGMCount = root.Q<IntegerField>("BGMCount");
+        BGMCount.BindProperty(data.FindPropertyRelative("BGMCount"));
+
+        // var BGMSecond = root.Q<FloatField>("BGMSecond");
+        // BGMSecond.BindProperty(data.FindPropertyRelative("BGMSecond"));
+
+        // var BGMFadeTime = root.Q<FloatField>("BGMFadeTime");
+        // BGMFadeTime.BindProperty(data.FindPropertyRelative("BGMFadeTime"));
+
+        // var BGMEndFadeTime = root.Q<FloatField>("BGMEndFadeTime");
+        // BGMEndFadeTime.BindProperty(data.FindPropertyRelative("BGMEndFadeTime"));
+
+
+        //SE
+        var SEStyle = root.Q<DropdownField>("SEStyle");
+        SEStyle.BindProperty(data.FindPropertyRelative("SEStyle"));
+
+        var SE = root.Q<ObjectField>("SE");
+        SE.BindProperty(data.FindPropertyRelative("SE"));
+
+        var SECount = root.Q<IntegerField>("SECount");
+        SECount.BindProperty(data.FindPropertyRelative("SECount"));
+
+        // var SESecond = root.Q<FloatField>("SESecond");
+        // SESecond.BindProperty(data.FindPropertyRelative("SESecond"));
+
+        // var SEFadeTime = root.Q<FloatField>("SEFadeTime");
+        // SEFadeTime.BindProperty(data.FindPropertyRelative("SEFadeTime"));
+
+        // var SEEndFadeTime = root.Q<FloatField>("SEEndFadeTime");
+        // SEEndFadeTime.BindProperty(data.FindPropertyRelative("SEEndFadeTime"));
+
+
+        //エフェクト
+        var backEffect = root.Q<DropdownField>("backEffect");
+        backEffect.BindProperty(data.FindPropertyRelative("backEffect"));
+
+        var backEffectStrength = root.Q<SliderInt>("backEffectStrength");
+        backEffectStrength.BindProperty(data.FindPropertyRelative("backEffectStrength"));
+
+        var FrontEffect = root.Q<DropdownField>("FrontEffect");
+        FrontEffect.BindProperty(data.FindPropertyRelative("FrontEffect"));
+
+        var FrontEffectStrength = root.Q<SliderInt>("FrontEffectStrength");
+        FrontEffectStrength.BindProperty(data.FindPropertyRelative("FrontEffectStrength"));
+
+        var AllEffect = root.Q<DropdownField>("AllEffect");
+        AllEffect.BindProperty(data.FindPropertyRelative("AllEffect"));
+
+        var AllEffectStrength = root.Q<SliderInt>("AllEffectStrength");
+        AllEffectStrength.BindProperty(data.FindPropertyRelative("AllEffectStrength"));
     }
 }

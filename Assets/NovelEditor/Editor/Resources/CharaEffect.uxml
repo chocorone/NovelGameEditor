@@ -7,5 +7,5 @@
 >
     <ui:Label text="キャラ1" display-tooltip-when-elided="true" name="charaName" />
     <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" tabindex="0" />
-    <ui:Slider picking-mode="Ignore" label="Slider" value="42" high-value="100" />
+    <ui:SliderInt picking-mode="Ignore" label="Slider" value="42" high-value="100" />
 </engine:UXML>
