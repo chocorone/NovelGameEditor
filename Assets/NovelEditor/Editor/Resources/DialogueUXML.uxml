@@ -8,59 +8,60 @@
         </ui:Box>
         <ui:Box class="flexbox">
             <ui:Label text="セリフ" />
-            <ui:TextField multiline="true" />
+            <ui:TextField multiline="true" class="serihu"/>
         </ui:Box>
+        <ui:Box class="detail">
+            <ui:Foldout text="詳細設定" tabindex="1">
 
-        <ui:Foldout text="詳細設定" >
+                <ui:Label text="背景" display-tooltip-when-elided="true" />
+                <ui:DropdownField label="切り替え" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
+                <uie:ObjectField type="UnityEngine.Sprite, UnityEngine.CoreModule" />
+                <uie:ColorField label="フェード色" />
+                <uie:FloatField label="フェード秒数" value="0" />
 
-            <ui:Label text="背景" display-tooltip-when-elided="true" />
-            <ui:DropdownField label="切り替え" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
-            <uie:ObjectField type="UnityEngine.Sprite, UnityEngine.CoreModule" />
-            <uie:ColorField label="フェード色" />
-            <uie:FloatField label="フェード秒数" value="0" />
+                <ui:Box name="charaImage" />
 
-            <ui:Box name="charaImage" />
+                <ui:Foldout text="フォント設定" tabindex="2">
+                    <ui:Toggle label="フォント変更" />
+                    <uie:ColorField label="文字色" />
+                    <uie:ObjectField label="Font Asset" type="TMPro.TMP_FontAsset, Unity.TextMeshPro" />
+                    <uie:MaskField label="Style" />
+                    <uie:IntegerField label="フォントサイズ" value="0" />
+                </ui:Foldout>
 
-            <ui:Foldout text="フォント設定" tabindex="1">
-                <ui:Toggle label="フォント変更" />
-                <uie:ColorField label="文字色" />
-                <uie:ObjectField label="Font Asset" type="TMPro.TMP_FontAsset, Unity.TextMeshPro" />
-                <uie:MaskField label="Style" />
-                <uie:IntegerField label="フォントサイズ" value="0" />
-            </ui:Foldout>
-
-            <ui:Foldout text="サウンド設定" tabindex="1">
-                <ui:Box name="BGMBox">
-                    <ui:Label text="BGM設定" display-tooltip-when-elided="true" />
-                    <ui:DropdownField label="再生状態" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
-                    <ui:Box name="BGMPlayBox">
-                        <uie:ObjectField type="UnityEngine.AudioClip, UnityEngine" style="height: -62px;" />
-                        <uie:FloatField label="フェードイン秒数" value="0" />
-                        <ui:DropdownField label="再生時間" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
-                        <uie:FloatField label="フェードアウト秒数" value="0" />
+                <ui:Foldout text="サウンド設定" tabindex="2">
+                    <ui:Box name="BGMBox">
+                        <ui:Label text="BGM設定" display-tooltip-when-elided="true" />
+                        <ui:DropdownField label="再生状態" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
+                        <ui:Box name="BGMPlayBox">
+                            <uie:ObjectField type="UnityEngine.AudioClip, UnityEngine" style="height: -62px;" />
+                            <uie:FloatField label="フェードイン秒数" value="0" />
+                            <ui:DropdownField label="再生時間" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
+                            <uie:FloatField label="フェードアウト秒数" value="0" />
+                        </ui:Box>
                     </ui:Box>
-                </ui:Box>
-                <ui:Box name="SEBox">
-                    <ui:Label text="SE設定" display-tooltip-when-elided="true" />
-                    <ui:DropdownField label="再生状態" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
-                    <ui:Box name="SEPlayBox">
-                        <uie:ObjectField type="UnityEngine.AudioClip, UnityEngine" style="height: -62px;" />
-                        <uie:FloatField label="フェードイン秒数" value="0" />
-                        <ui:DropdownField label="再生時間" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
-                        <uie:FloatField label="フェードアウト秒数" value="0" />
+                    <ui:Box name="SEBox">
+                        <ui:Label text="SE設定" display-tooltip-when-elided="true" />
+                        <ui:DropdownField label="再生状態" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
+                        <ui:Box name="SEPlayBox">
+                            <uie:ObjectField type="UnityEngine.AudioClip, UnityEngine" style="height: -62px;" />
+                            <uie:FloatField label="フェードイン秒数" value="0" />
+                            <ui:DropdownField label="再生時間" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
+                            <uie:FloatField label="フェードアウト秒数" value="0" />
+                        </ui:Box>
                     </ui:Box>
-                </ui:Box>
-            </ui:Foldout>
+                </ui:Foldout>
 
-            <ui:Foldout text="エフェクト設定" tabindex="1">
-                <ui:DropdownField label="背景" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
-                <ui:Slider picking-mode="Ignore" label="Slider" value="50" high-value="100" />
-                <ui:Box name="charaEffect" />
-                <ui:DropdownField label="セリフ枠以外" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
-                <ui:Slider picking-mode="Ignore" label="Slider" value="50" high-value="100" />
-                <ui:DropdownField label="全体" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
-                <ui:Slider picking-mode="Ignore" label="Slider" value="50" high-value="100" />
+                <ui:Foldout text="エフェクト設定" tabindex="2">
+                    <ui:DropdownField label="背景" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
+                    <ui:Slider picking-mode="Ignore" label="Slider" value="50" high-value="100" />
+                    <ui:Box name="charaEffect" />
+                    <ui:DropdownField label="セリフ枠以外" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
+                    <ui:Slider picking-mode="Ignore" label="Slider" value="50" high-value="100" />
+                    <ui:DropdownField label="全体" index="-1" choices="System.Collections.Generic.List`1[System.String]" />
+                    <ui:Slider picking-mode="Ignore" label="Slider" value="50" high-value="100" />
+                </ui:Foldout>
             </ui:Foldout>
-        </ui:Foldout>
+        </ui:Box>
     </ui:Box>
 </ui:UXML>
