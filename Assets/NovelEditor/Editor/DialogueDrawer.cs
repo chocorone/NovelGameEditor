@@ -321,6 +321,52 @@ internal class DialogueDrawer : PropertyDrawer
         });
 
         //エフェクト設定
+        var backEffect = root.Q<EnumField>("backEffect");
+        backEffect.RegisterValueChangedCallback(x =>
+        {
 
+            var value = (Effect)data.FindPropertyRelative("backEffect").enumValueIndex;
+            var backEffectStrength = root.Q<SliderInt>("backEffectStrength");
+            if (value == Effect.None || value == Effect.UnChange)
+            {
+                backEffectStrength.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                backEffectStrength.style.display = DisplayStyle.Flex;
+            }
+        });
+
+        var FrontEffect = root.Q<EnumField>("FrontEffect");
+        FrontEffect.RegisterValueChangedCallback(x =>
+        {
+
+            var value = (Effect)data.FindPropertyRelative("FrontEffect").enumValueIndex;
+            var FrontEffectStrength = root.Q<SliderInt>("FrontEffectStrength");
+            if (value == Effect.None || value == Effect.UnChange)
+            {
+                FrontEffectStrength.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                FrontEffectStrength.style.display = DisplayStyle.Flex;
+            }
+        });
+
+        var AllEffect = root.Q<EnumField>("AllEffect");
+        AllEffect.RegisterValueChangedCallback(x =>
+        {
+
+            var value = (Effect)data.FindPropertyRelative("AllEffect").enumValueIndex;
+            var AllEffectStrength = root.Q<SliderInt>("AllEffectStrength");
+            if (value == Effect.None || value == Effect.UnChange)
+            {
+                AllEffectStrength.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                AllEffectStrength.style.display = DisplayStyle.Flex;
+            }
+        });
     }
 }
