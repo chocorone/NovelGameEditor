@@ -15,8 +15,8 @@
 
                 <ui:Label text="背景" display-tooltip-when-elided="true" />
                 <uie:EnumField label="切り替え" name="howBack" />
+                <uie:ObjectField name="backSprite" type="UnityEngine.Sprite, UnityEngine.CoreModule" />
                 <ui:Box name="changeBackBox">
-                    <uie:ObjectField name="backSprite" type="UnityEngine.Sprite, UnityEngine.CoreModule" />
                     <uie:ColorField name="backFadeColor" label="フェード色" />
                     <uie:FloatField name="backFadeSpeed" label="フェード秒数" value="0" />
                 </ui:Box>
@@ -24,15 +24,19 @@
                 <ui:Box name="charaImage" />
 
                 <ui:Foldout text="フォント設定" value="false">
-                    <ui:Toggle label="フォント変更" name="changeFont" />
-                    <uie:ObjectField label="Font Asset" name="font" type="TMPro.TMP_FontAsset, Unity.TextMeshPro" />
-                    <uie:ColorField label="文字色" name="fontColor"/>
-                    <uie:MaskField label="Style" name="fontStyle"/>
-                    <uie:IntegerField label="フォントサイズ" name="fontSize" value="0" />
-
-                    <uie:ObjectField label="Font Asset" name="nameFont" type="TMPro.TMP_FontAsset, Unity.TextMeshPro" />
-                    <uie:ColorField label="名前文字色" name="nameColor"/>
-                    <uie:MaskField label="Style" name="nameFontStyle"/>
+                    <ui:Toggle label="セリフフォント変更" name="changeFont" />
+                    <ui:Box name="changeFontBox">
+                        <uie:ObjectField label="Font Asset" name="font" type="TMPro.TMP_FontAsset, Unity.TextMeshPro" />
+                        <uie:ColorField label="文字色" name="fontColor"/>
+                        <uie:MaskField label="Style" name="fontStyle"/>
+                        <uie:IntegerField label="フォントサイズ" name="fontSize" value="0" />
+                    </ui:Box>
+                    <ui:Toggle label="名前フォント変更" name="changeNameFont" />
+                    <ui:Box name="changeNameFontBox">
+                        <uie:ObjectField label="Font Asset" name="nameFont" type="TMPro.TMP_FontAsset, Unity.TextMeshPro" />
+                        <uie:ColorField label="名前文字色" name="nameColor"/>
+                        <uie:MaskField label="Style" name="nameFontStyle"/>
+                    </ui:Box> 
                 </ui:Foldout>
 
                 <ui:Foldout text="サウンド設定" value="false">
