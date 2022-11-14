@@ -93,20 +93,17 @@ internal class DialogueDrawer : PropertyDrawer
         var fontColor = root.Q<ColorField>("fontColor");
         fontColor.BindProperty(data.FindPropertyRelative("fontColor"));
 
-        var Style = root.Q<MaskField>("Style");
-        //Style.BindProperty(data.FindPropertyRelative("Style"));
-
         var fontSize = root.Q<IntegerField>("fontSize");
         fontSize.BindProperty(data.FindPropertyRelative("fontSize"));
+
+        var changeNameFont = root.Q<Toggle>("changeNameFont");
+        changeNameFont.BindProperty(data.FindPropertyRelative("changeNameFont"));
 
         var nameFont = root.Q<ObjectField>("nameFont");
         nameFont.BindProperty(data.FindPropertyRelative("nameFont"));
 
         var nameColor = root.Q<ColorField>("nameColor");
         nameColor.BindProperty(data.FindPropertyRelative("nameColor"));
-
-        var nameFontStyle = root.Q<MaskField>("nameFontStyle");
-        //nameFontStyle.BindProperty(data.FindPropertyRelative("nameFontStyle"));
 
 
         //BGM
@@ -184,35 +181,146 @@ internal class DialogueDrawer : PropertyDrawer
 
     void SetUpUIByValue(VisualElement root, SerializedProperty data)
     {
+        //背景設定
         var howBack = root.Q<EnumField>("howBack");
         howBack.RegisterValueChangedCallback(x =>
         {
-            Debug.Log(x.newValue);
+            BackChangeStyle value = (BackChangeStyle)data.FindPropertyRelative("howBack").enumValueIndex;
 
-            BackChangeStyle value;
+            var changeBackBox = root.Q<Box>("changeBackBox");
+            var backSprite = root.Q<ObjectField>("backSprite");
 
-            var e = root.Q<Box>("changeBackBox");
+            changeBackBox.style.display = DisplayStyle.None;
+            backSprite.style.display = DisplayStyle.None;
 
-            if (x.newValue == null)
+            if (value != BackChangeStyle.UnChange)
             {
-                value = (BackChangeStyle)data.FindPropertyRelative("howBack").enumValueIndex;
-            }
-            else
-            {
-                value = (BackChangeStyle)x.newValue;
-            }
-
-
-            if (value == BackChangeStyle.UnChange)
-            {
-                e.style.display = DisplayStyle.None;
-            }
-            else
-            {
-                e.style.display = DisplayStyle.Flex;
+                backSprite.style.display = DisplayStyle.Flex;
+                if (value != BackChangeStyle.Quick && value != BackChangeStyle.dissolve)
+                    changeBackBox.style.display = DisplayStyle.Flex;
             }
         });
 
+        //フォント設定
+        var changeFont = root.Q<Toggle>("changeFont");
+        changeFont.RegisterValueChangedCallback(x =>
+        {
+
+            var changeFontBox = root.Q<Box>("changeFontBox");
+
+            bool flag = data.FindPropertyRelative("changeFont").boolValue;
+
+            changeFontBox.style.display = flag ? DisplayStyle.Flex : DisplayStyle.None;
+        });
+
+        var changeNameFont = root.Q<Toggle>("changeNameFont");
+        changeNameFont.RegisterValueChangedCallback(x =>
+        {
+            var changeNameFontBox = root.Q<Box>("changeNameFontBox");
+
+            bool flag = data.FindPropertyRelative("changeNameFont").boolValue;
+
+            changeNameFontBox.style.display = flag ? DisplayStyle.Flex : DisplayStyle.None;
+        });
+
+        //サウンド設定
+        var BGMStyle = root.Q<EnumField>("BGMStyle");
+        BGMStyle.RegisterValueChangedCallback(x =>
+        {
+            SoundStyle PlayStyleValue = (SoundStyle)data.FindPropertyRelative("BGMStyle").enumValueIndex;
+
+            var BGMPlayBox = root.Q<Box>("BGMPlayBox");
+            if (PlayStyleValue == SoundStyle.Play)
+            {
+                BGMPlayBox.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                BGMPlayBox.style.display = DisplayStyle.None;
+            }
+
+        });
+
+        var BGMLoop = root.Q<EnumField>("BGMLoop");
+        BGMLoop.RegisterValueChangedCallback(x =>
+        {
+            var LoopStyleValue = (LoopMode)data.FindPropertyRelative("BGMLoop").enumValueIndex;
+            var BGMEndFadeTime = root.Q<FloatField>("BGMEndFadeTime");
+            var BGMCount = root.Q<IntegerField>("BGMCount");
+            var BGMSecond = root.Q<FloatField>("BGMSecond");
+
+
+            switch (LoopStyleValue)
+            {
+                case LoopMode.Endless:
+                    BGMEndFadeTime.style.display = DisplayStyle.None;
+                    BGMCount.style.display = DisplayStyle.None;
+                    BGMSecond.style.display = DisplayStyle.None;
+                    break;
+
+                case LoopMode.Count:
+                    BGMEndFadeTime.style.display = DisplayStyle.Flex;
+                    BGMCount.style.display = DisplayStyle.Flex;
+                    BGMSecond.style.display = DisplayStyle.None;
+                    break;
+
+                case LoopMode.Second:
+                    BGMEndFadeTime.style.display = DisplayStyle.Flex;
+                    BGMCount.style.display = DisplayStyle.None;
+                    BGMSecond.style.display = DisplayStyle.Flex;
+                    break;
+            }
+        });
+
+        var SEStyle = root.Q<EnumField>("SEStyle");
+        SEStyle.RegisterValueChangedCallback(x =>
+        {
+            SoundStyle PlayStyleValue = (SoundStyle)data.FindPropertyRelative("SEStyle").enumValueIndex;
+
+            var SEPlayBox = root.Q<Box>("SEPlayBox");
+            if (PlayStyleValue == SoundStyle.Play)
+            {
+                SEPlayBox.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                SEPlayBox.style.display = DisplayStyle.None;
+            }
+
+        });
+
+        var SELoop = root.Q<EnumField>("SELoop");
+        SELoop.RegisterValueChangedCallback(x =>
+        {
+            var LoopStyleValue = (LoopMode)data.FindPropertyRelative("SELoop").enumValueIndex;
+            var SEEndFadeTime = root.Q<FloatField>("SEEndFadeTime");
+            var SECount = root.Q<IntegerField>("SECount");
+            var SESecond = root.Q<FloatField>("SESecond");
+
+
+            switch (LoopStyleValue)
+            {
+                case LoopMode.Endless:
+                    SEEndFadeTime.style.display = DisplayStyle.None;
+                    SECount.style.display = DisplayStyle.None;
+                    SESecond.style.display = DisplayStyle.None;
+                    break;
+
+                case LoopMode.Count:
+                    SEEndFadeTime.style.display = DisplayStyle.Flex;
+                    SECount.style.display = DisplayStyle.Flex;
+                    SESecond.style.display = DisplayStyle.None;
+                    break;
+
+                case LoopMode.Second:
+                    SEEndFadeTime.style.display = DisplayStyle.Flex;
+                    SECount.style.display = DisplayStyle.None;
+                    SESecond.style.display = DisplayStyle.Flex;
+                    break;
+            }
+        });
+
+        //エフェクト設定
 
     }
 }
