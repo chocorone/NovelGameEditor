@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <ui:Box>
         <ui:Label text="キャラ1" display-tooltip-when-elided="true" name="charaName" />
-        <ui:DropdownField index="-1" choices="System.Collections.Generic.List`1[System.String]" tabindex="0" />
+        <uie:EnumField  />
         <uie:ObjectField type="UnityEngine.Sprite, UnityEngine.CoreModule" />
     </ui:Box>
 

@@ -68,8 +68,10 @@ internal class DialogueDrawer : PropertyDrawer
 
 
         //背景
-        var howBack = root.Q<DropdownField>("backSprite");
-        //howBack.BindProperty(data.FindPropertyRelative("howBack"));
+        var howBack = root.Q<EnumField>("howBack");
+        howBack.Init((BackChangeStyle)data.FindPropertyRelative("howBack").enumValueIndex);
+        howBack.BindProperty(data.FindPropertyRelative("howBack"));
+
 
         var BackSprite = root.Q<ObjectField>("backSprite");
         BackSprite.BindProperty(data.FindPropertyRelative("back"));
@@ -108,59 +110,72 @@ internal class DialogueDrawer : PropertyDrawer
 
 
         //BGM
-        var BGMStyle = root.Q<DropdownField>("BGMStyle");
+        var BGMStyle = root.Q<EnumField>("BGMStyle");
+        BGMStyle.Init((SoundStyle)data.FindPropertyRelative("BGMStyle").enumValueIndex);
         BGMStyle.BindProperty(data.FindPropertyRelative("BGMStyle"));
 
         var BGM = root.Q<ObjectField>("BGM");
         BGM.BindProperty(data.FindPropertyRelative("BGM"));
 
+        var BGMLoop = root.Q<EnumField>("BGMLoop");
+        BGMLoop.Init((LoopMode)data.FindPropertyRelative("BGMLoop").enumValueIndex);
+        BGMLoop.BindProperty(data.FindPropertyRelative("BGMLoop"));
+
         var BGMCount = root.Q<IntegerField>("BGMCount");
         BGMCount.BindProperty(data.FindPropertyRelative("BGMCount"));
 
-        // var BGMSecond = root.Q<FloatField>("BGMSecond");
-        // BGMSecond.BindProperty(data.FindPropertyRelative("BGMSecond"));
+        var BGMSecond = root.Q<FloatField>("BGMSecond");
+        BGMSecond.BindProperty(data.FindPropertyRelative("BGMSecond"));
 
-        // var BGMFadeTime = root.Q<FloatField>("BGMFadeTime");
-        // BGMFadeTime.BindProperty(data.FindPropertyRelative("BGMFadeTime"));
+        var BGMFadeTime = root.Q<FloatField>("BGMFadeTime");
+        BGMFadeTime.BindProperty(data.FindPropertyRelative("BGMFadeTime"));
 
-        // var BGMEndFadeTime = root.Q<FloatField>("BGMEndFadeTime");
-        // BGMEndFadeTime.BindProperty(data.FindPropertyRelative("BGMEndFadeTime"));
+        var BGMEndFadeTime = root.Q<FloatField>("BGMEndFadeTime");
+        BGMEndFadeTime.BindProperty(data.FindPropertyRelative("BGMEndFadeTime"));
 
 
         //SE
-        var SEStyle = root.Q<DropdownField>("SEStyle");
+        var SEStyle = root.Q<EnumField>("SEStyle");
+        SEStyle.Init((SoundStyle)data.FindPropertyRelative("SEStyle").enumValueIndex);
         SEStyle.BindProperty(data.FindPropertyRelative("SEStyle"));
 
         var SE = root.Q<ObjectField>("SE");
         SE.BindProperty(data.FindPropertyRelative("SE"));
 
+        var SELoop = root.Q<EnumField>("SELoop");
+        SELoop.Init((LoopMode)data.FindPropertyRelative("SELoop").enumValueIndex);
+        SELoop.BindProperty(data.FindPropertyRelative("SELoop"));
+
         var SECount = root.Q<IntegerField>("SECount");
         SECount.BindProperty(data.FindPropertyRelative("SECount"));
 
-        // var SESecond = root.Q<FloatField>("SESecond");
-        // SESecond.BindProperty(data.FindPropertyRelative("SESecond"));
+        var SESecond = root.Q<FloatField>("SESecond");
+        SESecond.BindProperty(data.FindPropertyRelative("SESecond"));
 
-        // var SEFadeTime = root.Q<FloatField>("SEFadeTime");
-        // SEFadeTime.BindProperty(data.FindPropertyRelative("SEFadeTime"));
+        var SEFadeTime = root.Q<FloatField>("SEFadeTime");
+        SEFadeTime.BindProperty(data.FindPropertyRelative("SEFadeTime"));
 
-        // var SEEndFadeTime = root.Q<FloatField>("SEEndFadeTime");
-        // SEEndFadeTime.BindProperty(data.FindPropertyRelative("SEEndFadeTime"));
+        var SEEndFadeTime = root.Q<FloatField>("SEEndFadeTime");
+        SEEndFadeTime.BindProperty(data.FindPropertyRelative("SEEndFadeTime"));
 
 
         //エフェクト
-        var backEffect = root.Q<DropdownField>("backEffect");
+        var backEffect = root.Q<EnumField>("backEffect");
+        backEffect.Init((Effect)data.FindPropertyRelative("backEffect").enumValueIndex);
         backEffect.BindProperty(data.FindPropertyRelative("backEffect"));
 
         var backEffectStrength = root.Q<SliderInt>("backEffectStrength");
         backEffectStrength.BindProperty(data.FindPropertyRelative("backEffectStrength"));
 
-        var FrontEffect = root.Q<DropdownField>("FrontEffect");
+        var FrontEffect = root.Q<EnumField>("FrontEffect");
+        FrontEffect.Init((Effect)data.FindPropertyRelative("FrontEffect").enumValueIndex);
         FrontEffect.BindProperty(data.FindPropertyRelative("FrontEffect"));
 
         var FrontEffectStrength = root.Q<SliderInt>("FrontEffectStrength");
         FrontEffectStrength.BindProperty(data.FindPropertyRelative("FrontEffectStrength"));
 
-        var AllEffect = root.Q<DropdownField>("AllEffect");
+        var AllEffect = root.Q<EnumField>("AllEffect");
+        AllEffect.Init((Effect)data.FindPropertyRelative("AllEffect").enumValueIndex);
         AllEffect.BindProperty(data.FindPropertyRelative("AllEffect"));
 
         var AllEffectStrength = root.Q<SliderInt>("AllEffectStrength");
