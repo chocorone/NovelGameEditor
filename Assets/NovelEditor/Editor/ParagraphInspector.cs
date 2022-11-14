@@ -26,8 +26,8 @@ internal class ParagraphInspector : Editor
 
     public override VisualElement CreateInspectorGUI()
     {
-        var visualElement = new VisualElement();
-
+        var root = new VisualElement();
+        root.styleSheets.Add(Resources.Load<StyleSheet>("DialogueUSS"));
         Label label = new Label();
         if (index == 0)
         {
@@ -37,11 +37,11 @@ internal class ParagraphInspector : Editor
         {
             label.text = "！現在の立ち絵や背景に注意";
         }
-        visualElement.Add(label);
+        root.Add(label);
 
         Toggle toggle = new Toggle();
         toggle.text = "詳細設定全部開く";
-        visualElement.Add(toggle);
+        root.Add(toggle);
 
         var list = new ListView();
         list.reorderable = true;
@@ -51,10 +51,10 @@ internal class ParagraphInspector : Editor
         list.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
 
 
-        visualElement.Add(list);
+        root.Add(list);
 
 
-        return visualElement;
+        return root;
     }
 
 }

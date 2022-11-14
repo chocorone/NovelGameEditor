@@ -23,7 +23,7 @@ internal class DialogueDrawer : PropertyDrawer
         var DialogueUXML = Resources.Load<VisualTreeAsset>("DialogueUXML");
         DialogueUXML.CloneTree(root);
 
-        var imageFold = root.Q<Foldout>("ImageFold");
+        var charaImageBox = root.Q<Box>("charaImage");
         var charaUXML = Resources.Load<VisualTreeAsset>("CharaSettingUXML");
 
         int rand = UnityEngine.Random.Range(1, 5);
@@ -31,9 +31,19 @@ internal class DialogueDrawer : PropertyDrawer
         {
             VisualElement charaTree = new VisualElement();
             charaUXML.CloneTree(charaTree);
-            imageFold.Add(charaTree);
+            charaTree.Q<Label>("charaName").text = "キャラ" + (i + 1);
+            charaImageBox.Add(charaTree);
         }
 
+        var charaEffectBox = root.Q<Box>("charaEffect");
+        var charaEffectUXML = Resources.Load<VisualTreeAsset>("CharaSettingUXML");
+        for (int i = 0; i < rand; i++)
+        {
+            VisualElement charaTree = new VisualElement();
+            charaUXML.CloneTree(charaTree);
+            charaTree.Q<Label>("charaName").text = "キャラ" + (i + 1);
+            charaEffectBox.Add(charaTree);
+        }
 
 
 
