@@ -75,12 +75,21 @@ internal class NovelDataInspector : Editor
                 dialogue.charaEffectStrength = new int[noveldata.locations.Count];
 
                 bar.value += perDialogue;
-                Debug.Log(bar.value);
             }
         }
         bar.value = 100;
         noveldata.havePreLocations = true;
         label.text = "処理完了";
+
+        LocationWrapper preLocation = new LocationWrapper() { locations = noveldata.locations };
+        string json = JsonUtility.ToJson(preLocation);
+        noveldata.prelocations = JsonUtility.FromJson<LocationWrapper>(json).locations;
+    }
+
+    class LocationWrapper
+    {
+        public List<UnityEngine.UI.Image> locations;
+
     }
 
 }
