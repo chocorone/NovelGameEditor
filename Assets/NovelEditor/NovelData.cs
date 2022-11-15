@@ -70,14 +70,9 @@ public class NovelData : ScriptableObject
     {
         _paragraphList.Clear();
 
-        ParagraphData pdata = new ParagraphData();
-        pdata.SetEnable(true);
-        pdata.dialogueList.Add(new ParagraphData.Dialogue());
+        ParagraphData pdata = CreateParagraph();
         pdata.dialogueList[0].text = "FirstParagraph";
         pdata.SetIndex(0);
-        pdata.ResetNext(Next.End);
-
-        _paragraphList.Add(pdata);
     }
 
     public ParagraphData CreateParagraph()
@@ -99,6 +94,8 @@ public class NovelData : ScriptableObject
         data.dialogueList[0].text = "Paragraph";
         data.dialogueList[0].charas = new Sprite[locations.Count];
         data.dialogueList[0].howCharas = new CharaChangeStyle[locations.Count];
+        data.dialogueList[0].charaEffects = new Effect[locations.Count];
+        data.dialogueList[0].charaEffectStrength = new int[locations.Count];
         data.ResetNext(Next.End);
 
         return data;
