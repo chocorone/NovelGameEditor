@@ -34,7 +34,9 @@ internal class ChoiceNode : BaseNode
     }
     internal override void overrideNode(string pasteData)
     {
-
+        ChoiceData newData = JsonUtility.FromJson<ChoiceData>(pasteData);
+        data.text = newData.text;
+        SetTitle();
     }
 
     private protected override void NodeSet()

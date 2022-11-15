@@ -41,7 +41,10 @@ internal class ParagraphNode : BaseNode
 
     internal override void overrideNode(string pasteData)
     {
-
+        ParagraphData newData = JsonUtility.FromJson<ParagraphData>(pasteData);
+        data.ChangeDialogue(newData.dialogueList);
+        SetTitle();
+        OnSelected();
     }
 
     private protected override void NodeSet()
