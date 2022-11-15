@@ -130,6 +130,14 @@ public class NovelData : ScriptableObject
         return data;
     }
 
+    public ChoiceData CreateChoiceFromJson(string sdata)
+    {
+        ChoiceData data = JsonUtility.FromJson<ChoiceData>(sdata);
+        ChoiceData popData = CreateChoice();
+        popData.text = data.text;
+        return popData;
+    }
+
 
 
     [System.SerializableAttribute]
@@ -238,6 +246,12 @@ public class NovelData : ScriptableObject
             this.SetEnable(false);
             //ここよくない
             NovelEditorWindow.editingData.ParagraphStack.Push(this);
+        }
+
+
+        internal void ChangeDialogue(List<Dialogue> newDialogueList)
+        {
+            _dialogueList = newDialogueList;
         }
 
         //会話文ごとのデータ

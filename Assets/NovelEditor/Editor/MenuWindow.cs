@@ -110,7 +110,14 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
 
         foreach (var cdata in copyData.cdatas)
         {
+            ChoiceData newdata = NovelEditorWindow.editingData.CreateChoiceFromJson(JsonUtility.ToJson(cdata));
+            ChoiceNode node = new ChoiceNode(newdata);
 
+            // マウスの位置にノードを追加
+            node.SetPosition(new Rect(newdata.nodePosition.center, new Vector2(100, 100)));
+
+            //GraphViewにノードを追加して位置をセーブ
+            graphView.AddElement(node);
         }
         Debug.Log(data);
     }

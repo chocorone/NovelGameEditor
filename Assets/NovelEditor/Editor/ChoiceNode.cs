@@ -30,7 +30,15 @@ internal class ChoiceNode : BaseNode
 
         NodeSet();
         SetPosition(data.nodePosition);
-        nodes[data.index] = this;
+        if (data.index < nodes.Count)
+        {
+            nodes[data.index] = this;
+        }
+        else
+        {
+            nodes.Add(this);
+        }
+
     }
     internal override void overrideNode(string pasteData)
     {
