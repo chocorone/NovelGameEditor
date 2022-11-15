@@ -21,8 +21,9 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
             SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), this);
         };
 
-        graphView.OnContextMenuNodeCreate = OnContextMenuNodeCreate;
-        graphView.OnContextMenuNodeCopy = OnContextMenuNodeCopy;
+        graphView.CopyNodes = OnContextMenuNodeCopy;
+        graphView.PasteOnNode = OnContextMenuPasteOnNode;
+        graphView.PasteOnGraph = OnContextMenuPasteOnGraph;
     }
 
     //右クリックで開くメニュー
@@ -69,27 +70,32 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
     string OnContextMenuNodeCopy(IEnumerable<GraphElement> elements)
     {
         Debug.Log("Copyed");
-        string data = "Copyed";
-        foreach (GraphElement element in elements)
-        {
-            GraphElement e = element;
-            if (e is BaseNode)
-            {
-                BaseNode node = (BaseNode)e;
-                //data = node.SerializeData();
-            }
-        }
-
-        Debug.Log("Serialized!");
+        string data = "";
+        // foreach (GraphElement element in elements)
+        // {
+        //     GraphElement e = element;
+        //     if (e is ParagraphNode)
+        //     {
+        //         data = "ParagraphNode|";
+        //         data += JsonUtility.ToJson(((ParagraphNode)e).data);
+        //     }
+        //     if (e is ChoiceNode)
+        //     {
+        //         data = "ChoiceNode|";
+        //         data += JsonUtility.ToJson(((ChoiceNode)e).data);
+        //     }
+        // }
         return data;
     }
 
-    void OnContextMenuPasteOnNode(string operationName, string data)
+    void OnContextMenuPasteOnNode(string data, BaseNode node)
     {
+        //node.overrideNode(data);
         Debug.Log(data);
     }
 
-    void OnContextMenuPasteOnGraph(DropdownMenuAction a)
+    void OnContextMenuPasteOnGraph(string data)
     {
+        Debug.Log(data);
     }
 }
