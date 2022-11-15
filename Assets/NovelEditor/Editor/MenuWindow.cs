@@ -83,9 +83,7 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
                 copyData.cdatas.Add(((ChoiceNode)e).data);
             }
         }
-        Debug.Log(copyData.pdatas.Count);
         string data = JsonUtility.ToJson(copyData);
-        Debug.Log(data);
         return data;
     }
 
@@ -119,7 +117,19 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
             //GraphViewにノードを追加して位置をセーブ
             graphView.AddElement(node);
         }
-        Debug.Log(data);
+
+        foreach (var pdata in copyData.pdatas)
+        {
+            ParagraphData newdata = NovelEditorWindow.editingData.CreateParagraphFromJson(JsonUtility.ToJson(pdata));
+            ParagraphNode node = new ParagraphNode(newdata);
+
+            // マウスの位置にノードを追加
+            node.SetPosition(new Rect(newdata.nodePosition.center, new Vector2(100, 100)));
+
+            //GraphViewにノードを追加して位置をセーブ
+            graphView.AddElement(node);
+        }
+
     }
 
     class CopyData
