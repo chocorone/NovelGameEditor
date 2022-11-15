@@ -57,8 +57,15 @@ internal abstract class BaseNode : Node
             if (nodeData is ChoiceData)
             {
                 TempChoice temp = ScriptableObject.CreateInstance<TempChoice>();
-                //ノードのデータをインスペクターに反映
                 temp.data = (ChoiceData)nodeData;
+                Selection.activeObject = temp;
+            }
+
+            if (nodeData is ParagraphData)
+            {
+                TempParagraph temp = ScriptableObject.CreateInstance<TempParagraph>();
+                temp.data = (ParagraphData)nodeData;
+                temp.dialogueList = ((ParagraphData)nodeData).dialogueList;
                 Selection.activeObject = temp;
             }
         }
