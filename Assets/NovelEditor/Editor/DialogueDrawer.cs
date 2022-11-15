@@ -36,18 +36,20 @@ internal class DialogueDrawer : PropertyDrawer
         var charaImageBox = root.Q<Box>("charaImage");
         var charaUXML = Resources.Load<VisualTreeAsset>("CharaSettingUXML");
 
-        int rand = UnityEngine.Random.Range(0, 5);
-        for (int i = 0; i < rand; i++)
+        int charaNum = NovelEditorWindow.editingData.locations.Count;
+        for (int i = 0; i < charaNum; i++)
         {
             VisualElement charaTree = new VisualElement();
             charaUXML.CloneTree(charaTree);
-            charaTree.Q<EnumField>().label = "キャラ" + (i + 1);
+            charaTree.Q<EnumField>().label = NovelEditorWindow.editingData.locations[i].name;
+            //charaTree.Q<EnumField>().BindProperty(data.FindPropertyRelative("CharaChangeStyle").GetArrayElementAtIndex(i));
+            //charaTree.Q<ObjectField>().BindProperty(data.FindPropertyRelative("charas").GetArrayElementAtIndex(i));
             charaImageBox.Add(charaTree);
         }
 
         var charaEffectBox = root.Q<Box>("charaEffect");
         var charaEffectUXML = Resources.Load<VisualTreeAsset>("CharaSettingUXML");
-        for (int i = 0; i < rand; i++)
+        for (int i = 0; i < charaNum; i++)
         {
             VisualElement charaTree = new VisualElement();
             charaUXML.CloneTree(charaTree);
