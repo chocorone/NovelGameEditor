@@ -13,6 +13,9 @@ internal class NovelDataInspector : Editor
 {
     NovelData noveldata;
 
+    ProgressBar bar;
+    Label label;
+
     void OnEnable()
     {
         noveldata = target as NovelData;
@@ -34,6 +37,12 @@ internal class NovelDataInspector : Editor
         var prefabButton = visualElement.Q<Button>("prefab_button");
         prefabButton.clickable.clicked += ChangePrefab;
 
+        label = visualElement.Q<Label>();
+
+        bar = visualElement.Q<ProgressBar>();
+        bar.style.display = DisplayStyle.None;
+
+
         return visualElement;
     }
 
@@ -48,10 +57,15 @@ internal class NovelDataInspector : Editor
 
     void ChangePrefab()
     {
+        label.text = "処理中";
+        bar.value = 0;
+        bar.style.display = DisplayStyle.Flex;
+
+        float perParagraph = 100 / noveldata.paragraphsList.Count;
 
         foreach (ParagraphData pdata in noveldata.paragraphsList)
         {
-
+            float perDialogue = perParagraph / pdata.dialogueList.Count;
             foreach (Dialogue dialogue in pdata.dialogueList)
             {
                 dialogue.charas = new Sprite[noveldata.locations.Count];
@@ -59,11 +73,14 @@ internal class NovelDataInspector : Editor
                 dialogue.charaFadeColor = new Color[noveldata.locations.Count];
                 dialogue.charaEffects = new Effect[noveldata.locations.Count];
                 dialogue.charaEffectStrength = new int[noveldata.locations.Count];
+
+                bar.value += perDialogue;
+                Debug.Log(bar.value);
             }
-
         }
-
+        bar.value = 100;
         noveldata.havePreLocations = true;
+        label.text = "処理完了";
     }
 
 }
