@@ -58,6 +58,7 @@ internal class NovelDataInspector : Editor
                 dialogue.howCharas = new CharaChangeStyle[noveldata.locations.Count];
                 dialogue.charaFadeColor = new Color[noveldata.locations.Count];
                 dialogue.charaEffects = new Effect[noveldata.locations.Count];
+                dialogue.charaEffectStrength = new int[noveldata.locations.Count];
             }
 
         }

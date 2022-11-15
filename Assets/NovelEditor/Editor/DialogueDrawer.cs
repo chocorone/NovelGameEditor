@@ -42,18 +42,20 @@ internal class DialogueDrawer : PropertyDrawer
             VisualElement charaTree = new VisualElement();
             charaUXML.CloneTree(charaTree);
             charaTree.Q<EnumField>().label = NovelEditorWindow.editingData.locations[i].name;
-            //charaTree.Q<EnumField>().BindProperty(data.FindPropertyRelative("CharaChangeStyle").GetArrayElementAtIndex(i));
-            //charaTree.Q<ObjectField>().BindProperty(data.FindPropertyRelative("charas").GetArrayElementAtIndex(i));
+            charaTree.Q<EnumField>().BindProperty(data.FindPropertyRelative("howCharas").GetArrayElementAtIndex(i));
+            charaTree.Q<ObjectField>().BindProperty(data.FindPropertyRelative("charas").GetArrayElementAtIndex(i));
             charaImageBox.Add(charaTree);
         }
 
         var charaEffectBox = root.Q<Box>("charaEffect");
-        var charaEffectUXML = Resources.Load<VisualTreeAsset>("CharaSettingUXML");
+        var charaEffectUXML = Resources.Load<VisualTreeAsset>("CharaEffect");
         for (int i = 0; i < charaNum; i++)
         {
             VisualElement charaTree = new VisualElement();
-            charaUXML.CloneTree(charaTree);
-            charaTree.Q<EnumField>().label = "キャラ" + (i + 1);
+            charaEffectUXML.CloneTree(charaTree);
+            charaTree.Q<EnumField>().label = NovelEditorWindow.editingData.locations[i].name;
+            charaTree.Q<EnumField>().BindProperty(data.FindPropertyRelative("charaEffects").GetArrayElementAtIndex(i));
+            charaTree.Q<SliderInt>().BindProperty(data.FindPropertyRelative("charaEffectStrength").GetArrayElementAtIndex(i));
             charaEffectBox.Add(charaTree);
         }
     }
