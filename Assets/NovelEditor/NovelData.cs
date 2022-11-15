@@ -11,8 +11,6 @@ using TMPro;
 public class NovelData : ScriptableObject
 {
     #region 会話基本データ
-    [SerializeField] TextMode textMode = TextMode.TextMeshPro;
-
     //立ち絵の位置
     [SerializeField] List<Image> _locations = new List<Image>();
 
@@ -44,7 +42,7 @@ public class NovelData : ScriptableObject
     internal bool havePreLocations = false;
 
     [SerializeField, HideInInspector]
-    internal List<Image> prelocations = new List<Image>();
+    internal Dictionary<int, int> prelocations = new Dictionary<int, int>();
 
     //使っていないデータを入れるスタック
     [SerializeField, HideInInspector]
