@@ -61,6 +61,7 @@ internal class ParagraphNode : BaseNode
         //ノードの色変更
         if (data.index == 0)
         {
+            capabilities -= Capabilities.Deletable;
             titleContainer.style.backgroundColor = new Color(0.8f, 0.2f, 0.4f);
         }
         else
