@@ -104,11 +104,9 @@ public class NovelData : ScriptableObject
     public ParagraphData CreateParagraphFromJson(string sdata)
     {
         ParagraphData data = JsonUtility.FromJson<ParagraphData>(sdata);
-        data.SetEnable(true);
-        data.SetIndex(MaxParagraphID);
-        data.ResetNext(Next.End);
-        _paragraphList.Add(data);
-        return data;
+        ParagraphData popData = CreateParagraph();
+        popData.ChangeDialogue(data.dialogueList);
+        return popData;
     }
 
     public ChoiceData CreateChoice()
