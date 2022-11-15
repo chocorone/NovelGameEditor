@@ -76,14 +76,14 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
             GraphElement e = element;
             if (e is ParagraphNode)
             {
-                copyData.pnodes.Add(((ParagraphNode)e).data);
+                copyData.pdatas.Add(((ParagraphNode)e).data);
             }
             if (e is ChoiceNode)
             {
-                copyData.cnodes.Add(((ChoiceNode)e).data);
+                copyData.cdatas.Add(((ChoiceNode)e).data);
             }
         }
-        Debug.Log(copyData.pnodes.Count);
+        Debug.Log(copyData.pdatas.Count);
         string data = JsonUtility.ToJson(copyData);
         Debug.Log(data);
         return data;
@@ -91,19 +91,34 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
 
     void OnContextMenuPasteOnNode(string data, BaseNode node)
     {
-        //node.overrideNode(data);
-        Debug.Log(data);
+        CopyData copyData = JsonUtility.FromJson<CopyData>(data);
+
+        if (node is ChoiceNode && copyData.cdatas.Count > 0)
+        {
+            node.overrideNode(JsonUtility.ToJson(copyData.cdatas[0]));
+        }
+
+        if (node is ParagraphNode && copyData.pdatas.Count > 0)
+        {
+            node.overrideNode(JsonUtility.ToJson(copyData.pdatas[0]));
+        }
     }
 
     void OnContextMenuPasteOnGraph(string data)
     {
+        CopyData copyData = JsonUtility.FromJson<CopyData>(data);
+
+        foreach (var cdata in copyData.cdatas)
+        {
+
+        }
         Debug.Log(data);
     }
 
     class CopyData
     {
-        public List<ParagraphData> pnodes = new List<ParagraphData>();
-        public List<ChoiceData> cnodes = new List<ChoiceData>();
+        public List<ParagraphData> pdatas = new List<ParagraphData>();
+        public List<ChoiceData> cdatas = new List<ChoiceData>();
 
     }
 }
