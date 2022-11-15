@@ -10,7 +10,7 @@ internal class NovelGraphView : GraphView
     public System.Action<DropdownMenuAction> OnContextMenuNodeCreate;
     public SerializeGraphElementsDelegate CopyNodes;
     public System.Action<string, BaseNode> PasteOnNode;
-    public System.Action<string> PasteOnGraph;
+    public System.Action<string, Vector2> PasteOnGraph;
 
     public NovelGraphView()
     {
@@ -116,7 +116,7 @@ internal class NovelGraphView : GraphView
                 paste =>
                 {
                     unserializeAndPaste = new UnserializeAndPasteDelegate(
-                        (string operationName, string pasteData) => PasteOnGraph(pasteData)
+                        (string operationName, string pasteData) => PasteOnGraph(pasteData, position)
                     );
                     PasteCallback();
                 },
