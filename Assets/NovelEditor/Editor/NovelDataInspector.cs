@@ -38,7 +38,7 @@ internal class NovelDataInspector : Editor
         var prefabButton = visualElement.Q<Button>("prefab_button");
         prefabButton.clickable.clicked += ChangePrefab;
 
-        label = visualElement.Q<Label>();
+        label = visualElement.Q<Label>("progressLabel");
 
         bar = visualElement.Q<ProgressBar>();
         bar.style.display = DisplayStyle.None;
