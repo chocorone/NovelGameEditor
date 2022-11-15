@@ -16,7 +16,6 @@ public class NovelEditor
     /// <param name="data">編集したいデータ</param>
     public static void Open(NovelData data)
     {
-        Debug.Log("bbb");
         //ウィンドウ作成
         var window = EditorWindow.GetWindow<NovelEditorWindow>(typeof(UnityEditor.SceneView));
         window.Init(data);
@@ -25,7 +24,6 @@ public class NovelEditor
     [MenuItem("Tool/NovelEditor")]
     public static void Open()
     {
-        Debug.Log("bbb");
         //ウィンドウ作成
         var window = EditorWindow.GetWindow<NovelEditorWindow>(typeof(UnityEditor.SceneView));
         window.Init(null);
