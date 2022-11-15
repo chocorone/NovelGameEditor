@@ -109,6 +109,11 @@ internal class NovelDataInspector : Editor
         foreach (ParagraphData pdata in noveldata.paragraphsList)
         {
             float perDialogue = perParagraph / pdata.dialogueList.Count;
+            if (!pdata.enabled)
+            {
+                bar.value += perDialogue;
+                continue;
+            }
             foreach (Dialogue dialogue in pdata.dialogueList)
             {
                 //データ保存
