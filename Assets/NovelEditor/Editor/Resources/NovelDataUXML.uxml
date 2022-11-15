@@ -7,6 +7,11 @@
 >
 
     <engine:Button text="プレハブをクリックしたら押す" name="prefab_button" />
+        <engine:Label text="ボタンを押すまで立ち絵位置の変更は反映されません" />
+    <engine:ProgressBar  name="ProgressBar" />
+    
     <engine:Button text="Open" name="open_button" />
+
+
 
 </engine:UXML>
