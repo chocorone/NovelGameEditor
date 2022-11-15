@@ -39,6 +39,11 @@ internal class ParagraphNode : BaseNode
         nodes[data.index] = this;
     }
 
+    internal override void overrideNode(string pasteData)
+    {
+
+    }
+
     private protected override void NodeSet()
     {
         base.NodeSet();

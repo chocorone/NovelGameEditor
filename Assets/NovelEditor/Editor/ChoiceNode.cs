@@ -32,7 +32,10 @@ internal class ChoiceNode : BaseNode
         SetPosition(data.nodePosition);
         nodes[data.index] = this;
     }
+    internal override void overrideNode(string pasteData)
+    {
 
+    }
 
     private protected override void NodeSet()
     {
