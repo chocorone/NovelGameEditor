@@ -31,6 +31,9 @@ internal class NovelDataInspector : Editor
         var button = visualElement.Q<Button>("open_button");
         button.clickable.clicked += OpenEditor;
 
+        var prefabButton = visualElement.Q<Button>("prefab_button");
+        prefabButton.clickable.clicked += ChangePrefab;
+
         return visualElement;
     }
 
@@ -43,6 +46,24 @@ internal class NovelDataInspector : Editor
         NovelEditor.Open(noveldata);
     }
 
+    void ChangePrefab()
+    {
 
+        foreach (ParagraphData pdata in noveldata.paragraphsList)
+        {
+
+            foreach (Dialogue dialogue in pdata.dialogueList)
+            {
+                dialogue.charas = new Sprite[noveldata.locations.Count];
+                dialogue.howCharas = new CharaChangeStyle[noveldata.locations.Count];
+                dialogue.charaFadeColor = new Color[noveldata.locations.Count];
+                dialogue.charaEffects = new Effect[noveldata.locations.Count];
+                dialogue.charaEffectStrength = new int[noveldata.locations.Count];
+            }
+
+        }
+
+        noveldata.havePreLocations = true;
+    }
 
 }

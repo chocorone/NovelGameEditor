@@ -6,7 +6,7 @@
     xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd"
 >
 
-<engine:Button text="プレハブをクリックしたら押す" class="prefab_button"/>
-<engine:Button text="Open" name="open_button"/>
-    
+    <engine:Button text="プレハブをクリックしたら押す" name="prefab_button" />
+    <engine:Button text="Open" name="open_button" />
+
 </engine:UXML>

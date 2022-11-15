@@ -5,7 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
-
+using TMPro;
 
 [CreateAssetMenu(menuName = "Scriptable/Create NovelData")]
 public class NovelData : ScriptableObject
@@ -251,26 +251,26 @@ public class NovelData : ScriptableObject
             public bool open;
             public int elementNum = 7;
 
-            [SerializeField] public CharaChangeStyle[] howCharas;
-            [SerializeField] public Sprite[] charas;
+            public string Name = "";
+            public string text;
 
             public Sprite back;
             public BackChangeStyle howBack;
             public Color backFadeColor = Color.white;
+            public float backFadeSpeed = 1;
 
-            public string Name = "";
-            [TextArea(1, 6)]
-            public string text;
+            [SerializeField] public CharaChangeStyle[] howCharas;
+            [SerializeField] public Sprite[] charas;
+            [SerializeField] public Color[] charaFadeColor;
 
             public bool changeFont = false;
-            public Font font;
+            public TMP_FontAsset font;
             public Color fontColor = Color.white;
-            public FontStyle fontStyle;
             public int fontSize = 30;
 
+            public bool changeNameFont = false;
             public Font nameFont;
             public Color nameColor = Color.white;
-            public FontStyle nameFontStyle;
 
 
             public AudioClip BGM;
@@ -278,9 +278,7 @@ public class NovelData : ScriptableObject
             public LoopMode BGMLoop;
             public int BGMCount = 1;
             public float BGMSecond = 20;
-            public bool BGMFade = false;
             public float BGMFadeTime = 3;
-            public bool BGMEndFade = false;
             public float BGMEndFadeTime = 3;
 
             public AudioClip SE;
@@ -288,9 +286,7 @@ public class NovelData : ScriptableObject
             public LoopMode SELoop;
             public int SECount = 1;
             public float SESecond = 20;
-            public bool SEFade = false;
             public float SEFadeTime = 3;
-            public bool SEEndFade = false;
             public float SEEndFadeTime = 3;
 
 
@@ -298,8 +294,10 @@ public class NovelData : ScriptableObject
             public int backEffectStrength;
             public Effect[] charaEffects;
             public int[] charaEffectStrength;
-            public Effect dialogueEffect;
-            public int dialogueFieldEffectStrength;
+            public Effect FrontEffect;
+            public int FrontEffectStrength;
+            public Effect AllEffect;
+            public int AllEffectStrength;
         }
 
     }
