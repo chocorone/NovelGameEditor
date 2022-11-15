@@ -261,6 +261,7 @@ public class NovelData : ScriptableObject
 
             [SerializeField] public CharaChangeStyle[] howCharas;
             [SerializeField] public Sprite[] charas;
+            [SerializeField] public Color[] charaFadeColor;
 
             public bool changeFont = false;
             public TMP_FontAsset font;
