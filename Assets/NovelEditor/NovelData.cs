@@ -70,14 +70,9 @@ public class NovelData : ScriptableObject
     {
         _paragraphList.Clear();
 
-        ParagraphData pdata = new ParagraphData();
-        pdata.SetEnable(true);
-        pdata.dialogueList.Add(new ParagraphData.Dialogue());
+        ParagraphData pdata = CreateParagraph();
         pdata.dialogueList[0].text = "FirstParagraph";
         pdata.SetIndex(0);
-        pdata.ResetNext(Next.End);
-
-        _paragraphList.Add(pdata);
     }
 
     public ParagraphData CreateParagraph()
@@ -99,6 +94,8 @@ public class NovelData : ScriptableObject
         data.dialogueList[0].text = "Paragraph";
         data.dialogueList[0].charas = new Sprite[locations.Count];
         data.dialogueList[0].howCharas = new CharaChangeStyle[locations.Count];
+        data.dialogueList[0].charaEffects = new Effect[locations.Count];
+        data.dialogueList[0].charaEffectStrength = new int[locations.Count];
         data.ResetNext(Next.End);
 
         return data;
@@ -107,11 +104,9 @@ public class NovelData : ScriptableObject
     public ParagraphData CreateParagraphFromJson(string sdata)
     {
         ParagraphData data = JsonUtility.FromJson<ParagraphData>(sdata);
-        data.SetEnable(true);
-        data.SetIndex(MaxParagraphID);
-        data.ResetNext(Next.End);
-        _paragraphList.Add(data);
-        return data;
+        ParagraphData popData = CreateParagraph();
+        popData.ChangeDialogue(data.dialogueList);
+        return popData;
     }
 
     public ChoiceData CreateChoice()
@@ -131,6 +126,14 @@ public class NovelData : ScriptableObject
         data.SetEnable(true);
 
         return data;
+    }
+
+    public ChoiceData CreateChoiceFromJson(string sdata)
+    {
+        ChoiceData data = JsonUtility.FromJson<ChoiceData>(sdata);
+        ChoiceData popData = CreateChoice();
+        popData.text = data.text;
+        return popData;
     }
 
 
@@ -241,6 +244,12 @@ public class NovelData : ScriptableObject
             this.SetEnable(false);
             //ここよくない
             NovelEditorWindow.editingData.ParagraphStack.Push(this);
+        }
+
+
+        internal void ChangeDialogue(List<Dialogue> newDialogueList)
+        {
+            _dialogueList = newDialogueList;
         }
 
         //会話文ごとのデータ

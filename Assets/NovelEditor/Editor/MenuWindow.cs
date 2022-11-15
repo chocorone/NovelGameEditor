@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using System.Linq;
+using static NovelData;
 
 internal class MenuWindow : ScriptableObject, ISearchWindowProvider
 {
@@ -20,9 +21,10 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
         {
             SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), this);
         };
-
         graphView.OnContextMenuNodeCreate = OnContextMenuNodeCreate;
-        graphView.OnContextMenuNodeCopy = OnContextMenuNodeCopy;
+        graphView.CopyNodes = OnContextMenuNodeCopy;
+        graphView.PasteOnNode = OnContextMenuPasteOnNode;
+        graphView.PasteOnGraph = OnContextMenuPasteOnGraph;
     }
 
     //右クリックで開くメニュー
@@ -68,28 +70,68 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
 
     string OnContextMenuNodeCopy(IEnumerable<GraphElement> elements)
     {
-        Debug.Log("Copyed");
-        string data = "Copyed";
+        CopyData copyData = new CopyData();
         foreach (GraphElement element in elements)
         {
             GraphElement e = element;
-            if (e is BaseNode)
+            if (e is ParagraphNode)
             {
-                BaseNode node = (BaseNode)e;
-                //data = node.SerializeData();
+                copyData.pdatas.Add(((ParagraphNode)e).data);
+            }
+            if (e is ChoiceNode)
+            {
+                copyData.cdatas.Add(((ChoiceNode)e).data);
             }
         }
-
-        Debug.Log("Serialized!");
+        string data = JsonUtility.ToJson(copyData);
         return data;
     }
 
-    void OnContextMenuPasteOnNode(string operationName, string data)
+    void OnContextMenuPasteOnNode(string data, BaseNode node)
     {
-        Debug.Log(data);
+        CopyData copyData = JsonUtility.FromJson<CopyData>(data);
+
+        if (node is ChoiceNode && copyData.cdatas.Count > 0)
+        {
+            node.overrideNode(JsonUtility.ToJson(copyData.cdatas[0]));
+        }
+
+        if (node is ParagraphNode && copyData.pdatas.Count > 0)
+        {
+            node.overrideNode(JsonUtility.ToJson(copyData.pdatas[0]));
+        }
     }
 
-    void OnContextMenuPasteOnGraph(DropdownMenuAction a)
+    void OnContextMenuPasteOnGraph(string data, Vector2 mousePos)
     {
+        CopyData copyData = JsonUtility.FromJson<CopyData>(data);
+
+        foreach (var cdata in copyData.cdatas)
+        {
+            ChoiceData newdata = NovelEditorWindow.editingData.CreateChoiceFromJson(JsonUtility.ToJson(cdata));
+            ChoiceNode node = new ChoiceNode(newdata);
+
+            node.SetPosition(new Rect(mousePos, new Vector2(100, 100)));
+
+            graphView.AddElement(node);
+        }
+
+        foreach (var pdata in copyData.pdatas)
+        {
+            ParagraphData newdata = NovelEditorWindow.editingData.CreateParagraphFromJson(JsonUtility.ToJson(pdata));
+            ParagraphNode node = new ParagraphNode(newdata);
+
+            node.SetPosition(new Rect(mousePos, new Vector2(100, 100)));
+
+            graphView.AddElement(node);
+        }
+
+    }
+
+    class CopyData
+    {
+        public List<ParagraphData> pdatas = new List<ParagraphData>();
+        public List<ChoiceData> cdatas = new List<ChoiceData>();
+
     }
 }

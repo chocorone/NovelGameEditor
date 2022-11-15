@@ -8,8 +8,9 @@ using System.Linq;
 internal class NovelGraphView : GraphView
 {
     public System.Action<DropdownMenuAction> OnContextMenuNodeCreate;
-    public SerializeGraphElementsDelegate OnContextMenuNodeCopy;
-    public System.Action<string, BaseNode> PasteNode;
+    public SerializeGraphElementsDelegate CopyNodes;
+    public System.Action<string, BaseNode> PasteOnNode;
+    public System.Action<string, Vector2> PasteOnGraph;
 
     public NovelGraphView()
     {
@@ -100,7 +101,7 @@ internal class NovelGraphView : GraphView
                 "Copy",
                 copy =>
                 {
-                    serializeGraphElements = OnContextMenuNodeCopy;
+                    serializeGraphElements = CopyNodes;
                     CopySelectionCallback();
                 },
                 copy => (this.canCopySelection ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled),
@@ -112,7 +113,13 @@ internal class NovelGraphView : GraphView
             Vector2 position = evt.mousePosition;
             evt.menu.AppendAction(
                 "Paste",
-                paste => { },
+                paste =>
+                {
+                    unserializeAndPaste = new UnserializeAndPasteDelegate(
+                        (string operationName, string pasteData) => PasteOnGraph(pasteData, position)
+                    );
+                    PasteCallback();
+                },
                 paste => (this.canPaste ? DropdownMenuAction.Status.Normal : DropdownMenuAction.Status.Disabled),
                 (object)null);
         }
@@ -126,7 +133,7 @@ internal class NovelGraphView : GraphView
                 Paste =>
                 {
                     unserializeAndPaste = new UnserializeAndPasteDelegate(
-                        (string operationName, string pasteData) => PasteNode(pasteData, node)
+                        (string operationName, string pasteData) => PasteOnNode(pasteData, node)
                     );
                     PasteCallback();
                 },
