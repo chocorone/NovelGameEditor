@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using System.Linq;
+using static NovelData;
 
 internal class MenuWindow : ScriptableObject, ISearchWindowProvider
 {
@@ -20,7 +21,7 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
         {
             SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), this);
         };
-
+        graphView.OnContextMenuNodeCreate = OnContextMenuNodeCreate;
         graphView.CopyNodes = OnContextMenuNodeCopy;
         graphView.PasteOnNode = OnContextMenuPasteOnNode;
         graphView.PasteOnGraph = OnContextMenuPasteOnGraph;
@@ -69,22 +70,22 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
 
     string OnContextMenuNodeCopy(IEnumerable<GraphElement> elements)
     {
-        Debug.Log("Copyed");
-        string data = "";
-        // foreach (GraphElement element in elements)
-        // {
-        //     GraphElement e = element;
-        //     if (e is ParagraphNode)
-        //     {
-        //         data = "ParagraphNode|";
-        //         data += JsonUtility.ToJson(((ParagraphNode)e).data);
-        //     }
-        //     if (e is ChoiceNode)
-        //     {
-        //         data = "ChoiceNode|";
-        //         data += JsonUtility.ToJson(((ChoiceNode)e).data);
-        //     }
-        // }
+        CopyData copyData = new CopyData();
+        foreach (GraphElement element in elements)
+        {
+            GraphElement e = element;
+            if (e is ParagraphNode)
+            {
+                copyData.pnodes.Add(((ParagraphNode)e).data);
+            }
+            if (e is ChoiceNode)
+            {
+                copyData.cnodes.Add(((ChoiceNode)e).data);
+            }
+        }
+        Debug.Log(copyData.pnodes.Count);
+        string data = JsonUtility.ToJson(copyData);
+        Debug.Log(data);
         return data;
     }
 
@@ -97,5 +98,12 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
     void OnContextMenuPasteOnGraph(string data)
     {
         Debug.Log(data);
+    }
+
+    class CopyData
+    {
+        public List<ParagraphData> pnodes = new List<ParagraphData>();
+        public List<ChoiceData> cnodes = new List<ChoiceData>();
+
     }
 }
