@@ -85,6 +85,11 @@ internal class NovelDataInspector : Editor
 
     void ChangePrefab()
     {
+        if (noveldata.newData)
+        {
+            noveldata.ResetData();
+        }
+
         label.text = "処理中";
         bar.value = 0;
         bar.style.display = DisplayStyle.Flex;
@@ -94,9 +99,6 @@ internal class NovelDataInspector : Editor
         {
             locationsKey.Add(noveldata.locations[i].GetInstanceID(), i);
         }
-
-        Debug.Log("before" + locationsKey.Count);
-        //noveldata.locations.ForEach(x => Debug.Log(x.name + ":" + x.GetInstanceID()));
 
         noveldata.newLocations.RemoveAll(item => item == null);
         noveldata.newLocations = noveldata.newLocations.Distinct().ToList();
