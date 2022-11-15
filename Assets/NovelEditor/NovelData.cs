@@ -41,8 +41,7 @@ public class NovelData : ScriptableObject
     [SerializeField, HideInInspector]
     internal bool havePreLocations = false;
 
-    [SerializeField, HideInInspector]
-    internal Dictionary<int, int> prelocations = new Dictionary<int, int>();
+    [SerializeField] internal List<Image> newLocations = new List<Image>();
 
     //使っていないデータを入れるスタック
     [SerializeField, HideInInspector]
@@ -62,6 +61,10 @@ public class NovelData : ScriptableObject
 
     #endregion
 
+    internal void changeLocation(List<Image> newLocations)
+    {
+        _locations = newLocations;
+    }
 
     public void ResetData()
     {

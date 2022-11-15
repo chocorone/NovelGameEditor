@@ -7,19 +7,34 @@ using System.Linq;
 using static NovelData;
 using static NovelData.ParagraphData;
 using UnityEngine.UIElements;
-using System.Linq;
+using UnityEditorInternal;
 
 [CustomEditor(typeof(NovelData))]
 internal class NovelDataInspector : Editor
 {
     NovelData noveldata;
-
     ProgressBar bar;
     Label label;
+
+    private ReorderableList reorderableList;
 
     void OnEnable()
     {
         noveldata = target as NovelData;
+
+        LocationWrapper wrapper = new LocationWrapper() { locations = noveldata.locations };
+        string json = JsonUtility.ToJson(wrapper);
+        noveldata.newLocations = JsonUtility.FromJson<LocationWrapper>(json).locations;
+        SetReorderableList();
+    }
+
+    public override void OnInspectorGUI()
+    {
+        serializedObject.Update();
+
+        reorderableList.DoLayoutList();
+
+        serializedObject.ApplyModifiedProperties();
     }
 
     public override VisualElement CreateInspectorGUI()
@@ -47,6 +62,18 @@ internal class NovelDataInspector : Editor
         return visualElement;
     }
 
+
+    void SetReorderableList()
+    {
+        reorderableList = new ReorderableList(this.serializedObject, this.serializedObject.FindProperty("newLocations"));
+        reorderableList.drawElementCallback = (rect, index, active, focused) =>
+        {
+            EditorGUI.ObjectField(rect, this.serializedObject.FindProperty("newLocations").GetArrayElementAtIndex(index));
+        };
+        reorderableList.drawHeaderCallback = (rect) => EditorGUI.LabelField(rect, "立ち絵の位置");
+
+    }
+
     void OpenEditor()
     {
         if (noveldata.newData)
@@ -61,6 +88,20 @@ internal class NovelDataInspector : Editor
         label.text = "処理中";
         bar.value = 0;
         bar.style.display = DisplayStyle.Flex;
+        Dictionary<int, int> locationsKey = new Dictionary<int, int>();
+
+        for (int i = 0; i < noveldata.locations.Count; i++)
+        {
+            locationsKey.Add(noveldata.locations[i].GetInstanceID(), i);
+        }
+
+        Debug.Log("before" + locationsKey.Count);
+        //noveldata.locations.ForEach(x => Debug.Log(x.name + ":" + x.GetInstanceID()));
+
+        noveldata.newLocations.RemoveAll(item => item == null);
+        noveldata.newLocations = noveldata.newLocations.Distinct().ToList();
+
+        noveldata.changeLocation(noveldata.newLocations);
 
         float perParagraph = 100 / noveldata.paragraphsList.Count;
 
@@ -82,9 +123,9 @@ internal class NovelDataInspector : Editor
                 //同じ名前のデータがあれば差し替え
                 for (int i = 0; i < noveldata.locations.Count; i++)
                 {
-                    if (noveldata.prelocations.ContainsKey(noveldata.locations[i].GetInstanceID()))
+                    if (locationsKey.ContainsKey(noveldata.locations[i].GetInstanceID()))
                     {
-                        int preIndex = noveldata.prelocations[noveldata.locations[i].GetInstanceID()];
+                        int preIndex = locationsKey[noveldata.locations[i].GetInstanceID()];
 
                         dialogue.charas[i] = preData.charas[preIndex];
                         dialogue.howCharas[i] = preData.howCharas[preIndex];
@@ -102,12 +143,11 @@ internal class NovelDataInspector : Editor
         noveldata.havePreLocations = true;
         label.text = "処理完了";
 
-        noveldata.prelocations.Clear();
-        for (int i = 0; i < noveldata.locations.Count; i++)
-        {
-            noveldata.prelocations.Add(noveldata.locations[i].GetInstanceID(), i);
-        }
+        EditorUtility.SetDirty(noveldata);
     }
 
-
+    class LocationWrapper
+    {
+        public List<UnityEngine.UI.Image> locations;
+    }
 }
