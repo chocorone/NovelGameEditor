@@ -41,8 +41,15 @@ internal class DialogueDrawer : PropertyDrawer
         {
             VisualElement charaTree = new VisualElement();
             charaUXML.CloneTree(charaTree);
-            charaTree.Q<EnumField>().label = NovelEditorWindow.editingData.locations[i].name;
-            charaTree.Q<EnumField>().BindProperty(data.FindPropertyRelative("howCharas").GetArrayElementAtIndex(i));
+            var enumField = charaTree.Q<EnumField>();
+            enumField.label = NovelEditorWindow.editingData.locations[i].name;
+            var charaData = data.FindPropertyRelative("howCharas").GetArrayElementAtIndex(i);
+            enumField.BindProperty(charaData);
+            enumField.RegisterValueChangedCallback(x =>
+            {
+                CharaChangeStyle value = (CharaChangeStyle)charaData.enumValueIndex;
+                charaTree.Q<Box>().style.display = value == CharaChangeStyle.UnChange ? DisplayStyle.None : DisplayStyle.Flex;
+            });
             charaTree.Q<ObjectField>().BindProperty(data.FindPropertyRelative("charas").GetArrayElementAtIndex(i));
             charaImageBox.Add(charaTree);
         }
@@ -53,9 +60,19 @@ internal class DialogueDrawer : PropertyDrawer
         {
             VisualElement charaTree = new VisualElement();
             charaEffectUXML.CloneTree(charaTree);
-            charaTree.Q<EnumField>().label = NovelEditorWindow.editingData.locations[i].name;
-            charaTree.Q<EnumField>().BindProperty(data.FindPropertyRelative("charaEffects").GetArrayElementAtIndex(i));
-            charaTree.Q<SliderInt>().BindProperty(data.FindPropertyRelative("charaEffectStrength").GetArrayElementAtIndex(i));
+            var enumField = charaTree.Q<EnumField>();
+            enumField.label = NovelEditorWindow.editingData.locations[i].name;
+            var charaEnumData = data.FindPropertyRelative("charaEffects").GetArrayElementAtIndex(i);
+            enumField.BindProperty(charaEnumData);
+
+            var slider = charaTree.Q<SliderInt>();
+            enumField.RegisterValueChangedCallback(x =>
+            {
+                Effect value = (Effect)charaEnumData.enumValueIndex;
+                slider.style.display = (value == Effect.UnChange || value == Effect.None) ? DisplayStyle.None : DisplayStyle.Flex;
+            });
+
+            slider.BindProperty(data.FindPropertyRelative("charaEffectStrength").GetArrayElementAtIndex(i));
             charaEffectBox.Add(charaTree);
         }
     }
