@@ -102,7 +102,7 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
         }
     }
 
-    void OnContextMenuPasteOnGraph(string data)
+    void OnContextMenuPasteOnGraph(string data, Vector2 mousePos)
     {
         CopyData copyData = JsonUtility.FromJson<CopyData>(data);
 
@@ -111,10 +111,8 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
             ChoiceData newdata = NovelEditorWindow.editingData.CreateChoiceFromJson(JsonUtility.ToJson(cdata));
             ChoiceNode node = new ChoiceNode(newdata);
 
-            // マウスの位置にノードを追加
-            node.SetPosition(new Rect(newdata.nodePosition.center, new Vector2(100, 100)));
+            node.SetPosition(new Rect(mousePos, new Vector2(100, 100)));
 
-            //GraphViewにノードを追加して位置をセーブ
             graphView.AddElement(node);
         }
 
@@ -123,10 +121,8 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
             ParagraphData newdata = NovelEditorWindow.editingData.CreateParagraphFromJson(JsonUtility.ToJson(pdata));
             ParagraphNode node = new ParagraphNode(newdata);
 
-            // マウスの位置にノードを追加
-            node.SetPosition(new Rect(newdata.nodePosition.center, new Vector2(100, 100)));
+            node.SetPosition(new Rect(mousePos, new Vector2(100, 100)));
 
-            //GraphViewにノードを追加して位置をセーブ
             graphView.AddElement(node);
         }
 
