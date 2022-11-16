@@ -14,6 +14,7 @@ public class NovelEditorWindow : EditorWindow
 {
     [SerializeField] NovelData _editingData;
     internal static NovelData editingData => Instance._editingData;
+    internal static bool Compiled = true;
 
     private static NovelEditorWindow instance;
     public static NovelEditorWindow Instance
@@ -39,8 +40,6 @@ public class NovelEditorWindow : EditorWindow
     internal void Init(NovelData data)
     {
         _editingData = data;
-        if (BaseNode.nowSelecton != null)
-            BaseNode.nowSelecton.OnUnselected();
         rootVisualElement.Clear();
         rootVisualElement.Bind(new SerializedObject(this));
 
@@ -55,6 +54,7 @@ public class NovelEditorWindow : EditorWindow
 
     void Draw()
     {
+        Compiled = true;
         GraphController controller = new GraphController();
         NovelGraphView graphView = controller.CreateGraph();
         rootVisualElement.Add(graphView);
