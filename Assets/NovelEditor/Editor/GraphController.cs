@@ -27,6 +27,8 @@ internal class GraphController
 
             Undo.undoRedoPerformed += () =>
             {
+                if (BaseNode.nowSelecton != null)
+                    BaseNode.nowSelecton.OnUnselected();
                 foreach (var element in graphView.graphElements)
                 {
                     if (element is BaseNode || element is Edge)

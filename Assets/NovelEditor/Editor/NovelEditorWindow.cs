@@ -39,6 +39,8 @@ public class NovelEditorWindow : EditorWindow
     internal void Init(NovelData data)
     {
         _editingData = data;
+        if (BaseNode.nowSelecton != null)
+            BaseNode.nowSelecton.OnUnselected();
         rootVisualElement.Clear();
         rootVisualElement.Bind(new SerializedObject(this));
 
