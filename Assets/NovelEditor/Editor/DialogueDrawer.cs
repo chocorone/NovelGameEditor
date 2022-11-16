@@ -32,9 +32,16 @@ internal class DialogueDrawer : PropertyDrawer
 
     void CharaSetting(VisualElement root, SerializedProperty data)
     {
+
+        if (data == null)
+        {
+            return;
+        }
         //立ち絵の数に応じて作成
         var charaImageBox = root.Q<Box>("charaImage");
         var charaUXML = Resources.Load<VisualTreeAsset>("CharaSettingUXML");
+
+        var howCharas = data.FindPropertyRelative("howCharas");
 
         int charaNum = NovelEditorWindow.editingData.locations.Count;
         for (int i = 0; i < charaNum; i++)
@@ -43,12 +50,21 @@ internal class DialogueDrawer : PropertyDrawer
             charaUXML.CloneTree(charaTree);
             var enumField = charaTree.Q<EnumField>();
             enumField.label = NovelEditorWindow.editingData.locations[i].name;
-            var charaData = data.FindPropertyRelative("howCharas").GetArrayElementAtIndex(i);
+
+            var charaData = howCharas.GetArrayElementAtIndex(i);
             enumField.BindProperty(charaData);
             enumField.RegisterValueChangedCallback(x =>
             {
-                CharaChangeStyle value = (CharaChangeStyle)charaData.enumValueIndex;
-                charaTree.Q<Box>().style.display = value == CharaChangeStyle.UnChange ? DisplayStyle.None : DisplayStyle.Flex;
+                try
+                {
+                    CharaChangeStyle value = (CharaChangeStyle)charaData.enumValueIndex;
+                    charaTree.Q<Box>().style.display = value == CharaChangeStyle.UnChange ? DisplayStyle.None : DisplayStyle.Flex;
+                }
+                catch
+                {
+                    return;
+                }
+
             });
             charaTree.Q<ObjectField>().BindProperty(data.FindPropertyRelative("charas").GetArrayElementAtIndex(i));
             charaImageBox.Add(charaTree);
@@ -56,20 +72,28 @@ internal class DialogueDrawer : PropertyDrawer
 
         var charaEffectBox = root.Q<Box>("charaEffect");
         var charaEffectUXML = Resources.Load<VisualTreeAsset>("CharaEffect");
+        var charaEffects = data.FindPropertyRelative("charaEffects");
         for (int i = 0; i < charaNum; i++)
         {
             VisualElement charaTree = new VisualElement();
             charaEffectUXML.CloneTree(charaTree);
             var enumField = charaTree.Q<EnumField>();
             enumField.label = NovelEditorWindow.editingData.locations[i].name;
-            var charaEnumData = data.FindPropertyRelative("charaEffects").GetArrayElementAtIndex(i);
+            var charaEnumData = charaEffects.GetArrayElementAtIndex(i);
             enumField.BindProperty(charaEnumData);
 
             var slider = charaTree.Q<SliderInt>();
             enumField.RegisterValueChangedCallback(x =>
             {
-                Effect value = (Effect)charaEnumData.enumValueIndex;
-                slider.style.display = (value == Effect.UnChange || value == Effect.None) ? DisplayStyle.None : DisplayStyle.Flex;
+                try
+                {
+                    Effect value = (Effect)charaEnumData.enumValueIndex;
+                    slider.style.display = (value == Effect.UnChange || value == Effect.None) ? DisplayStyle.None : DisplayStyle.Flex;
+                }
+                catch
+                {
+                    return;
+                }
             });
 
             slider.BindProperty(data.FindPropertyRelative("charaEffectStrength").GetArrayElementAtIndex(i));
@@ -87,6 +111,9 @@ internal class DialogueDrawer : PropertyDrawer
 
         var textElement = root.Q<TextField>("serihu");
         textElement.BindProperty(data.FindPropertyRelative("text"));
+
+        var detailFoldOut = root.Q<Foldout>("detailFoldOut");
+        detailFoldOut.BindProperty(data.FindPropertyRelative("open"));
 
 
         //背景
@@ -206,188 +233,231 @@ internal class DialogueDrawer : PropertyDrawer
         var howBack = root.Q<EnumField>("howBack");
         howBack.RegisterValueChangedCallback(x =>
         {
-            BackChangeStyle value = (BackChangeStyle)data.FindPropertyRelative("howBack").enumValueIndex;
-
-            var changeBackBox = root.Q<Box>("changeBackBox");
-            var backSprite = root.Q<ObjectField>("backSprite");
-
-            changeBackBox.style.display = DisplayStyle.None;
-            backSprite.style.display = DisplayStyle.None;
-
-            if (value != BackChangeStyle.UnChange)
+            try
             {
-                backSprite.style.display = DisplayStyle.Flex;
-                if (value != BackChangeStyle.Quick && value != BackChangeStyle.dissolve)
-                    changeBackBox.style.display = DisplayStyle.Flex;
+                BackChangeStyle value = (BackChangeStyle)data.FindPropertyRelative("howBack").enumValueIndex;
+
+                var changeBackBox = root.Q<Box>("changeBackBox");
+                var backSprite = root.Q<ObjectField>("backSprite");
+
+                changeBackBox.style.display = DisplayStyle.None;
+                backSprite.style.display = DisplayStyle.None;
+
+                if (value != BackChangeStyle.UnChange)
+                {
+                    backSprite.style.display = DisplayStyle.Flex;
+                    if (value != BackChangeStyle.Quick && value != BackChangeStyle.dissolve)
+                        changeBackBox.style.display = DisplayStyle.Flex;
+                }
             }
+            catch
+            { }
         });
 
         //フォント設定
         var changeFont = root.Q<Toggle>("changeFont");
         changeFont.RegisterValueChangedCallback(x =>
         {
+            try
+            {
+                var changeFontBox = root.Q<Box>("changeFontBox");
 
-            var changeFontBox = root.Q<Box>("changeFontBox");
+                bool flag = data.FindPropertyRelative("changeFont").boolValue;
 
-            bool flag = data.FindPropertyRelative("changeFont").boolValue;
-
-            changeFontBox.style.display = flag ? DisplayStyle.Flex : DisplayStyle.None;
+                changeFontBox.style.display = flag ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+            catch
+            { }
         });
 
         var changeNameFont = root.Q<Toggle>("changeNameFont");
         changeNameFont.RegisterValueChangedCallback(x =>
         {
-            var changeNameFontBox = root.Q<Box>("changeNameFontBox");
+            try
+            {
+                var changeNameFontBox = root.Q<Box>("changeNameFontBox");
 
-            bool flag = data.FindPropertyRelative("changeNameFont").boolValue;
+                bool flag = data.FindPropertyRelative("changeNameFont").boolValue;
 
-            changeNameFontBox.style.display = flag ? DisplayStyle.Flex : DisplayStyle.None;
+                changeNameFontBox.style.display = flag ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+            catch
+            { }
         });
 
         //サウンド設定
         var BGMStyle = root.Q<EnumField>("BGMStyle");
         BGMStyle.RegisterValueChangedCallback(x =>
         {
-            SoundStyle PlayStyleValue = (SoundStyle)data.FindPropertyRelative("BGMStyle").enumValueIndex;
-
-            var BGMPlayBox = root.Q<Box>("BGMPlayBox");
-            if (PlayStyleValue == SoundStyle.Play)
+            try
             {
-                BGMPlayBox.style.display = DisplayStyle.Flex;
-            }
-            else
-            {
-                BGMPlayBox.style.display = DisplayStyle.None;
-            }
+                SoundStyle PlayStyleValue = (SoundStyle)data.FindPropertyRelative("BGMStyle").enumValueIndex;
 
+                var BGMPlayBox = root.Q<Box>("BGMPlayBox");
+                if (PlayStyleValue == SoundStyle.Play)
+                {
+                    BGMPlayBox.style.display = DisplayStyle.Flex;
+                }
+                else
+                {
+                    BGMPlayBox.style.display = DisplayStyle.None;
+                }
+            }
+            catch
+            { }
         });
 
         var BGMLoop = root.Q<EnumField>("BGMLoop");
         BGMLoop.RegisterValueChangedCallback(x =>
         {
-            var LoopStyleValue = (LoopMode)data.FindPropertyRelative("BGMLoop").enumValueIndex;
-            var BGMEndFadeTime = root.Q<FloatField>("BGMEndFadeTime");
-            var BGMCount = root.Q<IntegerField>("BGMCount");
-            var BGMSecond = root.Q<FloatField>("BGMSecond");
-
-
-            switch (LoopStyleValue)
+            try
             {
-                case LoopMode.Endless:
-                    BGMEndFadeTime.style.display = DisplayStyle.None;
-                    BGMCount.style.display = DisplayStyle.None;
-                    BGMSecond.style.display = DisplayStyle.None;
-                    break;
+                var LoopStyleValue = (LoopMode)data.FindPropertyRelative("BGMLoop").enumValueIndex;
+                var BGMEndFadeTime = root.Q<FloatField>("BGMEndFadeTime");
+                var BGMCount = root.Q<IntegerField>("BGMCount");
+                var BGMSecond = root.Q<FloatField>("BGMSecond");
 
-                case LoopMode.Count:
-                    BGMEndFadeTime.style.display = DisplayStyle.Flex;
-                    BGMCount.style.display = DisplayStyle.Flex;
-                    BGMSecond.style.display = DisplayStyle.None;
-                    break;
 
-                case LoopMode.Second:
-                    BGMEndFadeTime.style.display = DisplayStyle.Flex;
-                    BGMCount.style.display = DisplayStyle.None;
-                    BGMSecond.style.display = DisplayStyle.Flex;
-                    break;
+                switch (LoopStyleValue)
+                {
+                    case LoopMode.Endless:
+                        BGMEndFadeTime.style.display = DisplayStyle.None;
+                        BGMCount.style.display = DisplayStyle.None;
+                        BGMSecond.style.display = DisplayStyle.None;
+                        break;
+
+                    case LoopMode.Count:
+                        BGMEndFadeTime.style.display = DisplayStyle.Flex;
+                        BGMCount.style.display = DisplayStyle.Flex;
+                        BGMSecond.style.display = DisplayStyle.None;
+                        break;
+
+                    case LoopMode.Second:
+                        BGMEndFadeTime.style.display = DisplayStyle.Flex;
+                        BGMCount.style.display = DisplayStyle.None;
+                        BGMSecond.style.display = DisplayStyle.Flex;
+                        break;
+                }
             }
+            catch { }
         });
 
         var SEStyle = root.Q<EnumField>("SEStyle");
         SEStyle.RegisterValueChangedCallback(x =>
         {
-            SoundStyle PlayStyleValue = (SoundStyle)data.FindPropertyRelative("SEStyle").enumValueIndex;
-
-            var SEPlayBox = root.Q<Box>("SEPlayBox");
-            if (PlayStyleValue == SoundStyle.Play)
+            try
             {
-                SEPlayBox.style.display = DisplayStyle.Flex;
-            }
-            else
-            {
-                SEPlayBox.style.display = DisplayStyle.None;
-            }
+                SoundStyle PlayStyleValue = (SoundStyle)data.FindPropertyRelative("SEStyle").enumValueIndex;
 
+                var SEPlayBox = root.Q<Box>("SEPlayBox");
+                if (PlayStyleValue == SoundStyle.Play)
+                {
+                    SEPlayBox.style.display = DisplayStyle.Flex;
+                }
+                else
+                {
+                    SEPlayBox.style.display = DisplayStyle.None;
+                }
+            }
+            catch
+            { }
         });
 
         var SELoop = root.Q<EnumField>("SELoop");
         SELoop.RegisterValueChangedCallback(x =>
         {
-            var LoopStyleValue = (LoopMode)data.FindPropertyRelative("SELoop").enumValueIndex;
-            var SEEndFadeTime = root.Q<FloatField>("SEEndFadeTime");
-            var SECount = root.Q<IntegerField>("SECount");
-            var SESecond = root.Q<FloatField>("SESecond");
-
-
-            switch (LoopStyleValue)
+            try
             {
-                case LoopMode.Endless:
-                    SEEndFadeTime.style.display = DisplayStyle.None;
-                    SECount.style.display = DisplayStyle.None;
-                    SESecond.style.display = DisplayStyle.None;
-                    break;
+                var LoopStyleValue = (LoopMode)data.FindPropertyRelative("SELoop").enumValueIndex;
+                var SEEndFadeTime = root.Q<FloatField>("SEEndFadeTime");
+                var SECount = root.Q<IntegerField>("SECount");
+                var SESecond = root.Q<FloatField>("SESecond");
 
-                case LoopMode.Count:
-                    SEEndFadeTime.style.display = DisplayStyle.Flex;
-                    SECount.style.display = DisplayStyle.Flex;
-                    SESecond.style.display = DisplayStyle.None;
-                    break;
 
-                case LoopMode.Second:
-                    SEEndFadeTime.style.display = DisplayStyle.Flex;
-                    SECount.style.display = DisplayStyle.None;
-                    SESecond.style.display = DisplayStyle.Flex;
-                    break;
+                switch (LoopStyleValue)
+                {
+                    case LoopMode.Endless:
+                        SEEndFadeTime.style.display = DisplayStyle.None;
+                        SECount.style.display = DisplayStyle.None;
+                        SESecond.style.display = DisplayStyle.None;
+                        break;
+
+                    case LoopMode.Count:
+                        SEEndFadeTime.style.display = DisplayStyle.Flex;
+                        SECount.style.display = DisplayStyle.Flex;
+                        SESecond.style.display = DisplayStyle.None;
+                        break;
+
+                    case LoopMode.Second:
+                        SEEndFadeTime.style.display = DisplayStyle.Flex;
+                        SECount.style.display = DisplayStyle.None;
+                        SESecond.style.display = DisplayStyle.Flex;
+                        break;
+                }
             }
+            catch { }
+
         });
 
         //エフェクト設定
         var backEffect = root.Q<EnumField>("backEffect");
         backEffect.RegisterValueChangedCallback(x =>
         {
+            try
+            {
+                var value = (Effect)data.FindPropertyRelative("backEffect").enumValueIndex;
+                var backEffectStrength = root.Q<SliderInt>("backEffectStrength");
+                if (value == Effect.None || value == Effect.UnChange)
+                {
+                    backEffectStrength.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    backEffectStrength.style.display = DisplayStyle.Flex;
+                }
+            }
+            catch { }
 
-            var value = (Effect)data.FindPropertyRelative("backEffect").enumValueIndex;
-            var backEffectStrength = root.Q<SliderInt>("backEffectStrength");
-            if (value == Effect.None || value == Effect.UnChange)
-            {
-                backEffectStrength.style.display = DisplayStyle.None;
-            }
-            else
-            {
-                backEffectStrength.style.display = DisplayStyle.Flex;
-            }
         });
 
         var FrontEffect = root.Q<EnumField>("FrontEffect");
         FrontEffect.RegisterValueChangedCallback(x =>
         {
+            try
+            {
+                var value = (Effect)data.FindPropertyRelative("FrontEffect").enumValueIndex;
+                var FrontEffectStrength = root.Q<SliderInt>("FrontEffectStrength");
+                if (value == Effect.None || value == Effect.UnChange)
+                {
+                    FrontEffectStrength.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    FrontEffectStrength.style.display = DisplayStyle.Flex;
+                }
+            }
+            catch { }
 
-            var value = (Effect)data.FindPropertyRelative("FrontEffect").enumValueIndex;
-            var FrontEffectStrength = root.Q<SliderInt>("FrontEffectStrength");
-            if (value == Effect.None || value == Effect.UnChange)
-            {
-                FrontEffectStrength.style.display = DisplayStyle.None;
-            }
-            else
-            {
-                FrontEffectStrength.style.display = DisplayStyle.Flex;
-            }
         });
 
         var AllEffect = root.Q<EnumField>("AllEffect");
         AllEffect.RegisterValueChangedCallback(x =>
         {
+            try
+            {
+                var value = (Effect)data.FindPropertyRelative("AllEffect").enumValueIndex;
+                var AllEffectStrength = root.Q<SliderInt>("AllEffectStrength");
+                if (value == Effect.None || value == Effect.UnChange)
+                {
+                    AllEffectStrength.style.display = DisplayStyle.None;
+                }
+                else
+                {
+                    AllEffectStrength.style.display = DisplayStyle.Flex;
+                }
+            }
+            catch { }
 
-            var value = (Effect)data.FindPropertyRelative("AllEffect").enumValueIndex;
-            var AllEffectStrength = root.Q<SliderInt>("AllEffectStrength");
-            if (value == Effect.None || value == Effect.UnChange)
-            {
-                AllEffectStrength.style.display = DisplayStyle.None;
-            }
-            else
-            {
-                AllEffectStrength.style.display = DisplayStyle.Flex;
-            }
         });
     }
 }
