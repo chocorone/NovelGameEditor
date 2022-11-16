@@ -252,6 +252,11 @@ public class NovelData : ScriptableObject
             _dialogueList = newDialogueList;
         }
 
+        internal void UpdateOrder()
+        {
+            Debug.Log("Update");
+        }
+
         //会話文ごとのデータ
         //SerializedPropertyで参照するため全部public
         [System.SerializableAttribute]

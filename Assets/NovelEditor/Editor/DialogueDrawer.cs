@@ -52,6 +52,7 @@ internal class DialogueDrawer : PropertyDrawer
             enumField.label = NovelEditorWindow.editingData.locations[i].name;
 
             var charaData = howCharas.GetArrayElementAtIndex(i);
+            var charaSpriteData = data.FindPropertyRelative("charas").GetArrayElementAtIndex(i);
             enumField.BindProperty(charaData);
             enumField.RegisterValueChangedCallback(x =>
             {
@@ -59,6 +60,9 @@ internal class DialogueDrawer : PropertyDrawer
                 {
                     CharaChangeStyle value = (CharaChangeStyle)charaData.enumValueIndex;
                     charaTree.Q<Box>().style.display = value == CharaChangeStyle.UnChange ? DisplayStyle.None : DisplayStyle.Flex;
+                    var label = charaTree.Q<Label>("nowLabel");
+                    label.style.display = value == CharaChangeStyle.UnChange ? DisplayStyle.Flex : DisplayStyle.None;
+                    //label.text = "現在の立ち絵：" + charaSpriteData.objectReferenceValue.name == "" ? "None" : charaSpriteData.objectReferenceValue.name;
                 }
                 catch
                 {
@@ -66,7 +70,7 @@ internal class DialogueDrawer : PropertyDrawer
                 }
 
             });
-            charaTree.Q<ObjectField>().BindProperty(data.FindPropertyRelative("charas").GetArrayElementAtIndex(i));
+            charaTree.Q<ObjectField>().BindProperty(charaSpriteData);
             charaImageBox.Add(charaTree);
         }
 
@@ -112,8 +116,8 @@ internal class DialogueDrawer : PropertyDrawer
         var textElement = root.Q<TextField>("serihu");
         textElement.BindProperty(data.FindPropertyRelative("text"));
 
-        var detailFoldOut = root.Q<Foldout>("detailFoldOut");
-        detailFoldOut.BindProperty(data.FindPropertyRelative("open"));
+        // var detailFoldOut = root.Q<Foldout>("detailFoldOut");
+        // detailFoldOut.BindProperty(data.FindPropertyRelative("open"));
 
 
         //背景

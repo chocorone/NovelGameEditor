@@ -24,6 +24,8 @@ internal class ParagraphInspector : Editor
         index = tmpdata.data.index;
     }
 
+
+
     public override VisualElement CreateInspectorGUI()
     {
         var root = new VisualElement();
@@ -39,20 +41,29 @@ internal class ParagraphInspector : Editor
         }
         root.Add(label);
 
-        Toggle toggle = new Toggle();
-        toggle.text = "詳細設定全部開く";
-        root.Add(toggle);
-
         var list = new ListView();
         list.reorderable = true;
         list.showBorder = true;
         list.showAddRemoveFooter = true;
         list.bindingPath = "dialogueList";
         list.virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight;
+        list.itemIndexChanged += (index1, index2) =>
+        {
+            tmpdata.data.UpdateOrder();
+        };
+        list.itemsAdded += (a) =>
+        {
+            tmpdata.data.UpdateOrder();
+        };
+
+        list.itemsRemoved += (a) =>
+        {
+            tmpdata.data.UpdateOrder();
+        };
+
 
 
         root.Add(list);
-
 
         return root;
     }
