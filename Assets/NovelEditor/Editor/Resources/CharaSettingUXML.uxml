@@ -4,5 +4,6 @@
         <uie:ObjectField type="UnityEngine.Sprite, UnityEngine.CoreModule" />
         <uie:ColorField label="フェード色"/>
     </ui:Box>
+    <ui:Label  label="現在の立ち絵：" name="nowLabel"/>
 
 </ui:UXML>
