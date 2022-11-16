@@ -58,11 +58,13 @@ internal class DialogueDrawer : PropertyDrawer
             {
                 try
                 {
+                    ParagraphInspector.UpdateValue();
                     CharaChangeStyle value = (CharaChangeStyle)charaData.enumValueIndex;
                     charaTree.Q<Box>().style.display = value == CharaChangeStyle.UnChange ? DisplayStyle.None : DisplayStyle.Flex;
                     var label = charaTree.Q<Label>("nowLabel");
                     label.style.display = value == CharaChangeStyle.UnChange ? DisplayStyle.Flex : DisplayStyle.None;
-                    //label.text = "現在の立ち絵：" + charaSpriteData.objectReferenceValue.name == "" ? "None" : charaSpriteData.objectReferenceValue.name;
+                    string name = charaSpriteData.objectReferenceValue == null ? "None" : charaSpriteData.objectReferenceValue.name;
+                    label.text = "現在の立ち絵：" + name;
                 }
                 catch
                 {

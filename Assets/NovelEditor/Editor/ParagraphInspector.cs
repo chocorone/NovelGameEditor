@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 [CustomEditor(typeof(TempParagraph))]
 internal class ParagraphInspector : Editor
 {
-    internal static bool dataChanged = false;
+    static TempParagraph editingData;
     TempParagraph tmpdata;
     private ReorderableList reorderableList;
     private SerializedProperty daialogueDataList;
@@ -19,6 +19,7 @@ internal class ParagraphInspector : Editor
     void OnEnable()
     {
         tmpdata = target as TempParagraph;
+        editingData = tmpdata;
 
         SerializedProperty data = serializedObject.FindProperty(nameof(tmpdata.data));
         index = tmpdata.data.index;
@@ -71,6 +72,11 @@ internal class ParagraphInspector : Editor
         root.Add(list);
 
         return root;
+    }
+
+    internal static void UpdateValue()
+    {
+        editingData.data.UpdateOrder();
     }
 
 }
