@@ -13,7 +13,6 @@ internal abstract class BaseNode : Node
 
     internal Port CountinuePort { get; private protected set; }
 
-    internal static BaseNode nowSelecton;
 
     private protected virtual void NodeSet()
     {
@@ -54,9 +53,9 @@ internal abstract class BaseNode : Node
 
     public override void OnSelected()
     {
-        nowSelecton = this;
         if (nodeData != null)
         {
+            NovelEditorWindow.Compiled = false;
             if (nodeData is ChoiceData)
             {
                 TempChoice temp = ScriptableObject.CreateInstance<TempChoice>();
@@ -81,7 +80,6 @@ internal abstract class BaseNode : Node
 
     public override void OnUnselected()
     {
-        nowSelecton = null;
         Selection.activeObject = null;
 
         SetTitle();
