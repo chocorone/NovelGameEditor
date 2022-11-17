@@ -252,6 +252,68 @@ public class NovelData : ScriptableObject
             _dialogueList = newDialogueList;
         }
 
+        internal void UpdateOrder()
+        {
+            int back = 0;
+            int[] charas = new int[NovelEditorWindow.editingData.locations.Count];
+
+
+            foreach (var data in dialogueList)
+            {
+                for (int i = 0; i < NovelEditorWindow.editingData.locations.Count; i++)
+                {
+                    if (data.howCharas[i] == CharaChangeStyle.UnChange)
+                    {
+                        if (charas[i] == 0)
+                        {
+                            data.charas[i] = null;
+                        }
+                        else
+                        {
+                            data.charas[i] = (Sprite)EditorUtility.InstanceIDToObject(charas[i]);
+                        }
+
+                    }
+                    else
+                    {
+                        if (data.charas[i] == null)
+                        {
+                            charas[i] = 0;
+                        }
+                        else
+                        {
+                            charas[i] = data.charas[i].GetInstanceID();
+                        }
+
+                    }
+                }
+
+                if (data.howBack == BackChangeStyle.UnChange)
+                {
+                    if (back == 0)
+                    {
+                        data.back = null;
+                    }
+                    else
+                    {
+                        data.back = (Sprite)EditorUtility.InstanceIDToObject(back);
+                    }
+                }
+                else
+                {
+                    if (data.back == null)
+                    {
+                        back = 0;
+                    }
+                    else
+                    {
+                        back = data.back.GetInstanceID();
+                    }
+                }
+            }
+
+        }
+
         //会話文ごとのデータ
         //SerializedPropertyで参照するため全部public
         [System.SerializableAttribute]

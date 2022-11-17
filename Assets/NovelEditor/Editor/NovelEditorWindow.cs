@@ -14,6 +14,7 @@ public class NovelEditorWindow : EditorWindow
 {
     [SerializeField] NovelData _editingData;
     internal static NovelData editingData => Instance._editingData;
+    internal static bool Compiled = true;
 
     private static NovelEditorWindow instance;
     public static NovelEditorWindow Instance
@@ -53,6 +54,7 @@ public class NovelEditorWindow : EditorWindow
 
     void Draw()
     {
+        Compiled = true;
         GraphController controller = new GraphController();
         NovelGraphView graphView = controller.CreateGraph();
         rootVisualElement.Add(graphView);

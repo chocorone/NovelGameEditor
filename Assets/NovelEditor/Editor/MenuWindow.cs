@@ -89,6 +89,7 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
 
     void OnContextMenuPasteOnNode(string data, BaseNode node)
     {
+        Undo.RecordObject(NovelEditorWindow.editingData, "Paste Node");
         CopyData copyData = JsonUtility.FromJson<CopyData>(data);
 
         if (node is ChoiceNode && copyData.cdatas.Count > 0)
@@ -104,6 +105,7 @@ internal class MenuWindow : ScriptableObject, ISearchWindowProvider
 
     void OnContextMenuPasteOnGraph(string data, Vector2 mousePos)
     {
+        Undo.RecordObject(NovelEditorWindow.editingData, "Paste Node");
         CopyData copyData = JsonUtility.FromJson<CopyData>(data);
 
         foreach (var cdata in copyData.cdatas)
