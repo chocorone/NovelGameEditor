@@ -11,12 +11,6 @@ public enum Next
     End
 }
 
-public enum TextMode
-{
-    LegacyText,
-    TextMeshPro
-}
-
 public enum CharaChangeStyle
 {
     UnChange,
