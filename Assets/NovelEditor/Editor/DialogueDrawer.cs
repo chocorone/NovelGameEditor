@@ -142,22 +142,6 @@ internal class DialogueDrawer : PropertyDrawer
     {
         root.Bind(data.serializedObject);
 
-        // var nameElement = root.Q<TextField>("name");
-        // nameElement.BindProperty(data.FindPropertyRelative("Name"));
-
-        // nameElement.RegisterCallback<FocusInEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.On; });
-        // nameElement.RegisterCallback<FocusOutEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.Auto; });
-
-        // var textElement = root.Q<TextField>("serihu");
-        // textElement.BindProperty(data.FindPropertyRelative("text"));
-        // textElement.RegisterCallback<FocusInEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.On; Debug.Log("Focus"); });
-        // textElement.RegisterCallback<FocusOutEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.Auto; });
-
-
-        // var detailFoldOut = root.Q<Foldout>("detailFoldOut");
-        // detailFoldOut.BindProperty(data.FindPropertyRelative("open"));
-
-
         //背景
         var howBack = root.Q<EnumField>("howBack");
         howBack.Init((BackChangeStyle)data.FindPropertyRelative("howBack").enumValueIndex);
