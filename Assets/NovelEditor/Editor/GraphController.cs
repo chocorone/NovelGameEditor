@@ -27,6 +27,7 @@ internal class GraphController
 
             Undo.undoRedoPerformed += () =>
             {
+                NovelEditorWindow.Compiled = true;
                 foreach (var element in graphView.graphElements)
                 {
                     if (element is BaseNode || element is Edge)

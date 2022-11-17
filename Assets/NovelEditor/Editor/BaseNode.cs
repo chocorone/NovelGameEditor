@@ -13,6 +13,7 @@ internal abstract class BaseNode : Node
 
     internal Port CountinuePort { get; private protected set; }
 
+
     private protected virtual void NodeSet()
     {
         titleButtonContainer.Clear(); // デフォルトのCollapseボタンを削除
@@ -54,6 +55,7 @@ internal abstract class BaseNode : Node
     {
         if (nodeData != null)
         {
+            NovelEditorWindow.Compiled = false;
             if (nodeData is ChoiceData)
             {
                 TempChoice temp = ScriptableObject.CreateInstance<TempChoice>();

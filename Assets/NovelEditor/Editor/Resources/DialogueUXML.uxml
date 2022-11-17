@@ -15,6 +15,7 @@
 
                 <ui:Label text="背景" display-tooltip-when-elided="true" />
                 <uie:EnumField label="切り替え" name="howBack" />
+                <ui:Label text="現在の背景" name="nowBack" />
                 <uie:ObjectField name="backSprite" type="UnityEngine.Sprite, UnityEngine.CoreModule" />
                 <ui:Box name="changeBackBox">
                     <uie:ColorField name="backFadeColor" label="フェード色" />
