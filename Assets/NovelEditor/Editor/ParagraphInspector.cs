@@ -13,8 +13,6 @@ internal class ParagraphInspector : Editor
 {
     internal static TempParagraph editingData;
     TempParagraph tmpdata;
-    private ReorderableList reorderableList;
-    private SerializedProperty daialogueDataList;
     private int index;
 
     VisualElement root;
