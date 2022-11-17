@@ -17,7 +17,10 @@ public class NovelEditor
     public static void Open(NovelData data)
     {
         //ウィンドウ作成
-        var window = EditorWindow.GetWindow<NovelEditorWindow>(typeof(UnityEditor.SceneView));
+        var scene = typeof(UnityEditor.SceneView);
+        var window = EditorWindow.GetWindow<NovelEditorWindow>(new Type[] { scene });
+        window.Focus();
+        //window = EditorWindow.GetWindow<NovelEditorWindow>(typeof(UnityEditor.SceneView));
         window.Init(data);
     }
 
@@ -25,7 +28,8 @@ public class NovelEditor
     public static void Open()
     {
         //ウィンドウ作成
-        var window = EditorWindow.GetWindow<NovelEditorWindow>(typeof(UnityEditor.SceneView));
+        var window = EditorWindow.GetWindow<NovelEditorWindow>();
+        window.Focus();
         window.Init(null);
     }
 }
