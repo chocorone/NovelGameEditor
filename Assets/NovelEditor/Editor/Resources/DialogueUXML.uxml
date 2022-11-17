@@ -2,13 +2,11 @@
 
     <ui:Label text="=" />
     <ui:Box class="wrapper">
-        <ui:Box class="flexbox">
-        <ui:Label text="名前" />
-            <ui:TextField name="name"/>
+        <ui:Box class="flexbox" name = "nameBox">
+            <ui:Label text="名前" />
         </ui:Box>
-        <ui:Box class="flexbox">
+        <ui:Box class="flexbox" name = "serihuBox">
             <ui:Label text="セリフ" />
-            <ui:TextField multiline="true" class="serihu" name="serihu"/>
         </ui:Box>
         <ui:Box class="detail">
             <ui:Foldout text="詳細設定" name="detailFoldOut" value="false">

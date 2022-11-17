@@ -20,6 +20,32 @@ internal class DialogueDrawer : PropertyDrawer
         var DialogueUXML = Resources.Load<VisualTreeAsset>("DialogueUXML");
         DialogueUXML.CloneTree(root);
 
+        var nameField = new IMGUIContainer(() =>
+        {
+            data.serializedObject.Update();
+            var Name = data.FindPropertyRelative("Name");
+            Name.stringValue = GUILayout.TextArea(Name.stringValue);
+            data.serializedObject.ApplyModifiedProperties();
+        });
+
+        root.Q<Box>("nameBox").Add(nameField);
+
+        var serihuField = new IMGUIContainer(() =>
+        {
+            data.serializedObject.Update();
+            var style = new GUIStyle(EditorStyles.textArea)
+            {
+                wordWrap = true,
+                fixedHeight = EditorGUIUtility.singleLineHeight * 3
+            };
+
+            var talkTextProperty = data.FindPropertyRelative("text");
+            talkTextProperty.stringValue = GUILayout.TextArea(talkTextProperty.stringValue, style);
+            data.serializedObject.ApplyModifiedProperties();
+        });
+
+        root.Q<Box>("serihuBox").Add(serihuField);
+
         CharaSetting(root, data);
 
         //データバインド
@@ -29,6 +55,7 @@ internal class DialogueDrawer : PropertyDrawer
 
         return root;
     }
+
 
     void CharaSetting(VisualElement root, SerializedProperty data)
     {
@@ -115,16 +142,16 @@ internal class DialogueDrawer : PropertyDrawer
     {
         root.Bind(data.serializedObject);
 
+        // var nameElement = root.Q<TextField>("name");
+        // nameElement.BindProperty(data.FindPropertyRelative("Name"));
 
-        var nameElement = root.Q<TextField>("name");
-        nameElement.BindProperty(data.FindPropertyRelative("Name"));
-        nameElement.RegisterCallback<FocusInEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.On; });
-        nameElement.RegisterCallback<FocusOutEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.Auto; });
+        // nameElement.RegisterCallback<FocusInEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.On; });
+        // nameElement.RegisterCallback<FocusOutEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.Auto; });
 
-        var textElement = root.Q<TextField>("serihu");
-        textElement.BindProperty(data.FindPropertyRelative("text"));
-        textElement.RegisterCallback<FocusInEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.On; Debug.Log("Focus"); });
-        textElement.RegisterCallback<FocusOutEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.Auto; });
+        // var textElement = root.Q<TextField>("serihu");
+        // textElement.BindProperty(data.FindPropertyRelative("text"));
+        // textElement.RegisterCallback<FocusInEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.On; Debug.Log("Focus"); });
+        // textElement.RegisterCallback<FocusOutEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.Auto; });
 
 
         // var detailFoldOut = root.Q<Foldout>("detailFoldOut");
