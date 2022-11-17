@@ -37,13 +37,13 @@ internal class DialogueDrawer : PropertyDrawer
         {
             return;
         }
-        //立ち絵の数に応じて作成
+
+        //立ち絵の編集
         var charaImageBox = root.Q<Box>("charaImage");
         var charaUXML = Resources.Load<VisualTreeAsset>("CharaSettingUXML");
-
         var howCharas = data.FindPropertyRelative("howCharas");
-
         int charaNum = NovelEditorWindow.editingData.locations.Count;
+
         for (int i = 0; i < charaNum; i++)
         {
             VisualElement charaTree = new VisualElement();
@@ -54,6 +54,7 @@ internal class DialogueDrawer : PropertyDrawer
             var charaData = howCharas.GetArrayElementAtIndex(i);
             var charaSpriteData = data.FindPropertyRelative("charas").GetArrayElementAtIndex(i);
             enumField.BindProperty(charaData);
+            var label = charaTree.Q<Label>("nowLabel");
             enumField.RegisterValueChangedCallback(x =>
             {
                 try
@@ -61,21 +62,24 @@ internal class DialogueDrawer : PropertyDrawer
                     ParagraphInspector.UpdateValue();
                     CharaChangeStyle value = (CharaChangeStyle)charaData.enumValueIndex;
                     charaTree.Q<Box>().style.display = value == CharaChangeStyle.UnChange ? DisplayStyle.None : DisplayStyle.Flex;
-                    var label = charaTree.Q<Label>("nowLabel");
                     label.style.display = value == CharaChangeStyle.UnChange ? DisplayStyle.Flex : DisplayStyle.None;
                     string name = charaSpriteData.objectReferenceValue == null ? "None" : charaSpriteData.objectReferenceValue.name;
                     label.text = "現在の立ち絵：" + name;
                 }
                 catch
-                {
-                    return;
-                }
-
+                { }
             });
             charaTree.Q<ObjectField>().BindProperty(charaSpriteData);
+            charaTree.Q<ObjectField>().RegisterValueChangedCallback(x =>
+            {
+                ParagraphInspector.UpdateValue();
+                string name = charaSpriteData.objectReferenceValue == null ? "None" : charaSpriteData.objectReferenceValue.name;
+                label.text = "現在の立ち絵：" + name;
+            });
             charaImageBox.Add(charaTree);
         }
 
+        //エフェクトの作成
         var charaEffectBox = root.Q<Box>("charaEffect");
         var charaEffectUXML = Resources.Load<VisualTreeAsset>("CharaEffect");
         var charaEffects = data.FindPropertyRelative("charaEffects");
@@ -114,9 +118,14 @@ internal class DialogueDrawer : PropertyDrawer
 
         var nameElement = root.Q<TextField>("name");
         nameElement.BindProperty(data.FindPropertyRelative("Name"));
+        nameElement.RegisterCallback<FocusInEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.On; });
+        nameElement.RegisterCallback<FocusOutEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.Auto; });
 
         var textElement = root.Q<TextField>("serihu");
         textElement.BindProperty(data.FindPropertyRelative("text"));
+        textElement.RegisterCallback<FocusInEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.On; Debug.Log("Focus"); });
+        textElement.RegisterCallback<FocusOutEvent>(evt => { Input.imeCompositionMode = IMECompositionMode.Auto; });
+
 
         // var detailFoldOut = root.Q<Foldout>("detailFoldOut");
         // detailFoldOut.BindProperty(data.FindPropertyRelative("open"));
@@ -241,6 +250,7 @@ internal class DialogueDrawer : PropertyDrawer
         {
             try
             {
+                ParagraphInspector.UpdateValue();
                 BackChangeStyle value = (BackChangeStyle)data.FindPropertyRelative("howBack").enumValueIndex;
 
                 var changeBackBox = root.Q<Box>("changeBackBox");
@@ -255,9 +265,22 @@ internal class DialogueDrawer : PropertyDrawer
                     if (value != BackChangeStyle.Quick && value != BackChangeStyle.dissolve)
                         changeBackBox.style.display = DisplayStyle.Flex;
                 }
+                var label = root.Q<Label>("nowBack");
+                label.style.display = value == BackChangeStyle.UnChange ? DisplayStyle.Flex : DisplayStyle.None;
+                string name = data.FindPropertyRelative("back").objectReferenceValue == null ? "None" : data.FindPropertyRelative("back").objectReferenceValue.name;
+                label.text = "現在の背景：" + name;
             }
             catch
             { }
+        });
+
+        var BackSprite = root.Q<ObjectField>("backSprite");
+        BackSprite.RegisterValueChangedCallback(x =>
+        {
+            ParagraphInspector.UpdateValue();
+            var label = root.Q<Label>("nowBack");
+            string name = data.FindPropertyRelative("back").objectReferenceValue == null ? "None" : data.FindPropertyRelative("back").objectReferenceValue.name;
+            label.text = "現在の背景：" + name;
         });
 
         //フォント設定

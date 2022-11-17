@@ -6,37 +6,46 @@ using UnityEngine;
 using static NovelData;
 using static NovelData.ParagraphData;
 using UnityEngine.UIElements;
+using System.Reflection;
 
 [CustomEditor(typeof(TempParagraph))]
 internal class ParagraphInspector : Editor
 {
-    static TempParagraph editingData;
+    internal static TempParagraph editingData;
     TempParagraph tmpdata;
     private ReorderableList reorderableList;
     private SerializedProperty daialogueDataList;
     private int index;
 
+    VisualElement root;
+
     void OnEnable()
     {
         tmpdata = target as TempParagraph;
         editingData = tmpdata;
-
         SerializedProperty data = serializedObject.FindProperty(nameof(tmpdata.data));
         index = tmpdata.data.index;
     }
 
+
     public override VisualElement CreateInspectorGUI()
     {
-        var root = new VisualElement();
-        root.styleSheets.Add(Resources.Load<StyleSheet>("DialogueUSS"));
+        root = new VisualElement();
+        return Draw(root);
+    }
+
+    VisualElement Draw(VisualElement _root)
+    {
+        _root = new VisualElement();
+        _root.styleSheets.Add(Resources.Load<StyleSheet>("DialogueUSS"));
         Label label = new Label();
         if (NovelEditorWindow.Compiled)
         {
             label.text = "ノードをクリックし直してください";
             label.style.color = new StyleColor(Color.red);
             label.style.fontSize = 20;
-            root.Add(label);
-            return root;
+            _root.Add(label);
+            return _root;
         }
         else if (index == 0)
         {
@@ -46,7 +55,7 @@ internal class ParagraphInspector : Editor
         {
             label.text = "！現在の立ち絵や背景に注意";
         }
-        root.Add(label);
+        _root.Add(label);
 
         var list = new ListView();
         list.reorderable = true;
@@ -69,9 +78,9 @@ internal class ParagraphInspector : Editor
             tmpdata.data.UpdateOrder();
         };
 
-        root.Add(list);
+        _root.Add(list);
 
-        return root;
+        return _root;
     }
 
     internal static void UpdateValue()
