@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using static NovelData.ParagraphData;
 
 public class DialogueText : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void textUpdate(Dialogue data)
     {
-        
+        Debug.Log(data.text);
     }
 
-    // Update is called once per frame
-    void Update()
+    void PlayText(string text)
     {
-        
+
     }
 }

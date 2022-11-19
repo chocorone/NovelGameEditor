@@ -12,7 +12,7 @@ public static class NodeCreator
 {
     internal static void RestoreGraph(GraphView graphView, NovelData data)
     {
-        RestoreParagraphNode(graphView, data.paragraphsList);
+        RestoreParagraphNode(graphView, data.paragraphList);
         RestoreChoiceNode(graphView, data.choiceList);
         RestoreParagraphEdge(graphView);
         RestoreChoiceEdge(graphView);
