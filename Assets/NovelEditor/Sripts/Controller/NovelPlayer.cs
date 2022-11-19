@@ -21,7 +21,7 @@ public class NovelPlayer : MonoBehaviour
     {
         switch (inputSystem)
         {
-            case HowInput.Auto:
+            case HowInput.Default:
                 inputProvider = new DefaultInputProvider();
                 break;
             case HowInput.UserSetting:
