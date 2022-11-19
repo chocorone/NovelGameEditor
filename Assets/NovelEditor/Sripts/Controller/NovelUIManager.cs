@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static NovelData.ParagraphData;
 
 [RequireComponent(typeof(CanvasGroup))]
 internal class NovelUIManager : MonoBehaviour
 {
     CanvasGroup NovelCanvas;
     ImageManager imagemanager;
-    void Init()
+    [SerializeField] DialogueText dialogueText;
+
+    void Awake()
     {
         NovelCanvas = GetComponent<CanvasGroup>();
     }
@@ -33,10 +36,16 @@ internal class NovelUIManager : MonoBehaviour
 
     }
 
-    internal void NewDataSetUp(List<Image> data)
+    internal void Reset(List<Image> data)
     {
-        imagemanager.Init(data);
-        //dialogueField.ResetDialogue();
+        //キャラなどを非表示？
+
+        //テキストを初期化
+
+        //選択肢を全部消す
+
+        //キャラのロケーションをリセットとか
+        //imagemanager.Init(data);
     }
 
     internal void SetDisplay(bool display)
@@ -51,5 +60,16 @@ internal class NovelUIManager : MonoBehaviour
             NovelCanvas.alpha = 0;
             NovelCanvas.interactable = false;
         }
+    }
+
+    internal void SetNextDialogue(Dialogue data)
+    {
+        dialogueText.textUpdate(data);
+        UpdateNameText(data);
+    }
+
+    internal void UpdateNameText(Dialogue data)
+    {
+        //名前のフォントなど変更
     }
 }

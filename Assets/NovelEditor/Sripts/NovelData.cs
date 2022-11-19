@@ -56,7 +56,7 @@ public class NovelData : ScriptableObject
 
     #region プロパティ
     public List<Image> locations => _locations;
-    public List<ParagraphData> paragraphsList => _paragraphList;
+    public List<ParagraphData> paragraphList => _paragraphList;
     public List<ChoiceData> choiceList => _choiceList;
 
     #endregion

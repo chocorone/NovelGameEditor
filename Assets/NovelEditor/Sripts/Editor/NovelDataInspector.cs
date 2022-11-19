@@ -105,10 +105,10 @@ internal class NovelDataInspector : Editor
 
         noveldata.changeLocation(noveldata.newLocations);
 
-        float perParagraph = 100 / noveldata.paragraphsList.Count;
+        float perParagraph = 100 / noveldata.paragraphList.Count;
 
         //データを初期化
-        foreach (ParagraphData pdata in noveldata.paragraphsList)
+        foreach (ParagraphData pdata in noveldata.paragraphList)
         {
             float perDialogue = perParagraph / pdata.dialogueList.Count;
             if (!pdata.enabled)
