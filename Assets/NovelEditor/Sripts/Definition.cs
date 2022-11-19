@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public enum HowInput
 {
-    Auto,
+    Default,
     UserSetting,
     Override
 }
