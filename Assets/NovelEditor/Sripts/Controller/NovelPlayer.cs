@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static NovelData;
 
-[RequireComponent(typeof(NovelInputProvider))]
+[RequireComponent(typeof(NovelUIManager))]
 public class NovelPlayer : MonoBehaviour
 {
     [SerializeField] NovelData noveldata;
@@ -14,7 +14,6 @@ public class NovelPlayer : MonoBehaviour
     [SerializeField] KeyCode[] skipButton;
     [SerializeField] KeyCode[] hideOrDisplayButton;
     [SerializeField] KeyCode[] stopOrStartButton;
-
 
     NovelInputProvider inputProvider;
 
