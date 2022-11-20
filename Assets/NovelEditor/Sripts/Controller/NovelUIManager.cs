@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using System;
 using static NovelData.ParagraphData;
+using TMPro;
 
 [RequireComponent(typeof(CanvasGroup))]
 internal class NovelUIManager : MonoBehaviour
@@ -10,6 +14,7 @@ internal class NovelUIManager : MonoBehaviour
     CanvasGroup NovelCanvas;
     ImageManager imagemanager;
     [SerializeField] DialogueText dialogueText;
+    [SerializeField] TextMeshProUGUI nameText;
 
     void Awake()
     {
@@ -62,14 +67,20 @@ internal class NovelUIManager : MonoBehaviour
         }
     }
 
-    internal void SetNextDialogue(Dialogue data)
+    internal async UniTask<bool> SetNextText(Dialogue data, CancellationToken token)
     {
-        dialogueText.textUpdate(data);
         UpdateNameText(data);
+        return await dialogueText.textUpdate(data, token);
+    }
+
+    internal async UniTask<bool> SetNextImage(Dialogue data)
+    {
+        return true;
     }
 
     internal void UpdateNameText(Dialogue data)
     {
         //名前のフォントなど変更
+
     }
 }

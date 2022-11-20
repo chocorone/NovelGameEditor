@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static NovelData;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 
 [RequireComponent(typeof(NovelUIManager))]
 public class NovelPlayer : MonoBehaviour
@@ -32,6 +34,10 @@ public class NovelPlayer : MonoBehaviour
     private NovelUIManager novelUI;
     private AudioPlayer audioPlayer;
     private ParagraphData _nowParagraph;
+    private bool _isReading = false;
+
+    CancellationTokenSource textCTS = new CancellationTokenSource();
+
 
     void Awake()
     {
@@ -64,7 +70,7 @@ public class NovelPlayer : MonoBehaviour
 
         nowDialogueNum = 0;
         _nowParagraph = _noveldata.paragraphList[nowDialogueNum];
-        nextDialogueSet();
+        SetNextDialogue();
 
         SetStop(false);
         IsPlay = true;
@@ -108,7 +114,18 @@ public class NovelPlayer : MonoBehaviour
     {
         if (_inputProvider.GetNext())
         {
-            Debug.Log("GetNext");
+            //全部表示
+            if (_isReading)
+            {
+                Debug.Log("Skip");
+                textCTS.Cancel();
+            }
+            else
+            {
+                Debug.Log("Next");
+                SetNextDialogue();
+            }
+
         }
         if (_inputProvider.GetSkip())
         {
@@ -116,7 +133,7 @@ public class NovelPlayer : MonoBehaviour
         }
     }
 
-    void nextParagraphSet()
+    void SetNextParagraph()
     {
         if (_nowParagraph.nextParagraphIndex == -1)
         {
@@ -127,14 +144,18 @@ public class NovelPlayer : MonoBehaviour
             _nowParagraph = _noveldata.paragraphList[_nowParagraph.nextParagraphIndex];
             nowDialogueNum = 0;
 
-            nextDialogueSet();
+            SetNextDialogue();
         }
     }
 
-    void nextDialogueSet()
+    async void SetNextDialogue()
     {
+        _isReading = true;
         //audioPlayer.PlaySound(nowParagraph.dialogueList[nowDialogueNum]);
-        novelUI.SetNextDialogue(_nowParagraph.dialogueList[nowDialogueNum]);
+        //novelUI.SetNextImage(_nowParagraph.dialogueList[nowDialogueNum]);
+        textCTS.Dispose();
+        textCTS = new CancellationTokenSource();
+        _isReading = !await novelUI.SetNextText(_nowParagraph.dialogueList[nowDialogueNum], textCTS.Token);
         nowDialogueNum++;
     }
 
