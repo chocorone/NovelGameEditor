@@ -14,6 +14,8 @@ public class DialogueText : MonoBehaviour
 {
     TextMeshProUGUI tmpro;
     int textSpeed = 6;
+    public bool IsStop = false;
+
     void Awake()
     {
         tmpro = GetComponent<TextMeshProUGUI>();
@@ -51,7 +53,7 @@ public class DialogueText : MonoBehaviour
                 await UniTask.Delay(textSpeed * 10, cancellationToken: token);
 
                 tmpro.text += words[wordCnt];
-
+                await UniTask.WaitUntil(() => !IsStop);
                 wordCnt++;
             }
         }

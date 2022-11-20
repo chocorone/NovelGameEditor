@@ -121,7 +121,7 @@ public class NovelPlayer : MonoBehaviour
             //全部表示
             if (_isReading)
             {
-                textCTS.Cancel();
+                FlashText();
             }
             else
             {
@@ -132,6 +132,11 @@ public class NovelPlayer : MonoBehaviour
         if (_inputProvider.GetSkip())
         {
             Debug.Log("GetSkip");
+        }
+
+        if (_inputProvider.GetStopOrStart())
+        {
+            novelUI.StopOrStartText();
         }
     }
 
@@ -192,6 +197,11 @@ public class NovelPlayer : MonoBehaviour
     void end()
     {
         IsPlaying = false;
+    }
+
+    void FlashText()
+    {
+        textCTS.Cancel();
     }
 
 }
