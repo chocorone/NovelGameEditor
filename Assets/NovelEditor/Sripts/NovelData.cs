@@ -341,7 +341,7 @@ public class NovelData : ScriptableObject
             public int fontSize = 30;
 
             public bool changeNameFont = false;
-            public Font nameFont;
+            public TMP_FontAsset nameFont;
             public Color nameColor = Color.white;
 
 

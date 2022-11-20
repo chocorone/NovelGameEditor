@@ -81,6 +81,14 @@ internal class NovelUIManager : MonoBehaviour
     internal void UpdateNameText(Dialogue data)
     {
         //名前のフォントなど変更
+        nameText.text = data.Name;
+        if (data.changeNameFont)
+        {
+            nameText.color = data.nameColor;
+
+            if (data.nameFont != null)
+                nameText.font = data.nameFont;
+        }
 
     }
 }

@@ -20,8 +20,21 @@ public class DialogueText : MonoBehaviour
     }
     public async UniTask<bool> textUpdate(Dialogue data, CancellationToken token)
     {
+        UpdateFont(data);
         //再生が終わったら通知したい
         return await PlayText(data.text, token);
+    }
+
+    internal void UpdateFont(Dialogue data)
+    {
+        if (data.changeFont)
+        {
+            tmpro.color = data.fontColor;
+            tmpro.fontSize = data.fontSize;
+
+            if (data.font != null)
+                tmpro.font = data.font;
+        }
     }
 
     private async UniTask<bool> PlayText(string text, CancellationToken token)
