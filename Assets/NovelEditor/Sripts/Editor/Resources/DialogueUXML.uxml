@@ -27,14 +27,12 @@
                     <ui:Box name="changeFontBox">
                         <uie:ObjectField label="Font Asset" name="font" type="TMPro.TMP_FontAsset, Unity.TextMeshPro" />
                         <uie:ColorField label="文字色" name="fontColor"/>
-                        <uie:MaskField label="Style" name="fontStyle"/>
                         <uie:IntegerField label="フォントサイズ" name="fontSize" value="0" />
                     </ui:Box>
                     <ui:Toggle label="名前フォント変更" name="changeNameFont" />
                     <ui:Box name="changeNameFontBox">
                         <uie:ObjectField label="Font Asset" name="nameFont" type="TMPro.TMP_FontAsset, Unity.TextMeshPro" />
                         <uie:ColorField label="名前文字色" name="nameColor"/>
-                        <uie:MaskField label="Style" name="nameFontStyle"/>
                     </ui:Box> 
                 </ui:Foldout>
 
