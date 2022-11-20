@@ -9,12 +9,21 @@ using System;
 public class NovelImage : MonoBehaviour
 {
     protected Image _image;
-    private Color _defaultColor;
+    public Color _defaultColor;
     private float _defaultAlpha;
 
     public void Change(Sprite next)
     {
-        _image.sprite = next;
+        if (next == null)
+        {
+            HideImage();
+        }
+        else
+        {
+            _image.sprite = next;
+            DisplayImage();
+        }
+
     }
 
     void Awake()
@@ -30,57 +39,55 @@ public class NovelImage : MonoBehaviour
 
     public async UniTask<bool> FadeIn(float fadeTime)
     {
-        await FadeIn(_image.color, fadeTime);
+        await FadeIn(_defaultColor, fadeTime);
         return true;
     }
 
     public async UniTask<bool> FadeIn(Color color, float fadeTime)
     {
         float alpha = 0;
-
+        color = new Color(color.r, color.g, color.b, 1);
+        Color beforeColor = new Color(_defaultColor.r, _defaultColor.g, _defaultColor.b, 0);
         while (alpha < 1)
         {
-            _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, alpha);
-            _image.color = Color.Lerp(_defaultColor, color, alpha);
+            _image.color = Color.Lerp(beforeColor, color, alpha);
             await UniTask.Delay(TimeSpan.FromSeconds(fadeTime * 0.01f));
             alpha += 0.01f;
         }
 
-        _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 1);
+        _image.color = new Color(color.r, color.g, color.b, 1);
         return true;
     }
 
     public async UniTask<bool> FadeOut(float fadeTime)
     {
-        await FadeOut(_image.color, fadeTime);
+        await FadeOut(_defaultColor, fadeTime);
         return true;
     }
 
     public async UniTask<bool> FadeOut(Color color, float fadeTime)
     {
         float alpha = 1;
-
+        color = new Color(color.r, color.g, color.b, 0);
         while (alpha > 0)
         {
-            _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, alpha);
-            _image.color = Color.Lerp(_defaultColor, color, alpha);
+            _image.color = Color.Lerp(color, _defaultColor, alpha);
             await UniTask.Delay(TimeSpan.FromSeconds(fadeTime * 0.01f));
             alpha -= 0.01f;
         }
 
-        _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
+        _image.color = new Color(_defaultColor.r, _defaultColor.g, _defaultColor.b, 0);
         return true;
     }
 
     public void HideImage()
     {
-        _defaultAlpha = _image.color.a;
         _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
     }
 
     public void DisplayImage()
     {
-        _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, _defaultAlpha);
+        _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 1);
     }
 
 

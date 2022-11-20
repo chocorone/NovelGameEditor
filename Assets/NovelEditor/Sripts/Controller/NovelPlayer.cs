@@ -35,9 +35,10 @@ public class NovelPlayer : MonoBehaviour
     private AudioPlayer audioPlayer;
     private ParagraphData _nowParagraph;
     private bool _isReading = false;
+    private bool _isImageChangeing = false;
 
     CancellationTokenSource textCTS = new CancellationTokenSource();
-
+    CancellationTokenSource imageCTS = new CancellationTokenSource();
 
     void Awake()
     {
@@ -112,7 +113,7 @@ public class NovelPlayer : MonoBehaviour
 
     void Update()
     {
-        if (!IsPlaying && IsChoicing)
+        if (!IsPlaying || IsChoicing || _isImageChangeing)
         {
             return;
         }
@@ -185,11 +186,14 @@ public class NovelPlayer : MonoBehaviour
 
     async void SetNextDialogue()
     {
-        _isReading = true;
+        _isImageChangeing = true;
+        imageCTS.Dispose();
+        imageCTS = new CancellationTokenSource();
+        _isImageChangeing = !await novelUI.SetNextImage(_nowParagraph.dialogueList[nowDialogueNum], imageCTS.Token);
         //audioPlayer.PlaySound(nowParagraph.dialogueList[nowDialogueNum]);
-        //novelUI.SetNextImage(_nowParagraph.dialogueList[nowDialogueNum]);
         textCTS.Dispose();
         textCTS = new CancellationTokenSource();
+        _isReading = true;
         _isReading = !await novelUI.SetNextText(_nowParagraph.dialogueList[nowDialogueNum], textCTS.Token);
         nowDialogueNum++;
     }

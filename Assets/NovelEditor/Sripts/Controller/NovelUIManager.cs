@@ -13,8 +13,10 @@ internal class NovelUIManager : MonoBehaviour
 {
     CanvasGroup NovelCanvas;
     ImageManager imagemanager;
-    [SerializeField] DialogueText dialogueText;
-    [SerializeField] TextMeshProUGUI nameText;
+    [SerializeField] NovelBackGround _backGround;
+    [SerializeField] DialogueText _dialogueText;
+    [SerializeField] TextMeshProUGUI _nameText;
+
 
     void Awake()
     {
@@ -70,29 +72,30 @@ internal class NovelUIManager : MonoBehaviour
     internal async UniTask<bool> SetNextText(Dialogue data, CancellationToken token)
     {
         UpdateNameText(data);
-        return await dialogueText.textUpdate(data, token);
+        return await _dialogueText.textUpdate(data, token);
     }
 
-    internal async UniTask<bool> SetNextImage(Dialogue data)
+    internal async UniTask<bool> SetNextImage(Dialogue data, CancellationToken token)
     {
+        await _backGround.ChangeBack(data);
         return true;
     }
 
     internal void UpdateNameText(Dialogue data)
     {
         //名前のフォントなど変更
-        nameText.text = data.Name;
+        _nameText.text = data.Name;
         if (data.changeNameFont)
         {
-            nameText.color = data.nameColor;
+            _nameText.color = data.nameColor;
 
             if (data.nameFont != null)
-                nameText.font = data.nameFont;
+                _nameText.font = data.nameFont;
         }
     }
 
     internal void StopOrStartText()
     {
-        dialogueText.IsStop = !dialogueText.IsStop;
+        _dialogueText.IsStop = !_dialogueText.IsStop;
     }
 }

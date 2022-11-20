@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static NovelData.ParagraphData;
+using Cysharp.Threading.Tasks;
 
 public class NovelBackGround : NovelImage
 {
-    private NovelImage _frontImage;
-    private NovelImage _allImage;
+    private NovelImage _backFade;
+    private NovelImage _allFade;
     void Awake()
     {
         Init();
@@ -16,14 +17,14 @@ public class NovelBackGround : NovelImage
         RectTransform frontObj = new GameObject("frontFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
         frontObj.transform.SetParent(this.transform);
         CopyRectTransformSize(backTransform, frontObj);
-        _frontImage = frontObj.gameObject.AddComponent<NovelImage>();
-        _frontImage.HideImage();
+        _backFade = frontObj.gameObject.AddComponent<NovelImage>();
+        _backFade.HideImage();
 
         RectTransform allObj = new GameObject("allFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
         allObj.transform.SetParent(this.transform.parent);
         CopyRectTransformSize(backTransform, allObj);
-        _allImage = allObj.gameObject.AddComponent<NovelImage>();
-        _allImage.HideImage();
+        _allFade = allObj.gameObject.AddComponent<NovelImage>();
+        _allFade.HideImage();
     }
 
     void CopyRectTransformSize(RectTransform source, RectTransform dest)
@@ -34,8 +35,30 @@ public class NovelBackGround : NovelImage
         dest.sizeDelta = source.sizeDelta;
     }
 
-    public void ChangeBack(Dialogue data)
+    public async UniTask<bool> ChangeBack(Dialogue data)
     {
+        switch (data.howBack)
+        {
+            case BackChangeStyle.Quick:
+                Change(data.back);
+                break;
+            case BackChangeStyle.FadeBack:
+                _backFade._defaultColor = data.backFadeColor;
+                await _backFade.FadeIn(data.backFadeColor, data.backFadeSpeed / 2);
+                Change(data.back);
+                await _backFade.FadeOut(data.backFadeColor, data.backFadeSpeed / 2);
+                break;
+            case BackChangeStyle.FadeFront:
 
+                break;
+
+            case BackChangeStyle.FadeAll:
+                _allFade._defaultColor = data.backFadeColor;
+                await _allFade.FadeIn(data.backFadeColor, data.backFadeSpeed / 2);
+                Change(data.back);
+                await _allFade.FadeOut(data.backFadeColor, data.backFadeSpeed / 2);
+                break;
+        }
+        return true;
     }
 }
