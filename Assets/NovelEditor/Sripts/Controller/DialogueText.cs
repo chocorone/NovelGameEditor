@@ -14,8 +14,6 @@ public class DialogueText : MonoBehaviour
 {
     TextMeshProUGUI tmpro;
     int textSpeed = 6;
-    bool isReading = false;
-
     void Awake()
     {
         tmpro = GetComponent<TextMeshProUGUI>();
