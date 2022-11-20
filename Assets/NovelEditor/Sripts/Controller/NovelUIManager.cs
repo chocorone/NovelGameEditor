@@ -89,6 +89,10 @@ internal class NovelUIManager : MonoBehaviour
             if (data.nameFont != null)
                 nameText.font = data.nameFont;
         }
+    }
 
+    internal void StopOrStartText()
+    {
+        dialogueText.IsStop = !dialogueText.IsStop;
     }
 }
