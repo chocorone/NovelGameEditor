@@ -25,7 +25,7 @@ public class NovelPlayer : MonoBehaviour
     NovelInputProvider _inputProvider;
 
     public bool IsStop { get; private set; } = false;
-    public bool IsPlay { get; private set; } = false;
+    public bool IsPlaying { get; private set; } = false;
     public bool IsChoicing { get; private set; } = false;
     public bool IsDisplay => _isDisplay;
 
@@ -70,10 +70,10 @@ public class NovelPlayer : MonoBehaviour
 
         nowDialogueNum = 0;
         _nowParagraph = _noveldata.paragraphList[nowDialogueNum];
-        SetNextDialogue();
+        SetNext();
 
         SetStop(false);
-        IsPlay = true;
+        IsPlaying = true;
     }
 
     public void SetStop(bool isStop)
@@ -112,18 +112,20 @@ public class NovelPlayer : MonoBehaviour
 
     void Update()
     {
+        if (!IsPlaying && IsChoicing)
+        {
+            return;
+        }
         if (_inputProvider.GetNext())
         {
             //全部表示
             if (_isReading)
             {
-                Debug.Log("Skip");
                 textCTS.Cancel();
             }
             else
             {
-                Debug.Log("Next");
-                SetNextDialogue();
+                SetNext();
             }
 
         }
@@ -137,15 +139,43 @@ public class NovelPlayer : MonoBehaviour
     {
         if (_nowParagraph.nextParagraphIndex == -1)
         {
-            //end();
+            end();
         }
         else
         {
             _nowParagraph = _noveldata.paragraphList[_nowParagraph.nextParagraphIndex];
             nowDialogueNum = 0;
-
             SetNextDialogue();
         }
+    }
+
+    void SetNext()
+    {
+        if (nowDialogueNum >= _nowParagraph.dialogueList.Count)
+        {
+            switch (_nowParagraph.next)
+            {
+                case Next.Choice:
+                    SetChoice();
+                    break;
+                case Next.Continue:
+                    SetNextParagraph();
+                    break;
+                case Next.End:
+                    end();
+                    break;
+            }
+        }
+        else
+        {
+            SetNextDialogue();
+        }
+
+    }
+
+    async void SetChoice()
+    {
+        IsChoicing = true;
     }
 
     async void SetNextDialogue()
@@ -157,6 +187,11 @@ public class NovelPlayer : MonoBehaviour
         textCTS = new CancellationTokenSource();
         _isReading = !await novelUI.SetNextText(_nowParagraph.dialogueList[nowDialogueNum], textCTS.Token);
         nowDialogueNum++;
+    }
+
+    void end()
+    {
+        IsPlaying = false;
     }
 
 }
