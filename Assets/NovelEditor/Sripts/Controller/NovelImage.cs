@@ -10,6 +10,7 @@ public class NovelImage : MonoBehaviour
 {
     protected Image _image;
     private Color _defaultColor;
+    private float _defaultAlpha;
 
     public void Change(Sprite next)
     {
@@ -18,17 +19,22 @@ public class NovelImage : MonoBehaviour
 
     void Awake()
     {
+        Init();
+    }
+
+    protected void Init()
+    {
         _image = GetComponent<Image>();
         _defaultColor = _image.color;
     }
 
-    async UniTask<bool> FadeIn(float fadeTime)
+    public async UniTask<bool> FadeIn(float fadeTime)
     {
         await FadeIn(_image.color, fadeTime);
         return true;
     }
 
-    async UniTask<bool> FadeIn(Color color, float fadeTime)
+    public async UniTask<bool> FadeIn(Color color, float fadeTime)
     {
         float alpha = 0;
 
@@ -44,13 +50,13 @@ public class NovelImage : MonoBehaviour
         return true;
     }
 
-    async UniTask<bool> FadeOut(float fadeTime)
+    public async UniTask<bool> FadeOut(float fadeTime)
     {
         await FadeOut(_image.color, fadeTime);
         return true;
     }
 
-    async UniTask<bool> FadeOut(Color color, float fadeTime)
+    public async UniTask<bool> FadeOut(Color color, float fadeTime)
     {
         float alpha = 1;
 
@@ -65,5 +71,17 @@ public class NovelImage : MonoBehaviour
         _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
         return true;
     }
+
+    public void HideImage()
+    {
+        _defaultAlpha = _image.color.a;
+        _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
+    }
+
+    public void DisplayImage()
+    {
+        _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, _defaultAlpha);
+    }
+
 
 }
