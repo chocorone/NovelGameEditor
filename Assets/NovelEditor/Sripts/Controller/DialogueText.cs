@@ -4,42 +4,73 @@ using UnityEngine;
 using TMPro;
 using static NovelData.ParagraphData;
 using Cysharp.Threading.Tasks;
+using System.Threading;
 using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 [RequireComponent(typeof(TextMeshProUGUI))]
 public class DialogueText : MonoBehaviour
 {
     TextMeshProUGUI tmpro;
     int textSpeed = 6;
+    bool isReading = false;
 
     void Awake()
     {
         tmpro = GetComponent<TextMeshProUGUI>();
     }
-    public void textUpdate(Dialogue data)
+    public async UniTask<bool> textUpdate(Dialogue data, CancellationToken token)
     {
         //再生が終わったら通知したい
-        PlayText(data.text);
+        return await PlayText(data.text, token);
     }
 
-    private async UniTask<bool> PlayText(string text)
+    private async UniTask<bool> PlayText(string text, CancellationToken token)
     {
         tmpro.text = "";
 
-        int wordcnt = 0;
-        while (wordcnt < text.Length)
+        List<string> words = SplitText(text);
+
+        int wordCnt = 0;
+        try
         {
-            await UniTask.Delay(textSpeed * 10);
+            while (wordCnt < words.Count)
+            {
+                await UniTask.Delay(textSpeed * 10, cancellationToken: token);
 
-            tmpro.text += text[wordcnt];
+                tmpro.text += words[wordCnt];
 
-            // if (IsStop)
-            // {
-            //     await UniTask.WaitUntil(() => !IsStop);
-            // }
-            wordcnt++;
+                wordCnt++;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            tmpro.text += String.Join("", words.GetRange(wordCnt, words.Count - wordCnt));
         }
 
+
         return true;
+    }
+
+    List<string> SplitText(string text)
+    {
+        List<string> words = new List<string>();
+
+        foreach (string str in text.Split('<'))
+        {
+            string[] split = str.Split('>');
+
+            int i = 0;
+            if (split.Length == 2)
+            {
+                words.Add('<' + split[0] + '>');
+                i = 1;
+            }
+            split[i] = split[i].Replace("&lt;", "<");
+            split[i] = split[i].Replace("&gt;", ">");
+            words.AddRange(split[i].Select(c => c.ToString()));
+        }
+        return words;
     }
 }
