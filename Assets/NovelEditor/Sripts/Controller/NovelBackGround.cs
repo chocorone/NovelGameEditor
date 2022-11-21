@@ -11,6 +11,7 @@ public class NovelBackGround : NovelImage
     private NovelImage _backFade;
     private NovelImage _frontFade;
     private NovelImage _allFade;
+
     void Awake()
     {
         Init();
@@ -44,55 +45,78 @@ public class NovelBackGround : NovelImage
         dest.sizeDelta = source.sizeDelta;
     }
 
-    public async UniTask<bool> ChangeBack(Dialogue data, CancellationToken token)
+    public async UniTask<bool> BackFadeIn(Dialogue data, CancellationToken token)
     {
         switch (data.howBack)
         {
-            case BackChangeStyle.Quick:
-                Change(data.back);
+            case BackChangeStyle.FadeBack:
+                await FadeIn(_backFade, data.backFadeColor, data.backFadeSpeed, token);
                 break;
 
-            case BackChangeStyle.FadeBack:
-                await Fade(_backFade, data, token);
-                break;
             case BackChangeStyle.FadeFront:
-                await Fade(_frontFade, data, token);
+                await FadeIn(_frontFade, data.backFadeColor, data.backFadeSpeed, token);
                 break;
 
             case BackChangeStyle.FadeAll:
-                await Fade(_allFade, data, token);
+                await FadeIn(_allFade, data.backFadeColor, data.backFadeSpeed, token);
+                break;
+        }
+        Change(data.back);
+        return true;
+    }
+
+    public async UniTask<bool> BackFadeOut(Dialogue data, CancellationToken token)
+    {
+        switch (data.howBack)
+        {
+            case BackChangeStyle.FadeBack:
+                await FadeOut(_backFade, data.backFadeColor, data.backFadeSpeed, token);
                 break;
 
-            case BackChangeStyle.dissolve:
-                if (_image.sprite == null)
-                {
-                    HideImage();
-                    Change(data.back);
-                    _defaultColor = _image.color;
-                    await FadeIn(data.backFadeColor, data.backFadeSpeed, token);
-                }
-                else
-                {
-                    _backFade.Change(_image.sprite);
-                    _backFade.image.color = _image.color;
-                    _backFade._defaultColor = _image.color;
-                    Change(data.back);
-                    await _backFade.FadeOut(_image.color, data.backFadeSpeed, token);
-                    _backFade.HideImage();
-                }
+            case BackChangeStyle.FadeFront:
+                await FadeOut(_frontFade, data.backFadeColor, data.backFadeSpeed, token);
+                break;
 
+            case BackChangeStyle.FadeAll:
+                await FadeOut(_allFade, data.backFadeColor, data.backFadeSpeed, token);
                 break;
         }
         return true;
     }
 
-    async UniTask<bool> Fade(NovelImage Panel, Dialogue data, CancellationToken token)
+    async UniTask<bool> FadeIn(NovelImage Panel, Color dest, float speed, CancellationToken token)
     {
         Panel.image.sprite = null;
-        Panel._defaultColor = data.backFadeColor;
-        await Panel.FadeIn(data.backFadeColor, data.backFadeSpeed / 2, token);
-        Change(data.back);
-        await Panel.FadeOut(data.backFadeColor, data.backFadeSpeed / 2, token);
+        Color from = new Color(dest.r, dest.g, dest.b, 0);
+        await Panel.Fade(from, dest, speed / 2, token);
+        return true;
+    }
+
+    async UniTask<bool> FadeOut(NovelImage Panel, Color from, float speed, CancellationToken token)
+    {
+        Color dest = new Color(from.r, from.g, from.b, 0);
+        await Panel.Fade(from, dest, speed / 2, token);
+        return true;
+    }
+
+    public async UniTask<bool> Dissolve(float speed, Sprite sprite, CancellationToken token)
+    {
+        if (_image.sprite == null)
+        {
+            HideImage();
+            Change(sprite);
+            Color from = new Color(_defaultColor.r, _defaultColor.g, _defaultColor.b, 0);
+            await Fade(from, _defaultColor, speed, token);
+        }
+        else
+        {
+            _backFade.Change(_image.sprite);
+            _backFade.image.color = _image.color;
+            Change(sprite);
+            Color dest = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
+            await _backFade.Fade(_image.color, dest, speed, token);
+            _backFade.HideImage();
+        }
         return true;
     }
 }

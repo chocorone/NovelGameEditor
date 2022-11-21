@@ -27,7 +27,6 @@ public class NovelImage : MonoBehaviour
             _image.sprite = next;
             DisplayImage();
         }
-
     }
 
     void Awake()
@@ -41,17 +40,17 @@ public class NovelImage : MonoBehaviour
         _defaultColor = _image.color;
     }
 
-    public async UniTask<bool> FadeIn(Color color, float fadeTime, CancellationToken token)
+
+    public async UniTask<bool> Fade(Color from, Color dest, float fadeTime, CancellationToken token)
     {
         float alpha = 0;
-        color = new Color(color.r, color.g, color.b, 1);
-        Color beforeColor = new Color(_defaultColor.r, _defaultColor.g, _defaultColor.b, 0);
+        _image.color = from;
         try
         {
             while (alpha < 1)
             {
-                _image.color = Color.Lerp(beforeColor, color, alpha);
-                await UniTask.Delay(TimeSpan.FromSeconds(fadeTime * 0.01f));
+                _image.color = Color.Lerp(from, dest, alpha);
+                await UniTask.Delay(TimeSpan.FromSeconds((double)fadeTime * 0.01), cancellationToken: token);
                 alpha += 0.01f;
             }
         }
@@ -61,30 +60,7 @@ public class NovelImage : MonoBehaviour
         }
 
 
-        _image.color = new Color(color.r, color.g, color.b, 1);
-        return true;
-    }
-
-    public async UniTask<bool> FadeOut(Color color, float fadeTime, CancellationToken token)
-    {
-        float alpha = 1;
-        color = new Color(color.r, color.g, color.b, 0);
-        try
-        {
-            while (alpha > 0)
-            {
-                _image.color = Color.Lerp(color, _defaultColor, alpha);
-                await UniTask.Delay(TimeSpan.FromSeconds(fadeTime * 0.01f));
-                alpha -= 0.01f;
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            //return false;
-        }
-
-
-        _image.color = new Color(_defaultColor.r, _defaultColor.g, _defaultColor.b, 0);
+        _image.color = dest;
         return true;
     }
 
