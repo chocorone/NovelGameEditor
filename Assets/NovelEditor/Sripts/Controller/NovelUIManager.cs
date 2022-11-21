@@ -49,7 +49,7 @@ internal class NovelUIManager : MonoBehaviour
 
     internal void Reset(List<Image> data)
     {
-        //キャラなどを非表示？
+        imageManager.Init(data);
 
         //テキストを初期化
 
@@ -81,7 +81,7 @@ internal class NovelUIManager : MonoBehaviour
 
     internal async UniTask<bool> SetNextImage(Dialogue data, CancellationToken token)
     {
-        await imageManager.SetBackGround(data, token);
+        await imageManager.SetNextImage(data, token);
         return true;
     }
 
