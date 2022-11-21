@@ -9,17 +9,25 @@ using System.Threading;
 public class NovelBackGround : NovelImage
 {
     private NovelImage _backFade;
+    private NovelImage _frontFade;
     private NovelImage _allFade;
     void Awake()
     {
         Init();
         RectTransform backTransform = GetComponent<RectTransform>();
 
-        RectTransform frontObj = new GameObject("frontFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
-        frontObj.transform.SetParent(this.transform);
-        CopyRectTransformSize(backTransform, frontObj);
-        _backFade = frontObj.gameObject.AddComponent<NovelImage>();
+        RectTransform backObj = new GameObject("backFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
+        backObj.transform.SetParent(this.transform);
+        CopyRectTransformSize(backTransform, backObj);
+        _backFade = backObj.gameObject.AddComponent<NovelImage>();
         _backFade.HideImage();
+
+        RectTransform frontObj = new GameObject("frontFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
+        frontObj.transform.SetParent(this.transform.parent);
+        frontObj.transform.SetSiblingIndex(2);
+        CopyRectTransformSize(backTransform, frontObj);
+        _frontFade = frontObj.gameObject.AddComponent<NovelImage>();
+        _frontFade.HideImage();
 
         RectTransform allObj = new GameObject("allFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
         allObj.transform.SetParent(this.transform.parent);
@@ -45,22 +53,14 @@ public class NovelBackGround : NovelImage
                 break;
 
             case BackChangeStyle.FadeBack:
-                _backFade.image.sprite = null;
-                _backFade._defaultColor = data.backFadeColor;
-                await _backFade.FadeIn(data.backFadeColor, data.backFadeSpeed / 2, token);
-                Change(data.back);
-                await _backFade.FadeOut(data.backFadeColor, data.backFadeSpeed / 2, token);
+                await Fade(_backFade, data, token);
                 break;
             case BackChangeStyle.FadeFront:
-
+                await Fade(_frontFade, data, token);
                 break;
 
             case BackChangeStyle.FadeAll:
-                _allFade.image.sprite = null;
-                _allFade._defaultColor = data.backFadeColor;
-                await _allFade.FadeIn(data.backFadeColor, data.backFadeSpeed / 2, token);
-                Change(data.back);
-                await _allFade.FadeOut(data.backFadeColor, data.backFadeSpeed / 2, token);
+                await Fade(_allFade, data, token);
                 break;
 
             case BackChangeStyle.dissolve:
@@ -77,12 +77,22 @@ public class NovelBackGround : NovelImage
                     _backFade.image.color = _image.color;
                     _backFade._defaultColor = _image.color;
                     Change(data.back);
-                    await _backFade.FadeOut(_image.color, 3, token);
+                    await _backFade.FadeOut(_image.color, data.backFadeSpeed, token);
                     _backFade.HideImage();
                 }
 
                 break;
         }
+        return true;
+    }
+
+    async UniTask<bool> Fade(NovelImage Panel, Dialogue data, CancellationToken token)
+    {
+        Panel.image.sprite = null;
+        Panel._defaultColor = data.backFadeColor;
+        await Panel.FadeIn(data.backFadeColor, data.backFadeSpeed / 2, token);
+        Change(data.back);
+        await Panel.FadeOut(data.backFadeColor, data.backFadeSpeed / 2, token);
         return true;
     }
 }
