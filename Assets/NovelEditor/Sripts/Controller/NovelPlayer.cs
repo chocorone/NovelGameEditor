@@ -54,6 +54,7 @@ public class NovelPlayer : MonoBehaviour
         }
 
         novelUI = GetComponent<NovelUIManager>();
+        novelUI.Init();
         audioPlayer = gameObject.AddComponent<AudioPlayer>();
 
         if (_playOnAwake && _noveldata != null)

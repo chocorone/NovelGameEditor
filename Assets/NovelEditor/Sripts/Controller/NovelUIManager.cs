@@ -12,15 +12,19 @@ using TMPro;
 internal class NovelUIManager : MonoBehaviour
 {
     CanvasGroup NovelCanvas;
-    ImageManager imagemanager;
+    ImageManager imageManager;
+
+    [SerializeField] Transform _charaTransform;
     [SerializeField] NovelBackGround _backGround;
+    [SerializeField] DialogueImage _dialogueImage;
     [SerializeField] DialogueText _dialogueText;
     [SerializeField] TextMeshProUGUI _nameText;
 
 
-    void Awake()
+    public void Init()
     {
         NovelCanvas = GetComponent<CanvasGroup>();
+        imageManager = new ImageManager(_charaTransform, _backGround, _dialogueImage);
     }
 
     internal void SetStop()
@@ -77,7 +81,7 @@ internal class NovelUIManager : MonoBehaviour
 
     internal async UniTask<bool> SetNextImage(Dialogue data, CancellationToken token)
     {
-        await _backGround.ChangeBack(data);
+        await imageManager.SetBackGround(data, token);
         return true;
     }
 
