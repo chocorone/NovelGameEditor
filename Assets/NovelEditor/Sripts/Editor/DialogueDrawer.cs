@@ -264,17 +264,22 @@ internal class DialogueDrawer : PropertyDrawer
                 ParagraphInspector.UpdateValue();
                 BackChangeStyle value = (BackChangeStyle)data.FindPropertyRelative("howBack").enumValueIndex;
 
-                var changeBackBox = root.Q<Box>("changeBackBox");
+                var FadeColor = root.Q<ColorField>("backFadeColor");
+                var FadeSpeed = root.Q<FloatField>("backFadeSpeed");
                 var backSprite = root.Q<ObjectField>("backSprite");
 
-                changeBackBox.style.display = DisplayStyle.None;
+                FadeColor.style.display = DisplayStyle.None;
                 backSprite.style.display = DisplayStyle.None;
+                FadeSpeed.style.display = DisplayStyle.None;
 
                 if (value != BackChangeStyle.UnChange)
                 {
                     backSprite.style.display = DisplayStyle.Flex;
+                    if (value != BackChangeStyle.Quick)
+                        FadeSpeed.style.display = DisplayStyle.Flex;
+
                     if (value != BackChangeStyle.Quick && value != BackChangeStyle.dissolve)
-                        changeBackBox.style.display = DisplayStyle.Flex;
+                        FadeColor.style.display = DisplayStyle.Flex;
                 }
                 var label = root.Q<Label>("nowBack");
                 label.style.display = value == BackChangeStyle.UnChange ? DisplayStyle.Flex : DisplayStyle.None;
