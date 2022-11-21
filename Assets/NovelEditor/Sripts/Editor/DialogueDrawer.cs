@@ -89,6 +89,7 @@ internal class DialogueDrawer : PropertyDrawer
                     ParagraphInspector.UpdateValue();
                     CharaChangeStyle value = (CharaChangeStyle)charaData.enumValueIndex;
                     charaTree.Q<Box>().style.display = value == CharaChangeStyle.UnChange ? DisplayStyle.None : DisplayStyle.Flex;
+                    charaTree.Q<ColorField>().style.display = value == CharaChangeStyle.dissolve ? DisplayStyle.Flex : DisplayStyle.None;
                     label.style.display = value == CharaChangeStyle.UnChange ? DisplayStyle.Flex : DisplayStyle.None;
                     string name = charaSpriteData.objectReferenceValue == null ? "None" : charaSpriteData.objectReferenceValue.name;
                     label.text = "現在の立ち絵：" + name;
@@ -103,6 +104,8 @@ internal class DialogueDrawer : PropertyDrawer
                 string name = charaSpriteData.objectReferenceValue == null ? "None" : charaSpriteData.objectReferenceValue.name;
                 label.text = "現在の立ち絵：" + name;
             });
+
+            charaTree.Q<ColorField>().BindProperty(data.FindPropertyRelative("charaFadeColor").GetArrayElementAtIndex(i));
             charaImageBox.Add(charaTree);
         }
 
