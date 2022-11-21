@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DialigueImage : NovelImage
+public class DialogueImage : NovelImage
 {
     // Start is called before the first frame update
     void Awake()
