@@ -22,26 +22,36 @@ internal class DialogueDrawer : PropertyDrawer
 
         var nameField = new IMGUIContainer(() =>
         {
-            data.serializedObject.Update();
-            var Name = data.FindPropertyRelative("Name");
-            Name.stringValue = GUILayout.TextArea(Name.stringValue);
-            data.serializedObject.ApplyModifiedProperties();
+            try
+            {
+                data.serializedObject.Update();
+                var Name = data.FindPropertyRelative("Name");
+                Name.stringValue = GUILayout.TextArea(Name.stringValue);
+                data.serializedObject.ApplyModifiedProperties();
+            }
+            catch { }
+
         });
 
         root.Q<Box>("nameBox").Add(nameField);
 
         var serihuField = new IMGUIContainer(() =>
         {
-            data.serializedObject.Update();
-            var style = new GUIStyle(EditorStyles.textArea)
+            try
             {
-                wordWrap = true,
-                fixedHeight = EditorGUIUtility.singleLineHeight * 3
-            };
+                data.serializedObject.Update();
+                var style = new GUIStyle(EditorStyles.textArea)
+                {
+                    wordWrap = true,
+                    fixedHeight = EditorGUIUtility.singleLineHeight * 3
+                };
 
-            var talkTextProperty = data.FindPropertyRelative("text");
-            talkTextProperty.stringValue = GUILayout.TextArea(talkTextProperty.stringValue, style);
-            data.serializedObject.ApplyModifiedProperties();
+                var talkTextProperty = data.FindPropertyRelative("text");
+                talkTextProperty.stringValue = GUILayout.TextArea(talkTextProperty.stringValue, style);
+                data.serializedObject.ApplyModifiedProperties();
+            }
+            catch { }
+
         });
 
         root.Q<Box>("serihuBox").Add(serihuField);
