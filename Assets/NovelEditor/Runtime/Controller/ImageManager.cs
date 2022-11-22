@@ -61,13 +61,24 @@ namespace NovelEditorPlugin
             List<UniTask<bool>> tasks = new();
             for (int i = 0; i < _charas.Count; i++)
             {
+                if (style[i] == CharaChangeStyle.dissolve)
+                {
+                    tasks.Add(_charas[i].DissolveIn(sprites[i], color[i], _charaFadetime, token));
+                }
+            }
+            await UniTask.WhenAll(tasks);
+
+
+            tasks.Clear();
+            for (int i = 0; i < _charas.Count; i++)
+            {
                 switch (style[i])
                 {
                     case CharaChangeStyle.Quick:
                         _charas[i].Change(sprites[i]);
                         break;
                     case CharaChangeStyle.dissolve:
-                        tasks.Add(_charas[i].Dissolve(sprites[i], color[i], _charaFadetime, token));
+                        tasks.Add(_charas[i].DissolveOut(sprites[i], color[i], _charaFadetime, token));
                         break;
                 }
             }
