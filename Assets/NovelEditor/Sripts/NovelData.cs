@@ -200,7 +200,7 @@ public class NovelData : ScriptableObject
         List<Dialogue> _dialogueList = new List<Dialogue>();
 
         [SerializeField, HideInInspector]
-        bool _detailOpen = false;
+        public bool detailOpen = false;
 
         [SerializeField, HideInInspector]
         Next _next = Next.End;
@@ -213,7 +213,6 @@ public class NovelData : ScriptableObject
 
         #region プロパティ
         public List<Dialogue> dialogueList => _dialogueList;
-        public bool detailOpen => _detailOpen;
         public Next next => _next;
         public List<int> nextChoiceIndexes => _nextChoiceIndexes;
         #endregion

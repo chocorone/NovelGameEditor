@@ -36,16 +36,16 @@ internal class ParagraphInspector : Editor
     {
         _root = new VisualElement();
         _root.styleSheets.Add(Resources.Load<StyleSheet>("DialogueUSS"));
-        Label label = new Label();
-        if (NovelEditorWindow.Compiled)
+        Toggle toggle = new Toggle();
+        toggle.label = "詳細設定全部開く";
+        toggle.RegisterValueChangedCallback(x =>
         {
-            label.text = "ノードをクリックし直してください";
-            label.style.color = new StyleColor(Color.red);
-            label.style.fontSize = 20;
-            _root.Add(label);
-            return _root;
-        }
-        else if (index == 0)
+            Debug.Log(x.newValue);
+        });
+        _root.Add(toggle);
+
+        Label label = new Label();
+        if (index == 0)
         {
             label.text = "最初に表示される会話です";
         }
@@ -84,6 +84,14 @@ internal class ParagraphInspector : Editor
     internal static void UpdateValue()
     {
         editingData.data.UpdateOrder();
+    }
+
+    void ChangeFolOut(bool flag)
+    {
+        foreach (var data in tmpdata.data.dialogueList)
+        {
+            data.open = flag;
+        }
     }
 
 }

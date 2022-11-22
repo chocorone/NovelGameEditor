@@ -5,7 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-
+using static NovelData;
 
 /// <summary>
 /// ウィンドウを表示するためのクラス
@@ -14,8 +14,6 @@ public class NovelEditorWindow : EditorWindow
 {
     [SerializeField] NovelData _editingData;
     internal static NovelData editingData => Instance._editingData;
-    internal static bool Compiled = true;
-
     private static NovelEditorWindow instance;
     public static NovelEditorWindow Instance
     {
@@ -54,10 +52,24 @@ public class NovelEditorWindow : EditorWindow
 
     void Draw()
     {
-        Compiled = true;
+        NodeData data = BaseNode.nowSelection?.nodeData;
+
         GraphController controller = new GraphController();
         NovelGraphView graphView = controller.CreateGraph();
         rootVisualElement.Add(graphView);
+
+        if (data != null)
+        {
+            Selection.activeObject = null;
+            if (data is ParagraphData && ParagraphNode.nodes.Count > data.index)
+            {
+                ParagraphNode.nodes[data.index]?.OnSelected();
+            }
+            else if (ChoiceNode.nodes.Count > data.index)
+            {
+                ChoiceNode.nodes[data.index]?.OnSelected();
+            }
+        }
 
         string name = "NoData";
         if (_editingData != null)
