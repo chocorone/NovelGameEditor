@@ -13,6 +13,7 @@ internal abstract class BaseNode : Node
 
     internal Port CountinuePort { get; private protected set; }
 
+    public static BaseNode nowSelection{get; private set; }
 
     private protected virtual void NodeSet()
     {
@@ -70,10 +71,12 @@ internal abstract class BaseNode : Node
                 temp.dialogueList = ((ParagraphData)nodeData).dialogueList;
                 Selection.activeObject = temp;
             }
+            nowSelection = this;
         }
         else
         {
             Selection.activeObject = null;
+            nowSelection = null;
         }
 
     }
@@ -81,7 +84,7 @@ internal abstract class BaseNode : Node
     public override void OnUnselected()
     {
         Selection.activeObject = null;
-
+        nowSelection = null;
         SetTitle();
     }
 

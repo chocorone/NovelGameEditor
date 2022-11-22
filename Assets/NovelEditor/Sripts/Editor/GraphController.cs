@@ -28,6 +28,8 @@ internal class GraphController
             Undo.undoRedoPerformed += () =>
             {
                 NovelEditorWindow.Compiled = true;
+                NodeData data = BaseNode.nowSelection.nodeData;
+
                 foreach (var element in graphView.graphElements)
                 {
                     if (element is BaseNode || element is Edge)
@@ -36,6 +38,14 @@ internal class GraphController
                     }
                 }
                 LoadNodes();
+                if(data != null){
+                    Selection.activeObject = null;
+                    if(data is ParagraphData&& ParagraphNode.nodes.Count>data.index){
+                        ParagraphNode.nodes[data.index]?.OnSelected();
+                    }else if(ChoiceNode.nodes.Count>data.index){
+                        ChoiceNode.nodes[data.index]?.OnSelected();
+                    }
+                }
             };
 
         }
