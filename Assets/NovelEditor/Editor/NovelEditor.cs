@@ -20,8 +20,8 @@ namespace NovelEditorPlugin.Editor
         {
             //ウィンドウ作成
             var scene = typeof(UnityEditor.SceneView);
-            var window = EditorWindow.GetWindow<NovelEditorWindow>(new Type[] { scene });
-            window.Focus();
+            var window = EditorWindow.GetWindow<NovelEditorWindow>(desiredDockNextTo: new Type[] { scene }, title: "NovelEditor");
+            //window.Focus();
             //window = EditorWindow.GetWindow<NovelEditorWindow>(typeof(UnityEditor.SceneView));
             window.Init(data);
         }
@@ -30,8 +30,9 @@ namespace NovelEditorPlugin.Editor
         public static void Open()
         {
             //ウィンドウ作成
-            var window = EditorWindow.GetWindow<NovelEditorWindow>();
-            window.Focus();
+            var scene = typeof(UnityEditor.SceneView);
+            var window = EditorWindow.GetWindow<NovelEditorWindow>(desiredDockNextTo: new Type[] { scene }, title: "NovelEditor");
+            //window.Focus();
             window.Init(null);
         }
     }
