@@ -19,8 +19,10 @@ public class NovelPlayer : MonoBehaviour
     [SerializeField] private KeyCode[] _hideOrDisplayButton;
     [SerializeField] private KeyCode[] _stopOrStartButton;
 
-    [SerializeField] public float SEVolume;
-    [SerializeField] public float BGMVolume;
+    [SerializeField] private float _charaFadeTime = 0.2f;
+
+    [SerializeField] private float SEVolume;
+    [SerializeField] private float BGMVolume;
 
     NovelInputProvider _inputProvider;
 
@@ -54,7 +56,7 @@ public class NovelPlayer : MonoBehaviour
         }
 
         novelUI = GetComponent<NovelUIManager>();
-        novelUI.Init();
+        novelUI.Init(_charaFadeTime);
         audioPlayer = gameObject.AddComponent<AudioPlayer>();
 
         if (_playOnAwake && _noveldata != null)

@@ -40,18 +40,22 @@ public class NovelImage : MonoBehaviour
         _defaultColor = _image.color;
     }
 
-
     public async UniTask<bool> Fade(Color from, Color dest, float fadeTime, CancellationToken token)
     {
         float alpha = 0;
         _image.color = from;
+
+        float alphaSpeed = 0.01f;
+        if(fadeTime<0.5){
+            alphaSpeed = 0.1f;
+        }
         try
         {
             while (alpha < 1)
             {
                 _image.color = Color.Lerp(from, dest, alpha);
-                await UniTask.Delay(TimeSpan.FromSeconds((double)fadeTime * 0.01), cancellationToken: token);
-                alpha += 0.01f;
+                await UniTask.Delay(TimeSpan.FromSeconds(fadeTime *alphaSpeed), cancellationToken: token);
+                alpha += alphaSpeed;
             }
         }
         catch (OperationCanceledException)

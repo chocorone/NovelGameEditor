@@ -14,15 +14,16 @@ public class ImageManager
 
     EffectManager _effectManager;
 
-    float charaDissolveSpeed = 0.01f;
+    float _charaFadetime = 0.1f;
 
-    public ImageManager(Transform charaTransform, NovelBackGround backGround, DialogueImage dialogogueImage)
+    public ImageManager(Transform charaTransform, NovelBackGround backGround, DialogueImage dialogogueImage,float charaFadeTime)
     {
         _charaTransform = charaTransform;
         _backGround = backGround;
         _dialogueImage = dialogogueImage;
 
         _effectManager = new EffectManager();
+        _charaFadetime = charaFadeTime;
     }
 
     internal async UniTask<bool> SetNextImage(Dialogue data, CancellationToken token)
@@ -64,7 +65,7 @@ public class ImageManager
                     _charas[i].Change(sprites[i]);
                     break;
                 case CharaChangeStyle.dissolve:
-                    tasks.Add(_charas[i].Dissolve(sprites[i], color[i], charaDissolveSpeed, token));
+                    tasks.Add(_charas[i].Dissolve(sprites[i], color[i], _charaFadetime, token));
                     break;
             }
         }

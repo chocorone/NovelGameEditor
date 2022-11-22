@@ -21,10 +21,10 @@ internal class NovelUIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI _nameText;
 
 
-    public void Init()
+    public void Init(float charaFadeTime)
     {
         NovelCanvas = GetComponent<CanvasGroup>();
-        imageManager = new ImageManager(_charaTransform, _backGround, _dialogueImage);
+        imageManager = new ImageManager(_charaTransform, _backGround, _dialogueImage,charaFadeTime);
     }
 
     internal void SetStop()
