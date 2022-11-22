@@ -145,6 +145,10 @@ internal class DialogueDrawer : PropertyDrawer
     {
         root.Bind(data.serializedObject);
 
+        var toggle = root.Q<Foldout>("detailFoldOut");
+        toggle.value = data.FindPropertyRelative("open").boolValue;
+        toggle.BindProperty(data.FindPropertyRelative("open"));
+
         //背景
         var howBack = root.Q<EnumField>("howBack");
         howBack.Init((BackChangeStyle)data.FindPropertyRelative("howBack").enumValueIndex);

@@ -30,14 +30,6 @@ internal class ChoiceInspector : Editor
         var root = new VisualElement();
 
         Label label = new Label();
-        if (NovelEditorWindow.Compiled)
-        {
-            label.text = "ノードをクリックし直してください";
-            label.style.color = new StyleColor(Color.red);
-            label.style.fontSize = 20;
-            root.Add(label);
-            return root;
-        }
 
         var container = new IMGUIContainer(OnInspectorGUI);
         root.Add(container);
