@@ -94,6 +94,7 @@ public class NovelData : ScriptableObject
         data.dialogueList[0].text = "Paragraph";
         data.dialogueList[0].charas = new Sprite[locations.Count];
         data.dialogueList[0].howCharas = new CharaChangeStyle[locations.Count];
+        data.dialogueList[0].charaFadeColor = new Color[locations.Count];
         data.dialogueList[0].charaEffects = new Effect[locations.Count];
         data.dialogueList[0].charaEffectStrength = new int[locations.Count];
         data.ResetNext(Next.End);
