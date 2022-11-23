@@ -67,8 +67,6 @@
                     <ui:Box name="charaEffect" />
                     <uie:EnumField label="セリフ枠" name="FrontEffect"  />
                     <ui:SliderInt picking-mode="Ignore" name="FrontEffectStrength" label="強度" value="5" high-value="10" />
-                    <uie:EnumField label="全体" name="AllEffect"   />
-                    <ui:SliderInt picking-mode="Ignore" name="AllEffectStrength" label="強度" value="5" high-value="10" />
                 </ui:Foldout>
             </ui:Foldout>
         </ui:Box>
