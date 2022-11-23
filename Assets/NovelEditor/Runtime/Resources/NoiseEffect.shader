@@ -3,8 +3,7 @@ Shader "NovelEditor/NoiseEffect"
     Properties
 	{
 		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
-		_Color("Tint", Color) = (1,1,1,1)
-		_Strength("Strength", float) = 1
+		_Strength("Strength", float) = 5
 	}
 
     SubShader
@@ -47,15 +46,12 @@ Shader "NovelEditor/NoiseEffect"
                 half2 uv  : TEXCOORD0;
             };
 
-
-            fixed4 _Color;
-
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
                 OUT.vertex = UnityObjectToClipPos(IN.vertex);
                 OUT.uv = IN.uv;
-                OUT.color = IN.color * _Color;
+                OUT.color = IN.color;
 
                 return OUT;
             }
@@ -73,7 +69,7 @@ Shader "NovelEditor/NoiseEffect"
             static const float blackinterval = 6;
             static const float blackheight = 0.5;
 
-            fixed4 frag(v2f i) : SV_Target
+            fixed4 frag(v2f i) : COLOR
             {
                 _Strength *=0.01;
                 //画面Y座標を分割
@@ -106,7 +102,7 @@ Shader "NovelEditor/NoiseEffect"
                 fixed4 col = (col1 * 4 + col2 + col3 + col4 + col5) / 8;
 
                 col.rgb = divisionindex % blackinterval < blackheight ? float4(0, 0, 0, 1) : col.rgb;
-                col.a *= _Color.a;
+                col *= i.color;
                 return col;
             }
 

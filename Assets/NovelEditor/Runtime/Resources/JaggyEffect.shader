@@ -3,9 +3,8 @@ Shader "NovelEditor/JaggyEffect"
 Properties
     {
         [PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
-        _Color("Tint", Color) = (1,1,1,1)
         _FrameRate("FrameRate", Range(0.1,30)) = 15
-        _Strength("Strength",float) = 1
+        _Strength("Strength",float) = 5
     }
         SubShader
         {
@@ -36,18 +35,19 @@ Properties
                 {
                     float4 vertex : POSITION;
                     float2 uv : TEXCOORD0;
+                    float4 color    : COLOR;
                 };
 
                 struct v2f
                 {
                     float2 uv : TEXCOORD0;
                     float4 vertex : SV_POSITION;
+                    float4 color    : COLOR;
                 };
 
                 sampler2D _MainTex;
                 float _FrameRate;
                 float _Strength;
-                fixed4 _Color;
 
                 //ランダムな値を返す
                 float rand(float2 co) //引数はシード値と呼ばれる　同じ値を渡せば同じものを返す
@@ -77,6 +77,7 @@ Properties
                     v2f o;
                     o.vertex = UnityObjectToClipPos(v.vertex);
                     o.uv = v.uv;
+                    o.color = v.color;
                     return o;
                 }
 
@@ -102,7 +103,7 @@ Properties
                     uv.x = lerp(uv.x, uv.x + noiseX, glitch);
                     //テクスチャサンプリング
                     float4 glitchColor = tex2D(_MainTex, uv);
-                    glitchColor.a *= _Color.a;
+                    glitchColor*= i.color;
                     return glitchColor;
                 }
                 ENDCG

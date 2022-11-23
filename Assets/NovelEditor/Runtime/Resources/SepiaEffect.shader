@@ -2,84 +2,66 @@ Shader "NovelEditor/SepiaEffect"
 {
 	Properties
 	{
-		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
-		_Color("Tint", Color) = (1,1,1,1)
-		_Strength("Strength",float) =5
+		_MainTex("Sprite Texture", 2D) = "white" {}
+        _Strength("Strength", float) = 5
 	}
+	SubShader
+    {
+        Tags { "QUEUE"="Transparent" "RenderType"="Transparent" }
+        Blend SrcAlpha OneMinusSrcAlpha
 
-		SubShader
-		{
-			Tags
-			{
-				"Queue" = "Transparent"
-				"IgnoreProjector" = "True"
-				"RenderType" = "Transparent"
-				"PreviewType" = "Plane"
-				"CanUseSpriteAtlas" = "True"
-			}
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
 
-			Cull Off
-			Lighting Off
-			ZWrite Off
-			Fog { Mode Off }
-			Blend SrcAlpha OneMinusSrcAlpha
+            #include "UnityCG.cginc"
 
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+                float4 color    : COLOR;
+            };
 
-			Pass
-			{
-			CGPROGRAM
-				#pragma vertex vert
-				#pragma fragment frag
-				#pragma multi_compile DUMMY PIXELSNAP_ON
-				#include "UnityCG.cginc"
+            struct v2f
+            {
+                float2 uv : TEXCOORD0;
+                float4 vertex : SV_POSITION;
+                float4  color : COLOR;
+            };
 
-				struct appdata_t
-				{
-					float4 vertex   : POSITION;
-					float4 color    : COLOR;
-					float2 texcoord : TEXCOORD0;
-				};
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.uv = v.uv;
+                o.color = v.color;
+                return o;
+            }
 
-				struct v2f
-				{
-					float4 vertex   : SV_POSITION;
-					fixed4 color : COLOR;
-					half2 texcoord  : TEXCOORD0;
-				};
+            sampler2D _MainTex;
+            float _Strength;
 
-				v2f vert(appdata_t IN)
-				{
-					v2f OUT;
-					OUT.vertex = UnityObjectToClipPos(IN.vertex);
-					OUT.texcoord = IN.texcoord;
-					OUT.color = IN.color;
+            fixed4 frag (v2f i) : COLOR
+            {
+				_Strength*=0.01;
+				fixed4 col = tex2D(_MainTex, i.uv)*i.color;
+				float gray = col.r * 0.3 + col.g * 0.6 + col.b * 0.1 - _Strength;
+				gray = (gray < 0) ? 0 : gray;
 
-					return OUT;
-				}
+				float R = gray + _Strength;
+				float B = gray - _Strength;
 
-
-				sampler2D _MainTex;
-				const half _Darkness =0.02;
-				half _Strength;
-				fixed4 _Color;
-
-				fixed4 frag(v2f IN) : COLOR
-				{
-                    _Strength*=0.01;
-					half4 c = tex2D(_MainTex, IN.texcoord);
-					half gray = c.r * 0.3 + c.g * 0.6 + c.b * 0.1 - _Darkness;
-					gray = (gray < 0) ? 0 : gray;
-
-					half R = gray + _Strength;
-					half B = gray - _Strength;
-
-					R = (R > 1.0) ? 1.0 : R;
-					B = (B < 0) ? 0 : B;
-					c.rgb = fixed3(R, gray, B);
-					c.a *= _Color.a;
-					return c;
-				}
-			ENDCG
-			}
-		}
+				R = (R > 1.0) ? 1.0 : R;
+				B = (B < 0) ? 0 : B;
+				col.rgb = fixed3(R, gray, B);
+                return col;
+            }
+            ENDCG
+        }
+    }
 }
+
+ 

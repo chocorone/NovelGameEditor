@@ -5,7 +5,7 @@ Shader "NovelEditor/HoloEffect"
         [PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
         _Color("Tint", Color) = (1,1,1,1)
         _FrameRate("FrameRate", Range(0.1,30)) = 26.4
-        _Frequency("Frequency", Range(0,1)) = 0.4
+        _Strength("Strength", Range(0,1)) = 0.4
 
         _LineColor("LineColor", Color) = (0,0,0,0)
         _LineSpeed("LineSpeed",Range(0,10)) = 2.6
@@ -55,7 +55,7 @@ Shader "NovelEditor/HoloEffect"
 
                 sampler2D _MainTex;
                 float _FrameRate;
-                float _Frequency;
+                float _Strength;
                 fixed4 _Color;
 
                 float4 _MainTex_ST;
@@ -118,8 +118,8 @@ Shader "NovelEditor/HoloEffect"
                     //uv.x�����̃m�C�Y�v�Z -0.1 < noiseX < 0.1
                     float noiseX = (2.0 * rand(posterize1) - 0.5) * 0.1;
                     //step(t,x) ��x��t���傫���ꍇ1��Ԃ�
-                    float frequency = step(rand(posterize2), _Frequency);
-                    noiseX *= frequency;
+                    float strength = step(rand(posterize2), _Strength);
+                    noiseX *= strength;
                     //uv.y�����̃m�C�Y�v�Z -1 < noiseY < 1
                     float noiseY = 2.0 * rand(posterize1) - 0.5;
                     //�O���b�`�̍����̕�Ԓl�v�Z �ǂ̍����ɏo�����邩�͎��ԕω��Ń����_��
