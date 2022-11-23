@@ -25,14 +25,15 @@ namespace UnityEditorPlugin.Editor
 
             var nameField = new IMGUIContainer(() =>
             {
+                data.serializedObject.Update();
                 try
                 {
-                    data.serializedObject.Update();
                     var Name = data.FindPropertyRelative("Name");
                     Name.stringValue = GUILayout.TextArea(Name.stringValue);
-                    data.serializedObject.ApplyModifiedProperties();
+
                 }
                 catch { }
+                data.serializedObject.ApplyModifiedProperties();
 
             });
 
@@ -40,9 +41,10 @@ namespace UnityEditorPlugin.Editor
 
             var serihuField = new IMGUIContainer(() =>
             {
+                data.serializedObject.Update();
                 try
                 {
-                    data.serializedObject.Update();
+
                     var style = new GUIStyle(EditorStyles.textArea)
                     {
                         wordWrap = true,
@@ -51,10 +53,9 @@ namespace UnityEditorPlugin.Editor
 
                     var talkTextProperty = data.FindPropertyRelative("text");
                     talkTextProperty.stringValue = GUILayout.TextArea(talkTextProperty.stringValue, style);
-                    data.serializedObject.ApplyModifiedProperties();
                 }
                 catch { }
-
+                data.serializedObject.ApplyModifiedProperties();
             });
 
             root.Q<Box>("serihuBox").Add(serihuField);
@@ -264,13 +265,6 @@ namespace UnityEditorPlugin.Editor
 
             var FrontEffectStrength = root.Q<SliderInt>("FrontEffectStrength");
             FrontEffectStrength.BindProperty(data.FindPropertyRelative("DialogueEffectStrength"));
-
-            var AllEffect = root.Q<EnumField>("AllEffect");
-            AllEffect.Init((Effect)data.FindPropertyRelative("AllEffect").enumValueIndex);
-            AllEffect.BindProperty(data.FindPropertyRelative("AllEffect"));
-
-            var AllEffectStrength = root.Q<SliderInt>("AllEffectStrength");
-            AllEffectStrength.BindProperty(data.FindPropertyRelative("AllEffectStrength"));
         }
 
         void SetUpUIByValue(VisualElement root, SerializedProperty data)
@@ -499,26 +493,6 @@ namespace UnityEditorPlugin.Editor
                     else
                     {
                         FrontEffectStrength.style.display = DisplayStyle.Flex;
-                    }
-                }
-                catch { }
-
-            });
-
-            var AllEffect = root.Q<EnumField>("AllEffect");
-            AllEffect.RegisterValueChangedCallback(x =>
-            {
-                try
-                {
-                    var value = (Effect)data.FindPropertyRelative("AllEffect").enumValueIndex;
-                    var AllEffectStrength = root.Q<SliderInt>("AllEffectStrength");
-                    if (value == Effect.None || value == Effect.UnChange)
-                    {
-                        AllEffectStrength.style.display = DisplayStyle.None;
-                    }
-                    else
-                    {
-                        AllEffectStrength.style.display = DisplayStyle.Flex;
                     }
                 }
                 catch { }
