@@ -30,25 +30,32 @@ namespace NovelEditorPlugin
             {
                 case BackChangeStyle.UnChange:
                     await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
+                    EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
+                    EffectManager.Instance.SetEffect(_backGround.image, data.backEffect, data.backEffectStrength);
                     break;
                 case BackChangeStyle.Quick:
                     _backGround.Change(data.back);
                     EffectManager.Instance.SetEffect(_backGround.image, data.backEffect, data.backEffectStrength);
                     await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
+                    EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
                     break;
                 case BackChangeStyle.dissolve:
                     await _backGround.Dissolve(data.backFadeSpeed, data.back,data.backEffect, data.backEffectStrength, token);
                     await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
+                    EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
                     break;
                 case BackChangeStyle.FadeBack:
                     await _backGround.BackFadeIn(data, token);
                     await _backGround.BackFadeOut(data, token);
                     await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
+                    EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
                     break;
                 case BackChangeStyle.FadeFront:
                 case BackChangeStyle.FadeAll:
                     await _backGround.BackFadeIn(data, token);
                     ChangeAllCharaQuick(data.howCharas, data.charas, data.charaEffects, data.charaEffectStrength);
+                    EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
+                    EffectManager.Instance.SetEffect(_backGround.image, data.backEffect, data.backEffectStrength);
                     await _backGround.BackFadeOut(data, token);
                     break;
             }
