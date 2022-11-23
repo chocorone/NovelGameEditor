@@ -21,7 +21,7 @@ namespace NovelEditorPlugin.Editor
             //ウィンドウ作成
             var scene = typeof(UnityEditor.SceneView);
             var window = EditorWindow.GetWindow<NovelEditorWindow>(desiredDockNextTo: new Type[] { scene }, title: "NovelEditor");
-            //window = EditorWindow.GetWindow<NovelEditorWindow>(typeof(UnityEditor.SceneView));
+            window.Focus();
             window.Init(data);
         }
 
@@ -30,7 +30,7 @@ namespace NovelEditorPlugin.Editor
         {
             //ウィンドウ作成
             var scene = typeof(UnityEditor.SceneView);
-            var window = EditorWindow.GetWindow<NovelEditorWindow>(desiredDockNextTo: new Type[] { scene }, title: "NovelEditor");
+            var window = EditorWindow.GetWindow<NovelEditorWindow>(title: "NovelEditor");
             window.Init(null);
         }
     }

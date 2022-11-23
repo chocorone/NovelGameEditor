@@ -12,6 +12,7 @@ namespace NovelEditorPlugin
 
         [SerializeField] private bool _playOnAwake = true;
         [SerializeField] private bool _hideAfterPlay = false;
+        [SerializeField] private float _hideFadeTime = 1;
         [SerializeField] private bool _isDisplay = true;
 
         [SerializeField] private HowInput _inputSystem;
@@ -22,8 +23,10 @@ namespace NovelEditorPlugin
 
         [SerializeField] private float _charaFadeTime = 0.2f;
 
-        [SerializeField] private float SEVolume;
-        [SerializeField] private float BGMVolume;
+        [SerializeField, Range(0, 1)] private float _BGMVolume = 1;
+        [SerializeField, Range(0, 1)] private float _SEVolume = 1;
+
+
 
         NovelInputProvider _inputProvider;
 
@@ -42,6 +45,7 @@ namespace NovelEditorPlugin
 
         CancellationTokenSource textCTS = new CancellationTokenSource();
         CancellationTokenSource imageCTS = new CancellationTokenSource();
+        CancellationTokenSource endFadeCTS = new CancellationTokenSource();
 
         void Awake()
         {
@@ -52,13 +56,13 @@ namespace NovelEditorPlugin
                     break;
                 case HowInput.UserSetting:
                     _inputProvider = new CustomInputProvider(_nextButton, _skipButton, _hideOrDisplayButton, _stopOrStartButton);
-                    Debug.Log("aaa");
                     break;
             }
 
             novelUI = GetComponent<NovelUIManager>();
             novelUI.Init(_charaFadeTime);
             audioPlayer = gameObject.AddComponent<AudioPlayer>();
+            audioPlayer.Init(_BGMVolume, _SEVolume);
 
             if (_playOnAwake && _noveldata != null)
             {
@@ -94,16 +98,18 @@ namespace NovelEditorPlugin
 
         public void SetDisplay(bool isDisplay)
         {
+            endFadeCTS.Cancel();
+            endFadeCTS.Dispose();
             if (isDisplay)
             {
                 SetStop(false);
-                //novelUI.SetDisplay(isDisplay);
+                novelUI.SetDisplay(isDisplay);
                 _isDisplay = true;
             }
             else
             {
                 SetStop(true);
-                //novelUI.SetDisplay(isDisplay);
+                novelUI.SetDisplay(isDisplay);
                 _isDisplay = false;
             }
         }
@@ -194,7 +200,7 @@ namespace NovelEditorPlugin
             imageCTS.Dispose();
             imageCTS = new CancellationTokenSource();
             _isImageChangeing = !await novelUI.SetNextImage(_nowParagraph.dialogueList[nowDialogueNum], imageCTS.Token);
-            //audioPlayer.PlaySound(nowParagraph.dialogueList[nowDialogueNum]);
+            audioPlayer.SetSound(_nowParagraph.dialogueList[nowDialogueNum]);
             textCTS.Dispose();
             textCTS = new CancellationTokenSource();
             _isReading = true;
@@ -202,14 +208,30 @@ namespace NovelEditorPlugin
             nowDialogueNum++;
         }
 
-        void end()
+        async void end()
         {
             IsPlaying = false;
+            if (_hideAfterPlay)
+            {
+                endFadeCTS = new CancellationTokenSource();
+                audioPlayer.AllStop();
+                await novelUI.FadeOut(_hideFadeTime, endFadeCTS.Token);
+                SetDisplay(false);
+            }
         }
 
         void FlashText()
         {
             textCTS.Cancel();
+        }
+
+        void OnValidate()
+        {
+            if (audioPlayer != null)
+            {
+                audioPlayer.SetSEVolume(_SEVolume);
+                audioPlayer.SetBGMVolume(_BGMVolume);
+            }
         }
 
     }
