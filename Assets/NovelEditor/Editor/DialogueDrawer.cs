@@ -259,11 +259,11 @@ namespace UnityEditorPlugin.Editor
             backEffectStrength.BindProperty(data.FindPropertyRelative("backEffectStrength"));
 
             var FrontEffect = root.Q<EnumField>("FrontEffect");
-            FrontEffect.Init((Effect)data.FindPropertyRelative("FrontEffect").enumValueIndex);
-            FrontEffect.BindProperty(data.FindPropertyRelative("FrontEffect"));
+            FrontEffect.Init((Effect)data.FindPropertyRelative("DialogueEffect").enumValueIndex);
+            FrontEffect.BindProperty(data.FindPropertyRelative("DialogueEffect"));
 
             var FrontEffectStrength = root.Q<SliderInt>("FrontEffectStrength");
-            FrontEffectStrength.BindProperty(data.FindPropertyRelative("FrontEffectStrength"));
+            FrontEffectStrength.BindProperty(data.FindPropertyRelative("DialogueEffectStrength"));
 
             var AllEffect = root.Q<EnumField>("AllEffect");
             AllEffect.Init((Effect)data.FindPropertyRelative("AllEffect").enumValueIndex);
@@ -490,7 +490,7 @@ namespace UnityEditorPlugin.Editor
             {
                 try
                 {
-                    var value = (Effect)data.FindPropertyRelative("FrontEffect").enumValueIndex;
+                    var value = (Effect)data.FindPropertyRelative("DialogueEffect").enumValueIndex;
                     var FrontEffectStrength = root.Q<SliderInt>("FrontEffectStrength");
                     if (value == Effect.None || value == Effect.UnChange)
                     {
