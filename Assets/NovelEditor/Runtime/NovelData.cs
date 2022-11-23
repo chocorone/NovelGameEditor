@@ -367,8 +367,8 @@ namespace NovelEditorPlugin
                 public int backEffectStrength;
                 public Effect[] charaEffects;
                 public int[] charaEffectStrength;
-                public Effect FrontEffect;
-                public int FrontEffectStrength;
+                public Effect DialogueEffect;
+                public int DialogueEffectStrength;
                 public Effect AllEffect;
                 public int AllEffectStrength;
             }
