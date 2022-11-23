@@ -46,6 +46,7 @@ namespace NovelEditorPlugin
                     break;
                 case BackChangeStyle.FadeBack:
                     await _backGround.BackFadeIn(data, token);
+                    EffectManager.Instance.SetEffect(_backGround.image, data.backEffect, data.backEffectStrength);
                     await _backGround.BackFadeOut(data, token);
                     await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
                     EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
@@ -101,10 +102,10 @@ namespace NovelEditorPlugin
                 if (style[i] != CharaChangeStyle.UnChange)
                 {
                     _charas[i].Change(sprites[i]);
-                    EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
-                    _charas[i].image.color = _charas[i]._defaultColor;
+                    if(sprites[i]!=null)
+                        _charas[i].image.color = _charas[i]._defaultColor;
                 }
-
+                EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
             }
         }
 
