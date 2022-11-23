@@ -39,12 +39,10 @@ namespace NovelEditorPlugin
             if (stop)
             {
                 //dialogueField.IsStop = true;
-                Debug.Log("すとっぷ");
             }
             else
             {
                 //dialogueField.IsStop = false;
-                Debug.Log("再開");
             }
 
         }
@@ -73,6 +71,30 @@ namespace NovelEditorPlugin
                 NovelCanvas.alpha = 0;
                 NovelCanvas.interactable = false;
             }
+        }
+
+        internal async UniTask<bool> FadeOut(float time, CancellationToken token)
+        {
+            float alpha = 1;
+
+            float alphaSpeed = 0.01f;
+            if (time < 0.5)
+            {
+                alphaSpeed = 0.1f;
+            }
+            try
+            {
+                while (alpha > 0)
+                {
+                    NovelCanvas.alpha = alpha;
+                    await UniTask.Delay(TimeSpan.FromSeconds(time * alphaSpeed), cancellationToken: token);
+                    alpha -= alphaSpeed;
+                }
+            }
+            catch (OperationCanceledException)
+            { }
+
+            return true;
         }
 
         internal async UniTask<bool> SetNextText(NovelData.ParagraphData.Dialogue data, CancellationToken token)

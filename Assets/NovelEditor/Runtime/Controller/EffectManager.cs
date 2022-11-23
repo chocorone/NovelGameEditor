@@ -84,7 +84,6 @@ namespace NovelEditorPlugin
                     image.material.shader = Blur;
                     break;
             }
-
             if (image.material.HasProperty("_Strength")) {
                 image.material.SetFloat("_Strength", strength);
             }
