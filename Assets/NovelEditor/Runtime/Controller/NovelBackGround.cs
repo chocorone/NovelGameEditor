@@ -22,7 +22,6 @@ namespace NovelEditorPlugin
             backObj.transform.SetParent(this.transform);
             CopyRectTransformSize(backTransform, backObj);
             _backFade = backObj.gameObject.AddComponent<NovelImage>();
-            Debug.Log("_backFade");
             _backFade.HideImage();
 
             RectTransform frontObj = new GameObject("frontFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
@@ -135,7 +134,7 @@ namespace NovelEditorPlugin
             else
             {
                 _backFade.Change(_image.sprite);
-                
+                EffectManager.Instance.copyShader(_image,_backFade.image);
                 _backFade.image.color = _image.color;
                 Change(sprite);
                 EffectManager.Instance.SetEffect(_image,effect,effectStrength);
