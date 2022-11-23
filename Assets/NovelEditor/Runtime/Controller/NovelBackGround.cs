@@ -22,6 +22,7 @@ namespace NovelEditorPlugin
             backObj.transform.SetParent(this.transform);
             CopyRectTransformSize(backTransform, backObj);
             _backFade = backObj.gameObject.AddComponent<NovelImage>();
+            Debug.Log("_backFade");
             _backFade.HideImage();
 
             RectTransform frontObj = new GameObject("frontFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
