@@ -14,8 +14,6 @@ namespace NovelEditorPlugin
         DialogueImage _dialogueImage;
         List<NovelCharaImage> _charas = new();
 
-        EffectManager _effectManager;
-
         float _charaFadetime = 0.1f;
 
         public ImageManager(Transform charaTransform, NovelBackGround backGround, DialogueImage dialogogueImage, float charaFadeTime)
@@ -23,8 +21,6 @@ namespace NovelEditorPlugin
             _charaTransform = charaTransform;
             _backGround = backGround;
             _dialogueImage = dialogogueImage;
-
-            _effectManager = new EffectManager();
             _charaFadetime = charaFadeTime;
         }
 
@@ -33,30 +29,29 @@ namespace NovelEditorPlugin
             switch (data.howBack)
             {
                 case BackChangeStyle.UnChange:
-                    await SetChara(data.howCharas, data.charas, data.charaFadeColor, token);
+                    await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
                     break;
                 case BackChangeStyle.Quick:
                     _backGround.Change(data.back);
-                    await SetChara(data.howCharas, data.charas, data.charaFadeColor, token);
+                    await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
                     break;
                 case BackChangeStyle.dissolve:
                     await _backGround.Dissolve(data.backFadeSpeed, data.back, token);
-                    await SetChara(data.howCharas, data.charas, data.charaFadeColor, token);
+                    await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
                     break;
                 case BackChangeStyle.FadeBack:
                 case BackChangeStyle.FadeFront:
                 case BackChangeStyle.FadeAll:
                     await _backGround.BackFadeIn(data, token);
-                    ChangeAllCharaQuick(data.howCharas, data.charas);
+                    ChangeAllCharaQuick(data.howCharas, data.charas, data.charaEffects, data.charaEffectStrength);
                     await _backGround.BackFadeOut(data, token);
                     break;
-
             }
 
             return true;
         }
 
-        async UniTask<bool> SetChara(CharaChangeStyle[] style, Sprite[] sprites, Color[] color, CancellationToken token)
+        async UniTask<bool> SetChara(CharaChangeStyle[] style, Sprite[] sprites, Color[] color, Effect[] charaEffects, int[] strength, CancellationToken token)
         {
             List<UniTask<bool>> tasks = new();
             for (int i = 0; i < _charas.Count; i++)
@@ -68,7 +63,6 @@ namespace NovelEditorPlugin
             }
             await UniTask.WhenAll(tasks);
 
-
             tasks.Clear();
             for (int i = 0; i < _charas.Count; i++)
             {
@@ -76,8 +70,10 @@ namespace NovelEditorPlugin
                 {
                     case CharaChangeStyle.Quick:
                         _charas[i].Change(sprites[i]);
+                        EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
                         break;
                     case CharaChangeStyle.dissolve:
+                        EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
                         tasks.Add(_charas[i].DissolveOut(sprites[i], color[i], _charaFadetime, token));
                         break;
                 }
@@ -86,13 +82,14 @@ namespace NovelEditorPlugin
             return true;
         }
 
-        void ChangeAllCharaQuick(CharaChangeStyle[] style, Sprite[] sprites)
+        void ChangeAllCharaQuick(CharaChangeStyle[] style, Sprite[] sprites, Effect[] charaEffects, int[] strength)
         {
             for (int i = 0; i < _charas.Count; i++)
             {
                 if (style[i] != CharaChangeStyle.UnChange)
                 {
                     _charas[i].Change(sprites[i]);
+                    //EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
                     _charas[i].image.color = _charas[i]._defaultColor;
                 }
 

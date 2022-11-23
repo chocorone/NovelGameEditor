@@ -43,33 +43,47 @@ namespace NovelEditorPlugin
             Blur = Resources.Load<Shader>("BlurEffect");
         }
 
-        public void SetEffect(Image image, Effect effect)
+        public void InitMaterial(Image image){
+            image.material = new Material(None);
+        }
+
+        public void SetEffect(Image image, Effect effect, int strength)
         {
+
             switch (effect)
             {
                 case Effect.None:
+                    image.material.shader = None;
                     break;
                 case Effect.Noise:
+                    image.material.shader = Noise;
                     break;
                 case Effect.Mosaic:
+                    image.material.shader = Mosaic;
                     break;
                 case Effect.GrayScale:
+                    image.material.shader = GrayScale;
                     break;
                 case Effect.Sepia:
+                    image.material.shader = Sepia;
                     break;
                 case Effect.Jaggy:
+                    image.material.shader = Jaggy;
                     break;
                 case Effect.Holo:
+                    image.material.shader = Holo;
                     break;
                 case Effect.ChromaticAberration:
+                    image.material.shader = ChromaticAberration;
                     break;
                 case Effect.Blur:
+                    image.material.shader = Blur;
                     break;
             }
 
             if (effect != Effect.None && effect != Effect.UnChange)
             {
-
+                image.material.SetFloat("_Strength", strength);
             }
         }
 
