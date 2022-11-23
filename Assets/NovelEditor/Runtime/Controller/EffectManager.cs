@@ -47,7 +47,11 @@ namespace NovelEditorPlugin
             image.material = new Material(None);
         }
 
-        public void SetEffect(Image image, Effect effect, int strength)
+        public void copyShader(Image from,Image dest){
+            dest.material = GameObject.Instantiate(from.material);
+        }
+
+        public void SetEffect(Image image, Effect effect, float strength)
         {
 
             switch (effect)
@@ -81,8 +85,7 @@ namespace NovelEditorPlugin
                     break;
             }
 
-            if (effect != Effect.None && effect != Effect.UnChange)
-            {
+            if (image.material.HasProperty("_Strength")) {
                 image.material.SetFloat("_Strength", strength);
             }
         }

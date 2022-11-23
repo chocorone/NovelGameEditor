@@ -101,7 +101,7 @@ namespace NovelEditorPlugin
             return true;
         }
 
-        public async UniTask<bool> Dissolve(float speed, Sprite sprite, CancellationToken token)
+        public async UniTask<bool> DissolveOut(float speed, Sprite sprite, CancellationToken token)
         {
             if (_image.sprite == null)
             {
@@ -115,6 +115,30 @@ namespace NovelEditorPlugin
                 _backFade.Change(_image.sprite);
                 _backFade.image.color = _image.color;
                 Change(sprite);
+                Color dest = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
+                await _backFade.Fade(_image.color, dest, speed, token);
+                _backFade.HideImage();
+            }
+            return true;
+        }
+
+        public async UniTask<bool> Dissolve(float speed, Sprite sprite, Effect effect, float effectStrength, CancellationToken token)
+        {
+            if (_image.sprite == null)
+            {
+                HideImage();
+                Change(sprite);
+                EffectManager.Instance.SetEffect(_image,effect,effectStrength);
+                Color from = new Color(_defaultColor.r, _defaultColor.g, _defaultColor.b, 0);
+                await Fade(from, _defaultColor, speed, token);
+            }
+            else
+            {
+                _backFade.Change(_image.sprite);
+                
+                _backFade.image.color = _image.color;
+                Change(sprite);
+                EffectManager.Instance.SetEffect(_image,effect,effectStrength);
                 Color dest = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
                 await _backFade.Fade(_image.color, dest, speed, token);
                 _backFade.HideImage();

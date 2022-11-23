@@ -33,13 +33,18 @@ namespace NovelEditorPlugin
                     break;
                 case BackChangeStyle.Quick:
                     _backGround.Change(data.back);
+                    EffectManager.Instance.SetEffect(_backGround.image, data.backEffect, data.backEffectStrength);
                     await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
                     break;
                 case BackChangeStyle.dissolve:
-                    await _backGround.Dissolve(data.backFadeSpeed, data.back, token);
+                    await _backGround.Dissolve(data.backFadeSpeed, data.back,data.backEffect, data.backEffectStrength, token);
                     await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
                     break;
                 case BackChangeStyle.FadeBack:
+                    await _backGround.BackFadeIn(data, token);
+                    await _backGround.BackFadeOut(data, token);
+                    await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
+                    break;
                 case BackChangeStyle.FadeFront:
                 case BackChangeStyle.FadeAll:
                     await _backGround.BackFadeIn(data, token);
@@ -89,7 +94,7 @@ namespace NovelEditorPlugin
                 if (style[i] != CharaChangeStyle.UnChange)
                 {
                     _charas[i].Change(sprites[i]);
-                    //EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
+                    EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
                     _charas[i].image.color = _charas[i]._defaultColor;
                 }
 
@@ -106,9 +111,7 @@ namespace NovelEditorPlugin
                 var charaImage = obj.gameObject.AddComponent<NovelCharaImage>();
                 charaImage.Change(null);
                 _charas.Add(charaImage);
-                //effectManager.SetCharaMaterial(dialogueImage.locations);
             }
-            //effectManager.SetCharaMaterial(dialogueImage.locations);
         }
     }
 
