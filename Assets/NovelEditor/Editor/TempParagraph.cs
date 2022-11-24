@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static NovelData;
-using static NovelData.ParagraphData;
-
-//ParagraphDataを仮で表示するためのもの
-internal class TempParagraph : ScriptableObject
+using NovelEditorPlugin;
+namespace NovelEditorPlugin.Editor
 {
-    [HideInInspector] public ParagraphData data;
-    public List<Dialogue> dialogueList;
+    //ParagraphDataを仮で表示するためのもの
+    internal class TempParagraph : ScriptableObject
+    {
+        [HideInInspector] public NovelData.ParagraphData data;
+        public List<NovelData.ParagraphData.Dialogue> dialogueList;
+    }
 }

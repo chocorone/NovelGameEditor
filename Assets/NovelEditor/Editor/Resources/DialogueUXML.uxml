@@ -15,10 +15,8 @@
                 <uie:EnumField label="切り替え" name="howBack" />
                 <ui:Label text="現在の背景" name="nowBack" />
                 <uie:ObjectField name="backSprite" type="UnityEngine.Sprite, UnityEngine.CoreModule" />
-                <ui:Box name="changeBackBox">
-                    <uie:ColorField name="backFadeColor" label="フェード色" />
-                    <uie:FloatField name="backFadeSpeed" label="フェード秒数" value="0" />
-                </ui:Box>
+                <uie:ColorField name="backFadeColor" label="フェード色" />
+                <uie:FloatField name="backFadeSpeed" label="フェード秒数" value="0" />
                 
                 <ui:Box name="charaImage" />
 
@@ -27,14 +25,12 @@
                     <ui:Box name="changeFontBox">
                         <uie:ObjectField label="Font Asset" name="font" type="TMPro.TMP_FontAsset, Unity.TextMeshPro" />
                         <uie:ColorField label="文字色" name="fontColor"/>
-                        <uie:MaskField label="Style" name="fontStyle"/>
                         <uie:IntegerField label="フォントサイズ" name="fontSize" value="0" />
                     </ui:Box>
                     <ui:Toggle label="名前フォント変更" name="changeNameFont" />
                     <ui:Box name="changeNameFontBox">
                         <uie:ObjectField label="Font Asset" name="nameFont" type="TMPro.TMP_FontAsset, Unity.TextMeshPro" />
                         <uie:ColorField label="名前文字色" name="nameColor"/>
-                        <uie:MaskField label="Style" name="nameFontStyle"/>
                     </ui:Box> 
                 </ui:Foldout>
 
@@ -67,12 +63,10 @@
 
                 <ui:Foldout text="エフェクト設定" value="false">
                     <uie:EnumField label="背景" name="backEffect"  />
-                    <ui:SliderInt picking-mode="Ignore" name="backEffectStrength" label="Slider" value="50" high-value="100" />
+                    <ui:SliderInt picking-mode="Ignore" name="backEffectStrength" label="強度" value="5" high-value="10" />
                     <ui:Box name="charaEffect" />
-                    <uie:EnumField label="セリフ枠以外" name="FrontEffect"  />
-                    <ui:SliderInt picking-mode="Ignore" name="FrontEffectStrength" label="Slider" value="50" high-value="100" />
-                    <uie:EnumField label="全体" name="AllEffect"   />
-                    <ui:SliderInt picking-mode="Ignore" name="AllEffectStrength" label="Slider" value="50" high-value="100" />
+                    <uie:EnumField label="セリフ枠" name="FrontEffect"  />
+                    <ui:SliderInt picking-mode="Ignore" name="FrontEffectStrength" label="強度" value="5" high-value="10" />
                 </ui:Foldout>
             </ui:Foldout>
         </ui:Box>

@@ -3,46 +3,42 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using NovelEditorPlugin.Editor;
 
-[CustomEditor(typeof(TempChoice))]
-internal class ChoiceInspector : Editor
+namespace NovelEditorPlugin.Editor
 {
-    TempChoice tmpdata;
-
-    void OnEnable()
+    [CustomEditor(typeof(TempChoice))]
+    internal class ChoiceInspector : UnityEditor.Editor
     {
-        tmpdata = target as TempChoice;
+        TempChoice tmpdata;
 
-    }
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-        SerializedProperty data = serializedObject.FindProperty("data");
-        SerializedProperty text = data.FindPropertyRelative("text");
-
-        text.stringValue = EditorGUILayout.TextField("選択肢のテキスト", text.stringValue);
-
-        serializedObject.ApplyModifiedProperties();
-    }
-
-    public override VisualElement CreateInspectorGUI()
-    {
-        var root = new VisualElement();
-
-        Label label = new Label();
-        if (NovelEditorWindow.Compiled)
+        void OnEnable()
         {
-            label.text = "ノードをクリックし直してください";
-            label.style.color = new StyleColor(Color.red);
-            label.style.fontSize = 20;
-            root.Add(label);
-            return root;
+            tmpdata = target as TempChoice;
+
+        }
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            SerializedProperty data = serializedObject.FindProperty("data");
+            SerializedProperty text = data.FindPropertyRelative("text");
+
+            text.stringValue = EditorGUILayout.TextField("選択肢のテキスト", text.stringValue);
+
+            serializedObject.ApplyModifiedProperties();
         }
 
-        var container = new IMGUIContainer(OnInspectorGUI);
-        root.Add(container);
+        public override VisualElement CreateInspectorGUI()
+        {
+            var root = new VisualElement();
+
+            Label label = new Label();
+
+            var container = new IMGUIContainer(OnInspectorGUI);
+            root.Add(container);
 
 
-        return root;
+            return root;
+        }
     }
 }
