@@ -5,83 +5,86 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static NovelData;
-using static NovelData.ParagraphData;
+using NovelEditorPlugin;
+using NovelEditorPlugin.Editor;
 
-internal class ChoiceNode : BaseNode
+namespace NovelEditorPlugin.Editor
 {
-    //編集しているデータにあるChoiceDataから作られたノード
-    public static List<ChoiceNode> nodes = new List<ChoiceNode>();
-    public ChoiceData data => (ChoiceData)nodeData;
-
-    //0から作られるとき
-    public ChoiceNode()
+    internal class ChoiceNode : BaseNode
     {
-        //データを作成する
-        nodeData = NovelEditorWindow.editingData.CreateChoice();
-        NodeSet();
-        nodes.Add(this);
-    }
+        //編集しているデータにあるChoiceDataから作られたノード
+        public static List<ChoiceNode> nodes = new List<ChoiceNode>();
+        public NovelData.ChoiceData data => (NovelData.ChoiceData)nodeData;
 
-    //データをもとに作られるとき
-    public ChoiceNode(ChoiceData Cdata)
-    {
-        nodeData = Cdata;
-
-        NodeSet();
-        SetPosition(data.nodePosition);
-        if (data.index < nodes.Count)
+        //0から作られるとき
+        public ChoiceNode()
         {
-            nodes[data.index] = this;
-        }
-        else
-        {
+            //データを作成する
+            nodeData = NovelEditorWindow.editingData.CreateChoice();
+            NodeSet();
             nodes.Add(this);
         }
 
-    }
-    internal override void overrideNode(string pasteData)
-    {
-        ChoiceData newData = JsonUtility.FromJson<ChoiceData>(pasteData);
-        data.text = newData.text;
-        SetTitle();
-    }
-
-    private protected override void NodeSet()
-    {
-        base.NodeSet();
-
-        SetTitle();
-
-        //InputPort作成
-        InputPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(ChoiceNode));
-        InputPort.portColor = new Color(0.7f, 0.7f, 0.0f);
-        InputPort.portName = "prev";
-        inputContainer.Add(InputPort);
-
-        //OutputPort作成
-        CountinuePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(BaseNode));
-        CountinuePort.portName = "next";
-        outputContainer.Add(CountinuePort);
-    }
-
-    protected override void SetTitle()
-    {
-        title = "Choice";
-        if (data != null)
+        //データをもとに作られるとき
+        public ChoiceNode(NovelData.ChoiceData Cdata)
         {
-            title = data.text.Substring(0, Math.Min(data.text.Length, 10));
+            nodeData = Cdata;
+
+            NodeSet();
+            SetPosition(data.nodePosition);
+            if (data.index < nodes.Count)
+            {
+                nodes[data.index] = this;
+            }
+            else
+            {
+                nodes.Add(this);
+            }
+
         }
-    }
+        internal override void overrideNode(string pasteData)
+        {
+            NovelData.ChoiceData newData = JsonUtility.FromJson<NovelData.ChoiceData>(pasteData);
+            data.text = newData.text;
+            SetTitle();
+        }
 
-    internal override void AddNext(BaseNode nextNode, Port outPort)
-    {
-        data.ChangeNextParagraph(((ParagraphNode)nextNode).data.index);
-    }
+        private protected override void NodeSet()
+        {
+            base.NodeSet();
 
-    public override void ResetNext(Edge edge)
-    {
-        data.ChangeNextParagraph(-1);
-    }
+            SetTitle();
 
+            //InputPort作成
+            InputPort = Port.Create<Edge>(Orientation.Horizontal, Direction.Input, Port.Capacity.Multi, typeof(ChoiceNode));
+            InputPort.portColor = new Color(0.7f, 0.7f, 0.0f);
+            InputPort.portName = "prev";
+            inputContainer.Add(InputPort);
+
+            //OutputPort作成
+            CountinuePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(BaseNode));
+            CountinuePort.portName = "next";
+            outputContainer.Add(CountinuePort);
+        }
+
+        protected override void SetTitle()
+        {
+            title = "Choice";
+            if (data != null)
+            {
+                title = data.text.Substring(0, Math.Min(data.text.Length, 10));
+            }
+        }
+
+        internal override void AddNext(BaseNode nextNode, Port outPort)
+        {
+            data.ChangeNextParagraph(((ParagraphNode)nextNode).data.index);
+        }
+
+        public override void ResetNext(Edge edge)
+        {
+            data.ChangeNextParagraph(-1);
+        }
+
+    }
 }

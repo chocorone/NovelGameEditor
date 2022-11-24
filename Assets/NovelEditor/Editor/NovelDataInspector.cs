@@ -4,157 +4,158 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
-using static NovelData;
-using static NovelData.ParagraphData;
 using UnityEngine.UIElements;
 using UnityEditorInternal;
+using NovelEditorPlugin;
 
-[CustomEditor(typeof(NovelData))]
-internal class NovelDataInspector : Editor
+namespace NovelEditorPlugin.Editor
 {
-    NovelData noveldata;
-    ProgressBar bar;
-    Label label;
-
-    private ReorderableList reorderableList;
-
-    void OnEnable()
+    [CustomEditor(typeof(NovelData))]
+    internal class NovelDataInspector : UnityEditor.Editor
     {
-        noveldata = target as NovelData;
+        NovelData noveldata;
+        ProgressBar bar;
+        Label label;
 
-        LocationWrapper wrapper = new LocationWrapper() { locations = noveldata.locations };
-        string json = JsonUtility.ToJson(wrapper);
-        noveldata.newLocations = JsonUtility.FromJson<LocationWrapper>(json).locations;
-        SetReorderableList();
-    }
+        private ReorderableList reorderableList;
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-
-        reorderableList.DoLayoutList();
-
-        serializedObject.ApplyModifiedProperties();
-    }
-
-    public override VisualElement CreateInspectorGUI()
-    {
-        var visualElement = new VisualElement();
-        visualElement.styleSheets.Add(Resources.Load<StyleSheet>("NovelDataUSS"));
-
-        var container = new IMGUIContainer(OnInspectorGUI);
-        visualElement.Add(container);
-        var visualTree = Resources.Load<VisualTreeAsset>("NovelDataUXML");
-        visualTree.CloneTree(visualElement);
-
-        var button = visualElement.Q<Button>("open_button");
-        button.clickable.clicked += OpenEditor;
-
-        var prefabButton = visualElement.Q<Button>("prefab_button");
-        prefabButton.clickable.clicked += ChangePrefab;
-
-        label = visualElement.Q<Label>("progressLabel");
-
-        bar = visualElement.Q<ProgressBar>();
-        bar.style.display = DisplayStyle.None;
-
-
-        return visualElement;
-    }
-
-
-    void SetReorderableList()
-    {
-        reorderableList = new ReorderableList(this.serializedObject, this.serializedObject.FindProperty("newLocations"));
-        reorderableList.drawElementCallback = (rect, index, active, focused) =>
+        void OnEnable()
         {
-            EditorGUI.ObjectField(rect, this.serializedObject.FindProperty("newLocations").GetArrayElementAtIndex(index));
-        };
-        reorderableList.drawHeaderCallback = (rect) => EditorGUI.LabelField(rect, "立ち絵の位置");
+            noveldata = target as NovelData;
 
-    }
-
-    void OpenEditor()
-    {
-        if (noveldata.newData)
-        {
-            noveldata.ResetData();
-        }
-        NovelEditor.Open(noveldata);
-    }
-
-    void ChangePrefab()
-    {
-        if (noveldata.newData)
-        {
-            noveldata.ResetData();
+            LocationWrapper wrapper = new LocationWrapper() { locations = noveldata.locations };
+            string json = JsonUtility.ToJson(wrapper);
+            noveldata.newLocations = JsonUtility.FromJson<LocationWrapper>(json).locations;
+            SetReorderableList();
         }
 
-        label.text = "処理中";
-        bar.value = 0;
-        bar.style.display = DisplayStyle.Flex;
-        Dictionary<int, int> locationsKey = new Dictionary<int, int>();
-
-        for (int i = 0; i < noveldata.locations.Count; i++)
+        public override void OnInspectorGUI()
         {
-            locationsKey.Add(noveldata.locations[i].GetInstanceID(), i);
+            serializedObject.Update();
+
+            reorderableList.DoLayoutList();
+
+            serializedObject.ApplyModifiedProperties();
         }
 
-        noveldata.newLocations.RemoveAll(item => item == null);
-        noveldata.newLocations = noveldata.newLocations.Distinct().ToList();
-
-        noveldata.changeLocation(noveldata.newLocations);
-
-        float perParagraph = 100 / noveldata.paragraphsList.Count;
-
-        //データを初期化
-        foreach (ParagraphData pdata in noveldata.paragraphsList)
+        public override VisualElement CreateInspectorGUI()
         {
-            float perDialogue = perParagraph / pdata.dialogueList.Count;
-            if (!pdata.enabled)
+            var visualElement = new VisualElement();
+            visualElement.styleSheets.Add(Resources.Load<StyleSheet>("NovelDataUSS"));
+
+            var container = new IMGUIContainer(OnInspectorGUI);
+            visualElement.Add(container);
+            var visualTree = Resources.Load<VisualTreeAsset>("NovelDataUXML");
+            visualTree.CloneTree(visualElement);
+
+            var button = visualElement.Q<Button>("open_button");
+            button.clickable.clicked += OpenEditor;
+
+            var prefabButton = visualElement.Q<Button>("prefab_button");
+            prefabButton.clickable.clicked += ChangePrefab;
+
+            label = visualElement.Q<Label>("progressLabel");
+
+            bar = visualElement.Q<ProgressBar>();
+            bar.style.display = DisplayStyle.None;
+
+
+            return visualElement;
+        }
+
+
+        void SetReorderableList()
+        {
+            reorderableList = new ReorderableList(this.serializedObject, this.serializedObject.FindProperty("newLocations"));
+            reorderableList.drawElementCallback = (rect, index, active, focused) =>
             {
-                bar.value += perDialogue;
-                continue;
+                EditorGUI.ObjectField(rect, this.serializedObject.FindProperty("newLocations").GetArrayElementAtIndex(index));
+            };
+            reorderableList.drawHeaderCallback = (rect) => EditorGUI.LabelField(rect, "立ち絵の位置");
+
+        }
+
+        void OpenEditor()
+        {
+            if (noveldata.newData)
+            {
+                noveldata.ResetData();
             }
-            foreach (Dialogue dialogue in pdata.dialogueList)
+            NovelEditor.Open(noveldata);
+        }
+
+        void ChangePrefab()
+        {
+            if (noveldata.newData)
             {
-                //データ保存
-                Dialogue preData = JsonUtility.FromJson<Dialogue>(JsonUtility.ToJson(dialogue));
+                noveldata.ResetData();
+            }
 
-                dialogue.charas = new Sprite[noveldata.locations.Count];
-                dialogue.howCharas = new CharaChangeStyle[noveldata.locations.Count];
-                dialogue.charaFadeColor = new Color[noveldata.locations.Count];
-                dialogue.charaEffects = new Effect[noveldata.locations.Count];
-                dialogue.charaEffectStrength = new int[noveldata.locations.Count];
+            label.text = "処理中";
+            bar.value = 0;
+            bar.style.display = DisplayStyle.Flex;
+            Dictionary<int, int> locationsKey = new Dictionary<int, int>();
 
-                //同じ名前のデータがあれば差し替え
-                for (int i = 0; i < noveldata.locations.Count; i++)
+            for (int i = 0; i < noveldata.locations.Count; i++)
+            {
+                locationsKey.Add(noveldata.locations[i].GetInstanceID(), i);
+            }
+
+            noveldata.newLocations.RemoveAll(item => item == null);
+            noveldata.newLocations = noveldata.newLocations.Distinct().ToList();
+
+            noveldata.changeLocation(noveldata.newLocations);
+
+            float perParagraph = 100 / noveldata.paragraphList.Count;
+
+            //データを初期化
+            foreach (NovelData.ParagraphData pdata in noveldata.paragraphList)
+            {
+                float perDialogue = perParagraph / pdata.dialogueList.Count;
+                if (!pdata.enabled)
                 {
-                    if (locationsKey.ContainsKey(noveldata.locations[i].GetInstanceID()))
-                    {
-                        int preIndex = locationsKey[noveldata.locations[i].GetInstanceID()];
-
-                        dialogue.charas[i] = preData.charas[preIndex];
-                        dialogue.howCharas[i] = preData.howCharas[preIndex];
-                        dialogue.charaFadeColor[i] = preData.charaFadeColor[preIndex];
-                        dialogue.charaEffects[i] = preData.charaEffects[preIndex];
-                        dialogue.charaEffectStrength[i] = preData.charaEffectStrength[preIndex];
-                    }
+                    bar.value += perDialogue;
+                    continue;
                 }
+                foreach (NovelData.ParagraphData.Dialogue dialogue in pdata.dialogueList)
+                {
+                    //データ保存
+                    NovelData.ParagraphData.Dialogue preData = JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(dialogue));
 
-                bar.value += perDialogue;
+                    dialogue.charas = new Sprite[noveldata.locations.Count];
+                    dialogue.howCharas = new CharaChangeStyle[noveldata.locations.Count];
+                    dialogue.charaFadeColor = new Color[noveldata.locations.Count];
+                    dialogue.charaEffects = new Effect[noveldata.locations.Count];
+                    dialogue.charaEffectStrength = new int[noveldata.locations.Count];
+
+                    //同じ名前のデータがあれば差し替え
+                    for (int i = 0; i < noveldata.locations.Count; i++)
+                    {
+                        if (locationsKey.ContainsKey(noveldata.locations[i].GetInstanceID()))
+                        {
+                            int preIndex = locationsKey[noveldata.locations[i].GetInstanceID()];
+
+                            dialogue.charas[i] = preData.charas[preIndex];
+                            dialogue.howCharas[i] = preData.howCharas[preIndex];
+                            dialogue.charaFadeColor[i] = preData.charaFadeColor[preIndex];
+                            dialogue.charaEffects[i] = preData.charaEffects[preIndex];
+                            dialogue.charaEffectStrength[i] = preData.charaEffectStrength[preIndex];
+                        }
+                    }
+
+                    bar.value += perDialogue;
+                }
             }
+
+            bar.value = 100;
+            label.text = "処理完了";
+
+            EditorUtility.SetDirty(noveldata);
         }
 
-        bar.value = 100;
-        noveldata.havePreLocations = true;
-        label.text = "処理完了";
-
-        EditorUtility.SetDirty(noveldata);
-    }
-
-    class LocationWrapper
-    {
-        public List<UnityEngine.UI.Image> locations;
+        class LocationWrapper
+        {
+            public List<UnityEngine.UI.Image> locations;
+        }
     }
 }

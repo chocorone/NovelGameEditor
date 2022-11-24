@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using NovelEditorPlugin;
 
-internal class TempChoice : ScriptableObject
+namespace NovelEditorPlugin.Editor
 {
-    [HideInInspector] public NovelData.ChoiceData data;
+    internal class TempChoice : ScriptableObject
+    {
+        [HideInInspector] public NovelData.ChoiceData data;
 
+    }
 }
