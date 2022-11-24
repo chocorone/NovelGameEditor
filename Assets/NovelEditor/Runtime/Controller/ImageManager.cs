@@ -40,7 +40,7 @@ namespace NovelEditorPlugin
                     EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
                     break;
                 case BackChangeStyle.dissolve:
-                    await _backGround.Dissolve(data.backFadeSpeed, data.back,data.backEffect, data.backEffectStrength, token);
+                    await _backGround.Dissolve(data.backFadeSpeed, data.back, data.backEffect, data.backEffectStrength, token);
                     await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
                     EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
                     break;
@@ -102,7 +102,7 @@ namespace NovelEditorPlugin
                 if (style[i] != CharaChangeStyle.UnChange)
                 {
                     _charas[i].Change(sprites[i]);
-                    if(sprites[i]!=null)
+                    if (sprites[i] != null)
                         _charas[i].image.color = _charas[i]._defaultColor;
                 }
                 EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
@@ -121,6 +121,7 @@ namespace NovelEditorPlugin
                 _charas.Add(charaImage);
             }
         }
+
     }
 
 }

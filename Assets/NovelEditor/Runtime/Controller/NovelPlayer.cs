@@ -87,13 +87,7 @@ namespace NovelEditorPlugin
 
         public void SetStop(bool isStop)
         {
-            // if (IsStop)
-            // {
-            //     novelUI.SetStop();
-            //     IsStop = true;
-            // }else{
-
-            // }
+            novelUI.SetStopText(isStop);
         }
 
         public void SetDisplay(bool isDisplay)
@@ -147,7 +141,7 @@ namespace NovelEditorPlugin
 
             if (_inputProvider.GetStopOrStart())
             {
-                novelUI.StopOrStartText();
+                novelUI.SwitchStopText();
             }
         }
 
