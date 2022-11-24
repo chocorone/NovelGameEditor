@@ -5,37 +5,40 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using NovelEditorPlugin.Editor;
 
-[CustomEditor(typeof(TempChoice))]
-internal class ChoiceInspector : Editor
+namespace NovelEditorPlugin.Editor
 {
-    TempChoice tmpdata;
-
-    void OnEnable()
+    [CustomEditor(typeof(TempChoice))]
+    internal class ChoiceInspector : UnityEditor.Editor
     {
-        tmpdata = target as TempChoice;
+        TempChoice tmpdata;
 
-    }
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-        SerializedProperty data = serializedObject.FindProperty("data");
-        SerializedProperty text = data.FindPropertyRelative("text");
+        void OnEnable()
+        {
+            tmpdata = target as TempChoice;
 
-        text.stringValue = EditorGUILayout.TextField("選択肢のテキスト", text.stringValue);
+        }
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            SerializedProperty data = serializedObject.FindProperty("data");
+            SerializedProperty text = data.FindPropertyRelative("text");
 
-        serializedObject.ApplyModifiedProperties();
-    }
+            text.stringValue = EditorGUILayout.TextField("選択肢のテキスト", text.stringValue);
 
-    public override VisualElement CreateInspectorGUI()
-    {
-        var root = new VisualElement();
+            serializedObject.ApplyModifiedProperties();
+        }
 
-        Label label = new Label();
+        public override VisualElement CreateInspectorGUI()
+        {
+            var root = new VisualElement();
 
-        var container = new IMGUIContainer(OnInspectorGUI);
-        root.Add(container);
+            Label label = new Label();
+
+            var container = new IMGUIContainer(OnInspectorGUI);
+            root.Add(container);
 
 
-        return root;
+            return root;
+        }
     }
 }
