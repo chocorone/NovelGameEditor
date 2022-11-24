@@ -9,6 +9,7 @@ namespace NovelEditorPlugin
     public class NovelPlayer : MonoBehaviour
     {
         [SerializeField] private NovelData _noveldata;
+        [SerializeField] private ChoiceButton _choiceButton;
 
         [SerializeField] private bool _playOnAwake = true;
         [SerializeField] private bool _hideAfterPlay = false;
@@ -39,6 +40,8 @@ namespace NovelEditorPlugin
 
         private NovelUIManager novelUI;
         private AudioPlayer audioPlayer;
+        private ChoiceManager choiceManager;
+
         private NovelData.ParagraphData _nowParagraph;
         private bool _isReading = false;
         private bool _isImageChangeing = false;
@@ -46,6 +49,8 @@ namespace NovelEditorPlugin
         CancellationTokenSource textCTS = new CancellationTokenSource();
         CancellationTokenSource imageCTS = new CancellationTokenSource();
         CancellationTokenSource endFadeCTS = new CancellationTokenSource();
+
+
 
         void Awake()
         {
@@ -63,6 +68,8 @@ namespace NovelEditorPlugin
             novelUI.Init(_charaFadeTime);
             audioPlayer = gameObject.AddComponent<AudioPlayer>();
             audioPlayer.Init(_BGMVolume, _SEVolume);
+            choiceManager = GetComponentInChildren<ChoiceManager>();
+            choiceManager.Init(_choiceButton);
 
             if (_playOnAwake && _noveldata != null)
             {
@@ -145,15 +152,15 @@ namespace NovelEditorPlugin
             }
         }
 
-        void SetNextParagraph()
+        void SetNextParagraph(int nextIndex)
         {
-            if (_nowParagraph.nextParagraphIndex == -1)
+            if (nextIndex == -1)
             {
                 end();
             }
             else
             {
-                _nowParagraph = _noveldata.paragraphList[_nowParagraph.nextParagraphIndex];
+                _nowParagraph = _noveldata.paragraphList[nextIndex];
                 nowDialogueNum = 0;
                 SetNextDialogue();
             }
@@ -166,10 +173,11 @@ namespace NovelEditorPlugin
                 switch (_nowParagraph.next)
                 {
                     case Next.Choice:
+                        Debug.Log("choice");
                         SetChoice();
                         break;
                     case Next.Continue:
-                        SetNextParagraph();
+                        SetNextParagraph(_nowParagraph.nextParagraphIndex);
                         break;
                     case Next.End:
                         end();
@@ -180,12 +188,27 @@ namespace NovelEditorPlugin
             {
                 SetNextDialogue();
             }
-
         }
 
         async void SetChoice()
         {
             IsChoicing = true;
+            List<NovelData.ChoiceData> list = new();
+            foreach (int i in _nowParagraph.nextChoiceIndexes)
+            {
+                if (i == -1)
+                    continue;
+                list.Add(_noveldata.choiceList[i]);
+            }
+            if (list.Count == 0)
+            {
+                end();
+                return;
+            }
+
+            var ans = await choiceManager.WaitChoice(list);
+            IsChoicing = false;
+            SetNextParagraph(ans.nextParagraphIndex);
         }
 
         async void SetNextDialogue()
