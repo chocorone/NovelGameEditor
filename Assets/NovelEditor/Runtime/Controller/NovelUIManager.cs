@@ -122,9 +122,14 @@ namespace NovelEditorPlugin
             }
         }
 
-        internal void StopOrStartText()
+        internal void SwitchStopText()
         {
             _dialogueText.IsStop = !_dialogueText.IsStop;
+        }
+
+        internal void SetStopText(bool flag)
+        {
+            _dialogueText.IsStop = flag;
         }
     }
 }
