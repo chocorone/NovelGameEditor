@@ -35,6 +35,7 @@ namespace NovelEditorPlugin
             allObj.transform.SetParent(this.transform.parent);
             CopyRectTransformSize(backTransform, allObj);
             _allFade = allObj.gameObject.AddComponent<NovelImage>();
+            _allFade.image.raycastTarget = false;
             _allFade.HideImage();
         }
 
@@ -127,17 +128,17 @@ namespace NovelEditorPlugin
             {
                 HideImage();
                 Change(sprite);
-                EffectManager.Instance.SetEffect(_image,effect,effectStrength);
+                EffectManager.Instance.SetEffect(_image, effect, effectStrength);
                 Color from = new Color(_defaultColor.r, _defaultColor.g, _defaultColor.b, 0);
                 await Fade(from, _defaultColor, speed, token);
             }
             else
             {
                 _backFade.Change(_image.sprite);
-                EffectManager.Instance.copyShader(_image,_backFade.image);
+                EffectManager.Instance.copyShader(_image, _backFade.image);
                 _backFade.image.color = _image.color;
                 Change(sprite);
-                EffectManager.Instance.SetEffect(_image,effect,effectStrength);
+                EffectManager.Instance.SetEffect(_image, effect, effectStrength);
                 Color dest = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
                 await _backFade.Fade(_image.color, dest, speed, token);
                 _backFade.HideImage();

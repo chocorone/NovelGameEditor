@@ -152,7 +152,6 @@ namespace NovelEditorPlugin
                     player.volume = from + (dest - from) * value;
                     await UniTask.Delay(TimeSpan.FromSeconds(time * volumeSpeed), cancellationToken: token);
                     value += volumeSpeed;
-                    Debug.Log("volume;" + player.volume);
                 }
             }
             catch (OperationCanceledException)
