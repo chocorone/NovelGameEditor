@@ -251,6 +251,18 @@ namespace NovelEditorPlugin
             }
         }
 
+        void OnDisable()
+        {
+
+        }
+
+        void OnDestroy()
+        {
+
+        }
+
     }
+
+
 }
 
