@@ -9,7 +9,7 @@ using TMPro;
 
 namespace NovelEditorPlugin
 {
-    [CreateAssetMenu(menuName = "Scriptable/Create NovelData")]
+    [CreateAssetMenu(menuName = "NovelData")]
     public class NovelData : ScriptableObject
     {
         #region 会話基本データ
