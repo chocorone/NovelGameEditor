@@ -21,6 +21,7 @@ namespace NovelEditorPlugin
         [SerializeField] DialogueImage _dialogueImage;
         [SerializeField] DialogueText _dialogueText;
         [SerializeField] TextMeshProUGUI _nameText;
+        [SerializeField] CanvasGroup UIparents;
 
 
         public void Init(float charaFadeTime)
