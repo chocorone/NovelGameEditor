@@ -9,25 +9,26 @@ namespace NovelEditor
     public class NovelPlayer : MonoBehaviour
     {
         # region variable
-        [SerializeField] private NovelData _noveldata;
+        [SerializeField] private NovelData _novelData;
         [SerializeField] private ChoiceButton _choiceButton;
-
+        [SerializeField] private Sprite _dialogueSprite;
+        [SerializeField] private Sprite _nonameDialogueSprite;
         [SerializeField] private bool _playOnAwake = true;
         [SerializeField] private bool _hideAfterPlay = false;
-        [SerializeField] private float _hideFadeTime = 1;
+        [SerializeField] private float _hideFadeTime = 0.5f;
         [SerializeField] private bool _isDisplay = true;
+
+        [SerializeField] private float _charaFadeTime = 0.2f;
+        [SerializeField] private int _textSpeed = 6;
+
+        [SerializeField, Range(0, 1)] private float _BGMVolume = 1;
+        [SerializeField, Range(0, 1)] private float _SEVolume = 1;
 
         [SerializeField] private HowInput _inputSystem;
         [SerializeField] private KeyCode[] _nextButton;
         [SerializeField] private KeyCode[] _skipButton;
         [SerializeField] private KeyCode[] _hideOrDisplayButton;
         [SerializeField] private KeyCode[] _stopOrStartButton;
-
-        public float charaFadeTime = 0.2f;
-        public float textSpeed = 2.0f;
-
-        [SerializeField, Range(0, 1)] public float BGMVolume = 1;
-        [SerializeField, Range(0, 1)] public float SEVolume = 1;
 
         private NovelInputProvider _inputProvider;
         private NovelUIManager _novelUI;
@@ -42,6 +43,8 @@ namespace NovelEditor
         private bool _isStop = false;
         private bool _isPlaying = false;
         private bool _isChoicing = false;
+        private bool _isUIDisplay = true;
+        private bool _mute = false;
 
         private List<string> _choiceName = new();
         private List<string> _ParagraphName = new();
@@ -53,26 +56,149 @@ namespace NovelEditor
         #endregion
 
         #region property
+        public NovelData novelData => _novelData;
         public bool IsStop => _isStop;
         public bool IsPlaying => _isPlaying;
         public bool IsChoicing => _isChoicing;
-        public bool IsDisplay => _isDisplay;
-        public bool mute = false;
+        public bool IsUIDisplay
+        {
+            get
+            {
+                return _isUIDisplay;
+            }
+
+            set
+            {
+                if (value)
+                {
+                    UnPause();
+                    DisplayUI();
+                }
+                else
+                {
+                    Pause();
+                    HideUI();
+                }
+
+                _isDisplay = value;
+            }
+        }
+        public bool IsDisplay
+        {
+            get
+            {
+                return _isDisplay;
+            }
+
+            set
+            {
+                if (value)
+                {
+                    UnPause();
+                }
+                else
+                {
+                    Pause();
+                }
+                _novelUI.SetDisplay(true);
+                _isDisplay = value;
+            }
+        }
+
+        public bool mute
+        {
+            get
+            {
+                return _mute;
+            }
+            set
+            {
+                _audioPlayer.SetMute(value);
+                _mute = value;
+            }
+        }
+
+        public float BGMVolume
+        {
+            get
+            {
+                return _BGMVolume;
+            }
+
+            set
+            {
+                _BGMVolume = Mathf.Clamp(value, 0, 1);
+                _audioPlayer.SetBGMVolume(_BGMVolume);
+            }
+        }
+
+        public float SEVolume
+        {
+            get
+            {
+                return _SEVolume;
+            }
+
+            set
+            {
+                _SEVolume = Mathf.Clamp(value, 0, 1);
+                _audioPlayer.SetSEVolume(_SEVolume);
+            }
+        }
+
+        public int textSpeed
+        {
+            get
+            {
+                return _textSpeed;
+            }
+            set
+            {
+                _textSpeed = value;
+
+                if (value < 1)
+                {
+                    _textSpeed = 1;
+                }
+
+                _novelUI.SetTextSpeed(_textSpeed);
+            }
+        }
+
+        public List<string> ParagraphName => _ParagraphName;
+        public List<string> ChoiceName => _choiceName;
 
         #endregion
 
 
         #region publicMethod
 
+        public void Play(NovelData data, bool hideAfterPlay)
+        {
+            _novelData = data;
+            _hideAfterPlay = hideAfterPlay;
+
+            Reset();
+
+            _nowDialogueNum = 0;
+            _nowParagraph = _novelData.paragraphList[0];
+            _ParagraphName.Add(_nowParagraph.name);
+            SetNext();
+
+            UnPause();
+            _isPlaying = true;
+        }
+
         public void Play(NovelData data, bool hideAfterPlay, int paragraphNum = 0, int dialogueIndex = 0, int paragraphID = 0)
         {
-            _noveldata = data;
+            _novelData = data;
             _hideAfterPlay = hideAfterPlay;
 
             Reset();
 
             _nowDialogueNum = dialogueIndex;
-            _nowParagraph = _noveldata.paragraphList[paragraphID];
+            _nowParagraph = _novelData.paragraphList[paragraphID];
+            _ParagraphName.Add(_nowParagraph.name);
             SetNext();
 
             UnPause();
@@ -91,22 +217,63 @@ namespace NovelEditor
 
         public void HideUI()
         {
-
+            _novelUI.SetUIDisplay(false);
         }
 
         public void DisplayUI()
         {
-
+            _novelUI.SetUIDisplay(true);
         }
 
         public void Skip()
         {
 
+            Debug.Log("Skip");
+            if (_isChoicing || _isImageChangeing)
+            {
+                return;
+            }
+            _textCTS.Cancel();
+            while (true)
+            {
+                Debug.Log(_nowParagraph.index);
+                //選択肢を表示
+                if (_nowParagraph.next == Next.Choice)
+                {
+                    _nowDialogueNum = _nowParagraph.dialogueList.Count - 1;
+                    SetNext();
+                    break;
+                }
+                else
+                {
+                    //選択肢のノードが続きになければ終わる
+                    if (_nowParagraph.next == Next.End || _nowParagraph.nextParagraphIndex == -1)
+                    {
+                        end();
+                        break;
+                    }
+                    _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
+                    _ParagraphName.Add(_nowParagraph.name);
+                }
+            }
         }
 
         public void SkipNextNode()
         {
+            if (!_isChoicing && !_isImageChangeing)
+            {
+                _textCTS.Cancel();
+                if (_nowParagraph.next == Next.Choice)
+                {
+                    _nowDialogueNum = _nowParagraph.dialogueList.Count - 1;
+                    SetNextDialogue();
+                }
+                else
+                {
+                    SetNextParagraph(_nowParagraph.nextParagraphIndex);
+                }
 
+            }
         }
 
         public int GetNowParagraphID()
@@ -141,19 +308,19 @@ namespace NovelEditor
             }
 
             _novelUI = GetComponent<NovelUIManager>();
-            _novelUI.Init(charaFadeTime);
+            _novelUI.Init(_charaFadeTime, _nonameDialogueSprite, _dialogueSprite);
             _audioPlayer = gameObject.AddComponent<AudioPlayer>();
-            _audioPlayer.Init(BGMVolume, SEVolume);
+            _audioPlayer.Init(_BGMVolume, _SEVolume);
             _choiceManager = GetComponentInChildren<ChoiceManager>();
             _choiceManager.Init(_choiceButton);
 
-            if (_playOnAwake && _noveldata != null)
+            if (_playOnAwake && _novelData != null)
             {
-                Play(_noveldata, _hideAfterPlay);
+                Play(_novelData, _hideAfterPlay);
             }
         }
 
-        public void SetDisplay(bool isDisplay)
+        void SetDisplay(bool isDisplay)
         {
 
             if (isDisplay)
@@ -166,7 +333,6 @@ namespace NovelEditor
             else
             {
                 _endFadeCTS.Cancel();
-                _endFadeCTS.Dispose();
                 Pause();
                 _novelUI.SetDisplay(isDisplay);
                 _isDisplay = false;
@@ -176,13 +342,19 @@ namespace NovelEditor
         //現在再生しているものをリセット
         void Reset()
         {
-            _novelUI.Reset(_noveldata.locations);
+            _novelUI.Reset(_novelData.locations);
+            //選択肢を全部消す
+            _choiceManager.ResetChoice();
             _isChoicing = false;
+
+            //今までのやつを消す
+            _choiceName.Clear();
+            _ParagraphName.Clear();
         }
 
         void Update()
         {
-            if (!IsPlaying || IsChoicing || _isImageChangeing)
+            if (!_isPlaying || _isChoicing || _isImageChangeing)
             {
                 return;
             }
@@ -201,12 +373,20 @@ namespace NovelEditor
             }
             if (_inputProvider.GetSkip())
             {
-                Debug.Log("GetSkip");
+                Skip();
             }
 
             if (_inputProvider.GetStopOrStart())
             {
                 _novelUI.SwitchStopText();
+            }
+
+            if (_inputProvider.GetHideOrDisplay())
+            {
+                if (_isUIDisplay)
+                    HideUI();
+                if (!_isUIDisplay)
+                    DisplayUI();
             }
         }
 
@@ -218,7 +398,8 @@ namespace NovelEditor
             }
             else
             {
-                _nowParagraph = _noveldata.paragraphList[nextIndex];
+                _nowParagraph = _novelData.paragraphList[nextIndex];
+                _ParagraphName.Add(_nowParagraph.name);
                 _nowDialogueNum = 0;
                 SetNextDialogue();
             }
@@ -256,7 +437,7 @@ namespace NovelEditor
             {
                 if (i == -1)
                     continue;
-                list.Add(_noveldata.choiceList[i]);
+                list.Add(_novelData.choiceList[i]);
             }
             if (list.Count == 0)
             {
@@ -265,6 +446,7 @@ namespace NovelEditor
             }
 
             var ans = await _choiceManager.WaitChoice(list);
+            _choiceName.Add(ans.name);
             _isChoicing = false;
             SetNextParagraph(ans.nextParagraphIndex);
         }
@@ -272,11 +454,9 @@ namespace NovelEditor
         async void SetNextDialogue()
         {
             _isImageChangeing = true;
-            _imageCTS.Dispose();
             _imageCTS = new CancellationTokenSource();
             _isImageChangeing = !await _novelUI.SetNextImage(_nowParagraph.dialogueList[_nowDialogueNum], _imageCTS.Token);
             _audioPlayer.SetSound(_nowParagraph.dialogueList[_nowDialogueNum]);
-            _textCTS.Dispose();
             _textCTS = new CancellationTokenSource();
             _isReading = true;
             _isReading = !await _novelUI.SetNextText(_nowParagraph.dialogueList[_nowDialogueNum], _textCTS.Token);
@@ -298,25 +478,34 @@ namespace NovelEditor
         void FlashText()
         {
             _textCTS.Cancel();
+            _novelUI.FlashText();
         }
 
         void OnValidate()
         {
             if (_audioPlayer != null)
             {
-                _audioPlayer.SetSEVolume(SEVolume);
-                _audioPlayer.SetBGMVolume(BGMVolume);
+                _audioPlayer.SetSEVolume(_SEVolume);
+                _audioPlayer.SetBGMVolume(_BGMVolume);
             }
         }
 
         void OnDisable()
         {
-
+            allCancel();
         }
 
         void OnDestroy()
         {
+            allCancel();
+        }
 
+        void allCancel()
+        {
+            _audioPlayer.AllStop();
+            _textCTS.Cancel();
+            _imageCTS.Cancel();
+            _endFadeCTS.Cancel();
         }
         #endregion
 

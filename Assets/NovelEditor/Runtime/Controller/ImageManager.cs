@@ -16,7 +16,7 @@ namespace NovelEditor
 
         float _charaFadetime = 0.1f;
 
-        public ImageManager(Transform charaTransform, NovelBackGround backGround, DialogueImage dialogogueImage, float charaFadeTime)
+        internal ImageManager(Transform charaTransform, NovelBackGround backGround, DialogueImage dialogogueImage, float charaFadeTime)
         {
             _charaTransform = charaTransform;
             _backGround = backGround;

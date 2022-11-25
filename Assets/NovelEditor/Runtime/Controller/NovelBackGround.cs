@@ -22,6 +22,7 @@ namespace NovelEditor
             backObj.transform.SetParent(this.transform);
             CopyRectTransformSize(backTransform, backObj);
             _backFade = backObj.gameObject.AddComponent<NovelImage>();
+            _backFade.image.raycastTarget = false;
             _backFade.HideImage();
 
             RectTransform frontObj = new GameObject("frontFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
@@ -29,6 +30,7 @@ namespace NovelEditor
             frontObj.transform.SetSiblingIndex(2);
             CopyRectTransformSize(backTransform, frontObj);
             _frontFade = frontObj.gameObject.AddComponent<NovelImage>();
+            _frontFade.image.raycastTarget = false;
             _frontFade.HideImage();
 
             RectTransform allObj = new GameObject("allFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
@@ -45,9 +47,10 @@ namespace NovelEditor
             dest.anchorMax = source.anchorMax;
             dest.anchoredPosition = source.anchoredPosition;
             dest.sizeDelta = source.sizeDelta;
+            dest.localScale = source.localScale;
         }
 
-        public async UniTask<bool> BackFadeIn(NovelData.ParagraphData.Dialogue data, CancellationToken token)
+        internal async UniTask<bool> BackFadeIn(NovelData.ParagraphData.Dialogue data, CancellationToken token)
         {
             switch (data.howBack)
             {
@@ -67,7 +70,7 @@ namespace NovelEditor
             return true;
         }
 
-        public async UniTask<bool> BackFadeOut(NovelData.ParagraphData.Dialogue data, CancellationToken token)
+        internal async UniTask<bool> BackFadeOut(NovelData.ParagraphData.Dialogue data, CancellationToken token)
         {
             switch (data.howBack)
             {
@@ -101,7 +104,7 @@ namespace NovelEditor
             return true;
         }
 
-        public async UniTask<bool> DissolveOut(float speed, Sprite sprite, CancellationToken token)
+        internal async UniTask<bool> DissolveOut(float speed, Sprite sprite, CancellationToken token)
         {
             if (_image.sprite == null)
             {
@@ -122,7 +125,7 @@ namespace NovelEditor
             return true;
         }
 
-        public async UniTask<bool> Dissolve(float speed, Sprite sprite, Effect effect, float effectStrength, CancellationToken token)
+        internal async UniTask<bool> Dissolve(float speed, Sprite sprite, Effect effect, float effectStrength, CancellationToken token)
         {
             if (_image.sprite == null)
             {

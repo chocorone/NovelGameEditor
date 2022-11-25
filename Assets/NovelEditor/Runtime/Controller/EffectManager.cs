@@ -30,7 +30,7 @@ namespace NovelEditor
         Shader ChromaticAberration;
         Shader Blur;
 
-        public EffectManager()
+        internal EffectManager()
         {
             None = Resources.Load<Shader>("DefaultEffect");
             Noise = Resources.Load<Shader>("NoiseEffect");
@@ -43,17 +43,17 @@ namespace NovelEditor
             Blur = Resources.Load<Shader>("BlurEffect");
         }
 
-        public void InitMaterial(Image image)
+        internal void InitMaterial(Image image)
         {
             image.material = new Material(None);
         }
 
-        public void copyShader(Image from, Image dest)
+        internal void copyShader(Image from, Image dest)
         {
             dest.material = GameObject.Instantiate(from.material);
         }
 
-        public void SetEffect(Image image, Effect effect, float strength)
+        internal void SetEffect(Image image, Effect effect, float strength)
         {
 
             switch (effect)

@@ -49,7 +49,7 @@ namespace NovelEditor
         internal void SetMute(bool flag)
         {
             _BGM.mute = flag;
-            _SE.mute = true;
+            _SE.mute = flag;
         }
 
         internal void AllStop()
@@ -95,7 +95,6 @@ namespace NovelEditor
         void Stop(AudioSource player, CancellationTokenSource cancel)
         {
             cancel.Cancel();
-            cancel.Dispose();
             player.Stop();
         }
 
