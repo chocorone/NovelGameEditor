@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using NovelEditorPlugin;
+using DialogueDesigner;
 using UnityEngine.UIElements;
 using System.Reflection;
 
-namespace NovelEditorPlugin.Editor
+namespace DialogueDesigner.Editor
 {
     [CustomEditor(typeof(TempParagraph))]
     internal class ParagraphInspector : UnityEditor.Editor

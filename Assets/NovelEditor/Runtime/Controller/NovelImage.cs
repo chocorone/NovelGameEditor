@@ -6,7 +6,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 
-namespace NovelEditorPlugin
+namespace DialogueDesigner
 {
     [RequireComponent(typeof(Image))]
     public class NovelImage : MonoBehaviour

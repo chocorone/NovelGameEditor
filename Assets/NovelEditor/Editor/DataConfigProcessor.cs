@@ -1,7 +1,7 @@
 using UnityEditor;
-using NovelEditorPlugin;
+using DialogueDesigner;
 
-namespace NovelEditorPlugin.Editor
+namespace DialogueDesigner.Editor
 {
     public class DataConfigProcessor : AssetModificationProcessor
     {
