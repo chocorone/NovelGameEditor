@@ -1,17 +1,18 @@
 {
-    "name": "rirunee.DialogueDesigner",
+    "name": "rirunee.dialoguedesigner",
     "version": "1.0.0",
     "displayName": "Dialogue Designer",
     "description": "This is an editor to create dialogue system easily.",
     "unity": "2021.3.11",
-    "unityRelease": "0b5",
     "dependencies": {
-        "com.unity.some-package": "1.0.0",
+        "com.unity.textmeshpro": "3.0.6",
+        "com.cysharp.unitask": "2.3.1"
     },
     "keywords": [
         "Dialogue",
         "Editor",
-        "DialogueDesigner"
+        "DialogueDesigner",
+        "Novel"
     ],
     "author": {
         "name": "Rirunee",
