@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 
-namespace DialogueDesigner.Editor
+namespace NovelEditor.Editor
 {
     public class CreateUI
     {

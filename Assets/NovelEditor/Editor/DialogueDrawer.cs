@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using DialogueDesigner;
+using NovelEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using DialogueDesigner.Editor;
+using NovelEditor.Editor;
 
-namespace DialogueDesigner.Editor
+namespace NovelEditor.Editor
 {
     [CustomPropertyDrawer(typeof(NovelData.ParagraphData.Dialogue))]
     internal class DialogueDrawer : PropertyDrawer

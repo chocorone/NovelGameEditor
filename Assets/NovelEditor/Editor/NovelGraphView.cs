@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DialogueDesigner.Editor
+namespace NovelEditor.Editor
 {
     internal class NovelGraphView : GraphView
     {

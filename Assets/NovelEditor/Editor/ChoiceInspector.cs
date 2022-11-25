@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
-using DialogueDesigner.Editor;
+using NovelEditor.Editor;
 
-namespace DialogueDesigner.Editor
+namespace NovelEditor.Editor
 {
     [CustomEditor(typeof(TempChoice))]
     internal class ChoiceInspector : UnityEditor.Editor

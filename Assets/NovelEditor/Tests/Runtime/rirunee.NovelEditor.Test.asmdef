@@ -1,6 +1,6 @@
 {
-    "name": "rirunee.DialogueDesigner.Test",
-    "rootNamespace": "DialogueDesigner.Test",
+    "name": "rirunee.NovelEditor.Test",
+    "rootNamespace": "NovelEditor.Test",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

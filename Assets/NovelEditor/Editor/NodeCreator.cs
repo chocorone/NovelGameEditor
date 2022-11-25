@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEditor;
-using DialogueDesigner;
+using NovelEditor;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 
-namespace DialogueDesigner.Editor
+namespace NovelEditor.Editor
 {
     public static class NodeCreator
     {
