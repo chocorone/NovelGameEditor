@@ -20,8 +20,9 @@ namespace NovelEditor.Editor
         {
             //ウィンドウ作成
             var scene = typeof(UnityEditor.SceneView);
-            var window = EditorWindow.GetWindow<NovelEditorWindow>(desiredDockNextTo: new Type[] { scene }, title: "NovelEditor");
-            window.Focus();
+            var window = EditorWindow.GetWindow<NovelEditorWindow>(title: "NovelEditor");
+            window.Close();
+            window = EditorWindow.GetWindow<NovelEditorWindow>(desiredDockNextTo: new Type[] { scene }, title: "NovelEditor");
             window.Init(data);
         }
 
