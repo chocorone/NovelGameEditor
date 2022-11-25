@@ -6,9 +6,9 @@ using System.IO;
 using System.Linq;
 using UnityEngine.UIElements;
 using UnityEditorInternal;
-using DialogueDesigner;
+using NovelEditor;
 
-namespace DialogueDesigner.Editor
+namespace NovelEditor.Editor
 {
     [CustomEditor(typeof(NovelData))]
     internal class NovelDataInspector : UnityEditor.Editor

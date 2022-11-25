@@ -1,7 +1,7 @@
 {
-    "name": "rirunee.dialoguedesigner",
+    "name": "rirunee.noveleditor",
     "version": "1.0.0",
-    "displayName": "Dialogue Designer",
+    "displayName": "Novel Editor",
     "description": "This is an editor to create dialogue system easily.",
     "unity": "2021.3",
     "dependencies": {
@@ -11,7 +11,7 @@
     "keywords": [
         "Dialogue",
         "Editor",
-        "DialogueDesigner",
+        "NovelEditor",
         "Novel"
     ],
     "author": {

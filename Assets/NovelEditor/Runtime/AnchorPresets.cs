@@ -13,7 +13,7 @@
   rect.localPosition = Vector3.zero;
   */
 
-namespace DialogueDesigner
+namespace NovelEditor
 {
     public enum AnchorPresets
     {

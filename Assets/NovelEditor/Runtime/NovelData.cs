@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using UnityEditor;
 using TMPro;
 
-namespace DialogueDesigner
+namespace NovelEditor
 {
     [CreateAssetMenu(menuName = "NovelData")]
     public class NovelData : ScriptableObject

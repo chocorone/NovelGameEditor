@@ -3,7 +3,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 
-namespace DialogueDesigner
+namespace NovelEditor
 {
     [RequireComponent(typeof(NovelUIManager))]
     public class NovelPlayer : MonoBehaviour

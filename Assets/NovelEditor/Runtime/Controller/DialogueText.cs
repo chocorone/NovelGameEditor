@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 
-namespace DialogueDesigner
+namespace NovelEditor
 {
     [RequireComponent(typeof(TextMeshProUGUI))]
     public class DialogueText : MonoBehaviour

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace DialogueDesigner.Test
+namespace NovelEditor.Test
 {
     public class EscapeTest : MonoBehaviour
     {

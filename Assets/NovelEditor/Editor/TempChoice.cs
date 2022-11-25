@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using DialogueDesigner;
+using NovelEditor;
 
-namespace DialogueDesigner.Editor
+namespace NovelEditor.Editor
 {
     internal class TempChoice : ScriptableObject
     {

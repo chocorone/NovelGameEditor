@@ -1,3 +1,3 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("rirunee.DialogueDesigner.Editor")]
+[assembly: InternalsVisibleTo("rirunee.NovelEditor.Editor")]

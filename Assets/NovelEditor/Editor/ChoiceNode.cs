@@ -5,10 +5,10 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using DialogueDesigner;
-using DialogueDesigner.Editor;
+using NovelEditor;
+using NovelEditor.Editor;
 
-namespace DialogueDesigner.Editor
+namespace NovelEditor.Editor
 {
     internal class ChoiceNode : BaseNode
     {

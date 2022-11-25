@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
-namespace DialogueDesigner
+namespace NovelEditor
 {
     public class ChoiceManager : MonoBehaviour
     {
