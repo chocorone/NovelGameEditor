@@ -25,26 +25,23 @@ namespace NovelEditor.Editor
 
             var nameField = new IMGUIContainer(() =>
             {
-                data.serializedObject.Update();
                 try
                 {
+                    data.serializedObject.Update();
                     var Name = data.FindPropertyRelative("Name");
                     Name.stringValue = GUILayout.TextArea(Name.stringValue);
-
+                    data.serializedObject.ApplyModifiedProperties();
                 }
                 catch { }
-                data.serializedObject.ApplyModifiedProperties();
-
             });
 
             root.Q<Box>("nameBox").Add(nameField);
 
             var serihuField = new IMGUIContainer(() =>
             {
-                data.serializedObject.Update();
                 try
                 {
-
+                    data.serializedObject.Update();
                     var style = new GUIStyle(EditorStyles.textArea)
                     {
                         wordWrap = true,
@@ -53,9 +50,10 @@ namespace NovelEditor.Editor
 
                     var talkTextProperty = data.FindPropertyRelative("text");
                     talkTextProperty.stringValue = GUILayout.TextArea(talkTextProperty.stringValue, style);
+                    data.serializedObject.ApplyModifiedProperties();
                 }
                 catch { }
-                data.serializedObject.ApplyModifiedProperties();
+
             });
 
             root.Q<Box>("serihuBox").Add(serihuField);
@@ -307,10 +305,14 @@ namespace NovelEditor.Editor
             var BackSprite = root.Q<ObjectField>("backSprite");
             BackSprite.RegisterValueChangedCallback(x =>
             {
-                ParagraphInspector.UpdateValue();
-                var label = root.Q<Label>("nowBack");
-                string name = data.FindPropertyRelative("back").objectReferenceValue == null ? "None" : data.FindPropertyRelative("back").objectReferenceValue.name;
-                label.text = "現在の背景：" + name;
+                try
+                {
+                    ParagraphInspector.UpdateValue();
+                    var label = root.Q<Label>("nowBack");
+                    string name = data.FindPropertyRelative("back").objectReferenceValue == null ? "None" : data.FindPropertyRelative("back").objectReferenceValue.name;
+                    label.text = "現在の背景：" + name;
+                }
+                catch { }
             });
 
             //フォント設定
