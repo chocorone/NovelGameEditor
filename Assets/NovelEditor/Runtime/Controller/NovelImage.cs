@@ -9,7 +9,7 @@ using System.Threading;
 namespace NovelEditor
 {
     [RequireComponent(typeof(Image))]
-    public class NovelImage : MonoBehaviour
+    internal class NovelImage : MonoBehaviour
     {
         protected Image _image;
         [HideInInspector] public Color _defaultColor;

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace NovelEditor
 {
-    public class EffectManager
+    internal class EffectManager
     {
         static EffectManager instance;
         public static EffectManager Instance

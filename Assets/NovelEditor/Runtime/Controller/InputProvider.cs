@@ -13,7 +13,7 @@ namespace NovelEditor
         bool GetStopOrStart();
     }
 
-    public class DefaultInputProvider : NovelInputProvider
+    internal class DefaultInputProvider : NovelInputProvider
     {
         public bool GetNext()
         {

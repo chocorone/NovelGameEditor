@@ -7,7 +7,7 @@ using System;
 
 namespace NovelEditor
 {
-    public class DialogueImage : NovelImage
+    internal class DialogueImage : NovelImage
     {
         void Awake()
         {

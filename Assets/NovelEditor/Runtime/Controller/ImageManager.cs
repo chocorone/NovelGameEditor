@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace NovelEditor
 {
-    public class ImageManager
+    internal class ImageManager
     {
         Transform _charaTransform;
         NovelBackGround _backGround;

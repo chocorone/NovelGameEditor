@@ -12,21 +12,26 @@ using System.Text.RegularExpressions;
 namespace NovelEditor
 {
     [RequireComponent(typeof(TextMeshProUGUI))]
-    public class DialogueText : MonoBehaviour
+    internal class DialogueText : MonoBehaviour
     {
         TextMeshProUGUI tmpro;
-        int textSpeed = 6;
+        internal int textSpeed = 6;
         public bool IsStop = false;
 
         void Awake()
         {
             tmpro = GetComponent<TextMeshProUGUI>();
         }
-        public async UniTask<bool> textUpdate(NovelData.ParagraphData.Dialogue data, CancellationToken token)
+        internal async UniTask<bool> textUpdate(NovelData.ParagraphData.Dialogue data, CancellationToken token)
         {
             UpdateFont(data);
             //再生が終わったら通知したい
             return await PlayText(data.text, token);
+        }
+
+        internal void DeleteText()
+        {
+            tmpro.text = "";
         }
 
         internal void UpdateFont(NovelData.ParagraphData.Dialogue data)
