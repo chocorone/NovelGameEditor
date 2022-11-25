@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace NovelEditor.Editor
 {
-    public static class NodeCreator
+    internal static class NodeCreator
     {
         internal static void RestoreGraph(GraphView graphView, NovelData data)
         {

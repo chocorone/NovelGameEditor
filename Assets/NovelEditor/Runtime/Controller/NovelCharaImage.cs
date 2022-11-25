@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace NovelEditor
 {
-    public class NovelCharaImage : NovelImage
+    internal class NovelCharaImage : NovelImage
     {
         void Awake()
         {

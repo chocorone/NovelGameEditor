@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace NovelEditor
 {
-    public class NovelBackGround : NovelImage
+    internal class NovelBackGround : NovelImage
     {
         private NovelImage _backFade;
         private NovelImage _frontFade;

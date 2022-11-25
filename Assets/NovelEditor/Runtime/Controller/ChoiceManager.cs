@@ -7,10 +7,12 @@ using System;
 
 namespace NovelEditor
 {
-    public class ChoiceManager : MonoBehaviour
+    internal class ChoiceManager : MonoBehaviour
     {
         private ChoiceButton _button;
-        // Start is called before the first frame update
+
+        private CancellationTokenSource cancel = new CancellationTokenSource();
+
         internal void Init(ChoiceButton button)
         {
             _button = button;
@@ -23,7 +25,7 @@ namespace NovelEditor
         internal async UniTask<NovelData.ChoiceData> WaitChoice(List<NovelData.ChoiceData> datas)
         {
             List<UniTask<NovelData.ChoiceData>> wait = new();
-            CancellationTokenSource cancel = new();
+            cancel = new();
 
             foreach (NovelData.ChoiceData data in datas)
             {
@@ -42,6 +44,16 @@ namespace NovelEditor
             }
 
             return sendData.result;
+        }
+
+        internal void ResetChoice()
+        {
+            cancel.Cancel();
+            cancel.Dispose();
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                Destroy(transform.GetChild(i).gameObject);
+            }
         }
     }
 }

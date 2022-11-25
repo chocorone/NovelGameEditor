@@ -8,7 +8,7 @@ using static NovelEditor.NovelData.ParagraphData;
 
 namespace NovelEditor
 {
-    public class AudioPlayer : MonoBehaviour
+    internal class AudioPlayer : MonoBehaviour
     {
         AudioSource _BGM;
         AudioSource _SE;
@@ -21,7 +21,7 @@ namespace NovelEditor
 
         bool _isFading = false;
 
-        public void Init(float bgmVolume, float seVolume)
+        internal void Init(float bgmVolume, float seVolume)
         {
             _BGM = gameObject.AddComponent<AudioSource>();
             _BGM.playOnAwake = false;
@@ -44,6 +44,12 @@ namespace NovelEditor
             {
                 SetSE(data);
             }
+        }
+
+        internal void SetMute(bool flag)
+        {
+            _BGM.mute = flag;
+            _SE.mute = true;
         }
 
         internal void AllStop()

@@ -10,7 +10,7 @@ using TMPro;
 namespace NovelEditor
 {
     [RequireComponent(typeof(Button))]
-    public class ChoiceButton : MonoBehaviour
+    internal class ChoiceButton : MonoBehaviour
     {
         bool _choiced = false;
         Button _button;
