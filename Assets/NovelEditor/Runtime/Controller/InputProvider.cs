@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace NovelEditor
 {
-    interface NovelInputProvider
+    public interface NovelInputProvider
     {
         bool GetNext();
         bool GetSkip();
@@ -35,7 +35,7 @@ namespace NovelEditor
 
     }
 
-    public class CustomInputProvider : NovelInputProvider
+    internal class CustomInputProvider : NovelInputProvider
     {
         KeyCode[] _nextButton;
         KeyCode[] _skipButton;
