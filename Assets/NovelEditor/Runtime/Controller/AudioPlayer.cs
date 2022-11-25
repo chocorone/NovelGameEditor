@@ -4,9 +4,9 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
-using static NovelEditorPlugin.NovelData.ParagraphData;
+using static DialogueDesigner.NovelData.ParagraphData;
 
-namespace NovelEditorPlugin
+namespace DialogueDesigner
 {
     public class AudioPlayer : MonoBehaviour
     {

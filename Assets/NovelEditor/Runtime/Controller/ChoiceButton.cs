@@ -7,7 +7,7 @@ using System.Threading;
 using System;
 using TMPro;
 
-namespace NovelEditorPlugin
+namespace DialogueDesigner
 {
     [RequireComponent(typeof(Button))]
     public class ChoiceButton : MonoBehaviour
