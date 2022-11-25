@@ -218,11 +218,13 @@ namespace NovelEditor
         public void HideUI()
         {
             _novelUI.SetUIDisplay(false);
+            _isUIDisplay = false;
         }
 
         public void DisplayUI()
         {
             _novelUI.SetUIDisplay(true);
+            _isUIDisplay = true;
         }
 
         public void Skip()
@@ -302,7 +304,7 @@ namespace NovelEditor
                 case HowInput.UserSetting:
                     _inputProvider = new CustomInputProvider(_nextButton, _skipButton, _hideOrDisplayButton, _stopOrStartButton);
                     break;
-                default:
+                case HowInput.Default:
                     _inputProvider = new DefaultInputProvider();
                     break;
             }

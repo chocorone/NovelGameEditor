@@ -8,19 +8,10 @@ using TMPro;
 
 namespace NovelEditor
 {
-    public interface NovelInputProvider
+    public abstract class NovelInputProvider
     {
 
-
-        bool GetNext();
-        bool GetSkip();
-        bool GetHideOrDisplay();
-        bool GetStopOrStart();
-    }
-
-    internal class DefaultInputProvider : NovelInputProvider
-    {
-        public bool GetNext()
+        protected bool OnUI()
         {
             PointerEventData pointData = new PointerEventData(EventSystem.current);
             List<RaycastResult> RayResult = new List<RaycastResult>();
@@ -32,21 +23,33 @@ namespace NovelEditor
                 if (!raycastResult.gameObject.GetComponent<TextMeshProUGUI>())
                     onUI = true;
             }
+            return onUI;
+        }
+        public abstract bool GetNext();
+        public abstract bool GetSkip();
+        public abstract bool GetHideOrDisplay();
+        public abstract bool GetStopOrStart();
+    }
 
-
+    internal class DefaultInputProvider : NovelInputProvider
+    {
+        public override bool GetNext()
+        {
             return Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space) ||
-                (Input.GetMouseButtonDown(0) && !onUI);
+                (Input.GetMouseButtonDown(0) && !OnUI());
         }
-        public bool GetSkip()
+        public override bool GetSkip()
         {
-            return Input.GetKeyDown(KeyCode.S);
+            return Input.GetKeyDown(KeyCode.N);
         }
-        public bool GetHideOrDisplay()
+        public override bool GetHideOrDisplay()
         {
-            return Input.GetKeyDown(KeyCode.H);
+            Debug.Log("hide");
+            Debug.Log(Input.GetKeyDown(KeyCode.H));
+            return Input.GetKey(KeyCode.H);
         }
 
-        public bool GetStopOrStart()
+        public override bool GetStopOrStart()
         {
             return Input.GetKeyDown(KeyCode.S);
         }
@@ -68,20 +71,20 @@ namespace NovelEditor
             _stopOrStartButton = stopOrStartButton;
         }
 
-        public bool GetNext()
+        public override bool GetNext()
         {
             return _nextButton.Any(key => Input.GetKeyDown(key));
         }
-        public bool GetSkip()
+        public override bool GetSkip()
         {
             return _skipButton.Any(key => Input.GetKeyDown(key));
         }
-        public bool GetHideOrDisplay()
+        public override bool GetHideOrDisplay()
         {
             return _hideOrDisplayButton.Any(key => Input.GetKeyDown(key));
         }
 
-        public bool GetStopOrStart()
+        public override bool GetStopOrStart()
         {
             return _stopOrStartButton.Any(key => Input.GetKeyDown(key));
         }
