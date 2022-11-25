@@ -48,6 +48,7 @@ namespace NovelEditor
 
         private List<string> _choiceName = new();
         private List<string> _ParagraphName = new();
+        private List<int> _passedParagraphID = new();
 
         private CancellationTokenSource _textCTS = new CancellationTokenSource();
         private CancellationTokenSource _imageCTS = new CancellationTokenSource();
@@ -183,26 +184,37 @@ namespace NovelEditor
             _nowDialogueNum = 0;
             _nowParagraph = _novelData.paragraphList[0];
             _ParagraphName.Add(_nowParagraph.name);
+            _passedParagraphID.Add(0);
             SetNext();
 
             UnPause();
             _isPlaying = true;
         }
 
-        public void Play(NovelData data, bool hideAfterPlay, int paragraphNum = 0, int dialogueIndex = 0, int paragraphID = 0)
+        public async void Load(NovelData data, bool hideAfterPlay, int dialogueIndex, int paragraphID, List<int> passedParagraphId, List<string> ParagraphName)
         {
             _novelData = data;
             _hideAfterPlay = hideAfterPlay;
 
             Reset();
 
-            _nowDialogueNum = dialogueIndex;
+            _nowDialogueNum = dialogueIndex + 1;
             _nowParagraph = _novelData.paragraphList[paragraphID];
-            _ParagraphName.Add(_nowParagraph.name);
-            SetNext();
+            _ParagraphName = ParagraphName;
+
+            //復元、新しいデータをとりあえず再生
+            NovelData.ParagraphData.Dialogue newData = new DataLoader().LoadDialogue(_novelData, paragraphID, dialogueIndex, passedParagraphId);
 
             UnPause();
             _isPlaying = true;
+
+            _isImageChangeing = true;
+            _imageCTS = new CancellationTokenSource();
+            _isImageChangeing = !await _novelUI.SetNextImage(newData, _imageCTS.Token);
+            _audioPlayer.SetSound(newData);
+            _textCTS = new CancellationTokenSource();
+            _isReading = true;
+            _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
         }
 
         public void Pause()
@@ -256,6 +268,7 @@ namespace NovelEditor
                     }
                     _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
                     _ParagraphName.Add(_nowParagraph.name);
+                    _passedParagraphID.Add(_nowParagraph.index);
                 }
             }
         }
@@ -286,6 +299,11 @@ namespace NovelEditor
         public int GetNowDialogueIndex()
         {
             return _nowDialogueNum;
+        }
+
+        public List<int> GetPassedParagraphID()
+        {
+            return _passedParagraphID;
         }
 
         public void SetInputProvider(NovelInputProvider input)
