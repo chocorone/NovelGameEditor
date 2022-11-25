@@ -1,11 +1,12 @@
 {
-    "name": "rirunee.NovelEditor.Runtime",
-    "rootNamespace": "NovelEditorPlugin",
+    "name": "rirunee.DialogueDesigner.Editor",
+    "rootNamespace": "DialogueDesigner.Editor",
     "references": [
-        "GUID:f51ebe6a0ceec4240a699833d6309b23",
-        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+        "GUID:d9a89c1498959154a8b8c96725b392a8"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

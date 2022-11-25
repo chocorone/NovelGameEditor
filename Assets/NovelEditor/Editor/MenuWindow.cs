@@ -5,8 +5,8 @@ using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using System.Linq;
-using NovelEditorPlugin;
-namespace NovelEditorPlugin.Editor
+using DialogueDesigner;
+namespace DialogueDesigner.Editor
 {
     internal class MenuWindow : ScriptableObject, ISearchWindowProvider
     {

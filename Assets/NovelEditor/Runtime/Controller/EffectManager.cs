@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NovelEditorPlugin
+namespace DialogueDesigner
 {
     public class EffectManager
     {
@@ -43,11 +43,13 @@ namespace NovelEditorPlugin
             Blur = Resources.Load<Shader>("BlurEffect");
         }
 
-        public void InitMaterial(Image image){
+        public void InitMaterial(Image image)
+        {
             image.material = new Material(None);
         }
 
-        public void copyShader(Image from,Image dest){
+        public void copyShader(Image from, Image dest)
+        {
             dest.material = GameObject.Instantiate(from.material);
         }
 
@@ -84,7 +86,8 @@ namespace NovelEditorPlugin
                     image.material.shader = Blur;
                     break;
             }
-            if (image.material.HasProperty("_Strength")) {
+            if (image.material.HasProperty("_Strength"))
+            {
                 image.material.SetFloat("_Strength", strength);
             }
         }

@@ -6,7 +6,7 @@ using System;
 using System.Threading;
 
 
-namespace NovelEditorPlugin
+namespace DialogueDesigner
 {
     public class NovelCharaImage : NovelImage
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 
-namespace NovelEditorPlugin
+namespace DialogueDesigner
 {
     [RequireComponent(typeof(NovelUIManager))]
     public class NovelPlayer : MonoBehaviour
@@ -77,7 +77,7 @@ namespace NovelEditorPlugin
             }
         }
 
-        public void Play(NovelData data, bool hideAfterPlay, int paragraphNum = 0, int dialogueNum = 0)
+        public void Play(NovelData data, bool hideAfterPlay = false, int paragraphNum = 0, int dialogueNum = 0, string paragraphID = "")
         {
             _noveldata = data;
             _hideAfterPlay = hideAfterPlay;

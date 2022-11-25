@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using NovelEditorPlugin;
-namespace NovelEditorPlugin.Editor
+using DialogueDesigner;
+namespace DialogueDesigner.Editor
 {
     //ParagraphDataを仮で表示するためのもの
     internal class TempParagraph : ScriptableObject

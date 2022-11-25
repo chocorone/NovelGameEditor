@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NovelEditorPlugin
+namespace DialogueDesigner
 {
     public enum HowInput
     {

@@ -5,9 +5,9 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using NovelEditorPlugin;
+using DialogueDesigner;
 
-namespace NovelEditorPlugin.Editor
+namespace DialogueDesigner.Editor
 {
     /// <summary>
     /// ウィンドウを表示するためのクラス

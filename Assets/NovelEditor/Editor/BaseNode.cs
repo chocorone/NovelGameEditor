@@ -4,9 +4,9 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor;
-using NovelEditorPlugin;
+using DialogueDesigner;
 
-namespace NovelEditorPlugin.Editor
+namespace DialogueDesigner.Editor
 {
     internal abstract class BaseNode : Node
     {
