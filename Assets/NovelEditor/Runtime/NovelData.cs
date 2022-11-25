@@ -149,6 +149,7 @@ namespace NovelEditor
             [SerializeField, HideInInspector] int _index;
             [SerializeField, HideInInspector] Rect _nodePosition;
             [SerializeField, HideInInspector] int _nextParagraphIndex = -1;
+            public string name;
             #endregion
 
             #region プロパティ
@@ -253,6 +254,10 @@ namespace NovelEditor
                 _dialogueList = newDialogueList;
             }
 
+            /// <summary>
+            /// 現在の背景、立ち絵の情報を更新するための関数
+            /// </summary>
+            /// <param name="editingData">このデータが属するNovelData</param>
             internal void UpdateOrder(NovelData editingData)
             {
                 int back = 0;
