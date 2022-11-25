@@ -25,5 +25,23 @@ namespace NovelEditor.Editor
             // 生成したゲームオブジェクトを選択状態に
             Selection.activeObject = obj;
         }
+
+        [MenuItem("GameObject/UI/ChoiceButton", false, 10)]
+        private static void CreateChoiceButton(MenuCommand menuCommand)
+        {
+            // ゲームオブジェクトを生成します
+            var button = Resources.Load<GameObject>("ChoiceButton"); ;
+
+            var obj = GameObject.Instantiate(button);
+
+            // 親を設定して同じレイヤーを継承
+            GameObjectUtility.SetParentAndAlign(obj, menuCommand.context as GameObject);
+
+            // Undo できるように
+            Undo.RegisterCreatedObjectUndo(obj, "Create Button");
+
+            // 生成したゲームオブジェクトを選択状態に
+            Selection.activeObject = obj;
+        }
     }
 }
