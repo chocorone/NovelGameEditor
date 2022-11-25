@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System;
-using NovelEditorPlugin;
+using DialogueDesigner;
 
-namespace NovelEditorPlugin.Editor
+namespace DialogueDesigner.Editor
 {
     /// <summary>
     /// NovelEditorを制御するためのクラス

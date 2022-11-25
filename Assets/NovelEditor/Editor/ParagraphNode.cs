@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEditor;
-using NovelEditorPlugin;
+using DialogueDesigner;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Linq;
 using Newtonsoft.Json.Linq;
 
 
-namespace NovelEditorPlugin.Editor
+namespace DialogueDesigner.Editor
 {
     internal class ParagraphNode : BaseNode
     {

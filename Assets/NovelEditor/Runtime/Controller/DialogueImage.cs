@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using System;
 
-namespace NovelEditorPlugin
+namespace DialogueDesigner
 {
     public class DialogueImage : NovelImage
     {

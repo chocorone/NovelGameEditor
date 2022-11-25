@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 
-namespace NovelEditorPlugin
+namespace DialogueDesigner
 {
     public class ImageManager
     {
