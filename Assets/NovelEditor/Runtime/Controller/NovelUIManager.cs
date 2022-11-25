@@ -23,41 +23,35 @@ namespace NovelEditor
         [SerializeField] TextMeshProUGUI _nameText;
         [SerializeField] CanvasGroup UIparents;
 
+        private Sprite _nonameDialogueSprites;
+        private Sprite _dialogueSprite;
 
-        public void Init(float charaFadeTime)
+
+        internal void Init(float charaFadeTime, Sprite nonameDialogueSprite, Sprite dialogueSprite)
         {
             NovelCanvas = GetComponent<CanvasGroup>();
             imageManager = new ImageManager(_charaTransform, _backGround, _dialogueImage, charaFadeTime);
-        }
-
-        internal void SetStop()
-        {
-
-        }
-
-        internal void SetStop(bool stop)
-        {
-            if (stop)
-            {
-                //dialogueField.IsStop = true;
-            }
-            else
-            {
-                //dialogueField.IsStop = false;
-            }
-
+            _dialogueSprite = dialogueSprite;
+            _nonameDialogueSprites = nonameDialogueSprite;
         }
 
         internal void Reset(List<Image> data)
         {
             imageManager.Init(data);
 
+            DeleteText();
+        }
+
+        internal void FlashText()
+        {
+            _dialogueText.FlushText();
+        }
+
+        internal void DeleteText()
+        {
             //テキストを初期化
-
-            //選択肢を全部消す
-
-            //キャラのロケーションをリセットとか
-            //imagemanager.Init(data);
+            _dialogueText.DeleteText();
+            _nameText.text = "";
         }
 
         internal void SetDisplay(bool display)
@@ -71,6 +65,20 @@ namespace NovelEditor
             {
                 NovelCanvas.alpha = 0;
                 NovelCanvas.interactable = false;
+            }
+        }
+
+        internal void SetUIDisplay(bool display)
+        {
+            if (display)
+            {
+                UIparents.alpha = 1;
+                UIparents.interactable = true;
+            }
+            else
+            {
+                UIparents.alpha = 0;
+                UIparents.interactable = false;
             }
         }
 
@@ -110,7 +118,7 @@ namespace NovelEditor
             return true;
         }
 
-        internal void UpdateNameText(NovelData.ParagraphData.Dialogue data)
+        void UpdateNameText(NovelData.ParagraphData.Dialogue data)
         {
             //名前のフォントなど変更
             _nameText.text = data.Name;
@@ -120,6 +128,15 @@ namespace NovelEditor
 
                 if (data.nameFont != null)
                     _nameText.font = data.nameFont;
+            }
+
+            if (data.Name == "")
+            {
+                _dialogueImage.image.sprite = _nonameDialogueSprites;
+            }
+            else
+            {
+                _dialogueImage.image.sprite = _dialogueSprite;
             }
         }
 
@@ -131,6 +148,11 @@ namespace NovelEditor
         internal void SetStopText(bool flag)
         {
             _dialogueText.IsStop = flag;
+        }
+
+        internal void SetTextSpeed(int speed)
+        {
+            _dialogueText.textSpeed = speed;
         }
     }
 }

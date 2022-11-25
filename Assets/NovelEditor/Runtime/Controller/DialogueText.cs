@@ -18,6 +18,8 @@ namespace NovelEditor
         internal int textSpeed = 6;
         public bool IsStop = false;
 
+        string nowText;
+
         void Awake()
         {
             tmpro = GetComponent<TextMeshProUGUI>();
@@ -49,6 +51,7 @@ namespace NovelEditor
         private async UniTask<bool> PlayText(string text, CancellationToken token)
         {
             tmpro.text = "";
+            nowText = text;
 
             List<string> words = SplitText(text);
 
@@ -57,7 +60,7 @@ namespace NovelEditor
             {
                 while (wordCnt < words.Count)
                 {
-                    await UniTask.Delay(textSpeed * 10, cancellationToken: token);
+                    await UniTask.Delay(250 / textSpeed, cancellationToken: token);
 
                     tmpro.text += words[wordCnt];
                     await UniTask.WaitUntil(() => !IsStop);
@@ -65,12 +68,15 @@ namespace NovelEditor
                 }
             }
             catch (OperationCanceledException)
-            {
-                tmpro.text += String.Join("", words.GetRange(wordCnt, words.Count - wordCnt));
-            }
+            { }
 
 
             return true;
+        }
+
+        internal void FlushText()
+        {
+            tmpro.text = nowText;
         }
 
         List<string> SplitText(string text)

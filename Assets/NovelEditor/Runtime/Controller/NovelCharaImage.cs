@@ -15,7 +15,7 @@ namespace NovelEditor
             Init();
         }
 
-        public async UniTask<bool> DissolveIn(Sprite sprite, Color color, float fadeTime, CancellationToken token)
+        internal async UniTask<bool> DissolveIn(Sprite sprite, Color color, float fadeTime, CancellationToken token)
         {
             if (_image.sprite == null)
             {
@@ -33,7 +33,7 @@ namespace NovelEditor
             return true;
         }
 
-        public async UniTask<bool> DissolveOut(Sprite sprite, Color color, float fadeTime, CancellationToken token)
+        internal async UniTask<bool> DissolveOut(Sprite sprite, Color color, float fadeTime, CancellationToken token)
         {
             if (_image.sprite == null)
             {

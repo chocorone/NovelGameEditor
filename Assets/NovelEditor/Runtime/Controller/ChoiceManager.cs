@@ -37,7 +37,6 @@ namespace NovelEditor
             var sendData = await UniTask.WhenAny(wait);
 
             cancel.Cancel();
-            cancel.Dispose();
             for (int i = 0; i < transform.childCount; i++)
             {
                 Destroy(transform.GetChild(i).gameObject);
@@ -49,7 +48,6 @@ namespace NovelEditor
         internal void ResetChoice()
         {
             cancel.Cancel();
-            cancel.Dispose();
             for (int i = 0; i < transform.childCount; i++)
             {
                 Destroy(transform.GetChild(i).gameObject);

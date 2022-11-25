@@ -17,7 +17,7 @@ namespace NovelEditor
 
         public Image image => _image;
 
-        public void Change(Sprite next)
+        internal void Change(Sprite next)
         {
             if (next == null)
             {
@@ -43,7 +43,7 @@ namespace NovelEditor
             EffectManager.Instance.InitMaterial(_image);
         }
 
-        public async UniTask<bool> Fade(Color from, Color dest, float fadeTime, CancellationToken token)
+        internal async UniTask<bool> Fade(Color from, Color dest, float fadeTime, CancellationToken token)
         {
             float alpha = 0;
             _image.color = from;
@@ -72,12 +72,12 @@ namespace NovelEditor
             return true;
         }
 
-        public void HideImage()
+        internal void HideImage()
         {
             _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
         }
 
-        public void DisplayImage()
+        internal void DisplayImage()
         {
             _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 1);
         }

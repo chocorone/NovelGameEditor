@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.EventSystems;
+using TMPro;
+
 
 namespace NovelEditor
 {
     public interface NovelInputProvider
     {
+
+
         bool GetNext();
         bool GetSkip();
         bool GetHideOrDisplay();
@@ -17,7 +22,20 @@ namespace NovelEditor
     {
         public bool GetNext()
         {
-            return Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0);
+            PointerEventData pointData = new PointerEventData(EventSystem.current);
+            List<RaycastResult> RayResult = new List<RaycastResult>();
+            pointData.position = Input.mousePosition;
+            EventSystem.current.RaycastAll(pointData, RayResult);
+            bool onUI = false;
+            foreach (var raycastResult in RayResult)
+            {
+                if (!raycastResult.gameObject.GetComponent<TextMeshProUGUI>())
+                    onUI = true;
+            }
+
+
+            return Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space) ||
+                (Input.GetMouseButtonDown(0) && !onUI);
         }
         public bool GetSkip()
         {
