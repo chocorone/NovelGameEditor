@@ -17,18 +17,31 @@ namespace NovelEditor
         TextMeshProUGUI tmpro;
         internal int textSpeed = 6;
         public bool IsStop = false;
-
         string nowText;
+
+        TMP_FontAsset defaultFont;
+        float defaultFontSize;
+        Color defaultFontColor;
 
         void Awake()
         {
             tmpro = GetComponent<TextMeshProUGUI>();
+            defaultFont = tmpro.font;
+            defaultFontSize = tmpro.fontSize;
+            defaultFontColor = tmpro.color;
         }
         internal async UniTask<bool> textUpdate(NovelData.ParagraphData.Dialogue data, CancellationToken token)
         {
             UpdateFont(data);
             //再生が終わったら通知したい
             return await PlayText(data.text, token);
+        }
+
+        internal void SetDefaultFont()
+        {
+            tmpro.font = defaultFont;
+            tmpro.fontSize = defaultFontSize;
+            tmpro.color = defaultFontColor;
         }
 
         internal void DeleteText()

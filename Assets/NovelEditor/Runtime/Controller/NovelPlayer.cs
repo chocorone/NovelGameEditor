@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using TMPro;
 
 namespace NovelEditor
 {
@@ -195,12 +196,15 @@ namespace NovelEditor
         {
             _novelData = saveData.novelData;
             _hideAfterPlay = hideAfterPlay;
+            _textCTS.Cancel();
+            _novelUI.FlashText();
 
             Reset();
 
             _nowDialogueNum = saveData.dialogueIndex + 1;
             _nowParagraph = _novelData.paragraphList[saveData.paragraphIndex];
-            _ParagraphName = ParagraphName;
+            _ParagraphName = saveData.ParagraphName;
+            _choiceName = saveData.choiceName;
 
             //復元、新しいデータをとりあえず再生
             NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.LoadDialogue(saveData);
@@ -246,7 +250,7 @@ namespace NovelEditor
             if (newData.next == Next.Choice)
             {
                 _nowParagraph = novelData.paragraphList[newData.ParagraphIndex];
-                _nowDialogueNum = _nowParagraph.dialogueList.Count - 1;
+                _nowDialogueNum = _nowParagraph.dialogueList.Count;
             }
             SetNextDialogue(newData.dialogue);
         }
@@ -272,7 +276,7 @@ namespace NovelEditor
                 else
                 {
                     _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
-                    _nowDialogueNum = 0;
+                    _nowDialogueNum = 1;
                 }
                 SetNextDialogue(newData);
 
@@ -281,7 +285,7 @@ namespace NovelEditor
 
         public NovelSaveData save()
         {
-            return DataLoader.Instance.SaveDialogue(novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID);
+            return DataLoader.Instance.SaveDialogue(novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID, ChoiceName, ParagraphName);
         }
 
         public void SetInputProvider(NovelInputProvider input)
@@ -462,10 +466,12 @@ namespace NovelEditor
         {
             _isImageChangeing = true;
             _imageCTS = new CancellationTokenSource();
+            _novelUI.DeleteText();
             _isImageChangeing = !await _novelUI.SetNextImage(newData, _imageCTS.Token);
             _audioPlayer.SetSound(newData);
             _textCTS = new CancellationTokenSource();
             _isReading = true;
+            _novelUI.SetDefaultFont();
             _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
         }
 

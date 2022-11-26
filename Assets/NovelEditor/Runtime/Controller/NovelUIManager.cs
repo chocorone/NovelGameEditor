@@ -151,6 +151,11 @@ namespace NovelEditor
             _dialogueText.IsStop = flag;
         }
 
+        internal void SetDefaultFont()
+        {
+            _dialogueText.SetDefaultFont();
+        }
+
         internal void SetTextSpeed(int speed)
         {
             _dialogueText.textSpeed = speed;
