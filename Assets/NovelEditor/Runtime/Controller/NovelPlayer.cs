@@ -251,8 +251,13 @@ namespace NovelEditor
             {
                 _nowParagraph = novelData.paragraphList[newData.ParagraphIndex];
                 _nowDialogueNum = _nowParagraph.dialogueList.Count;
+                SetNextDialogue(newData.dialogue);
             }
-            SetNextDialogue(newData.dialogue);
+            else
+            {
+                end();
+            }
+
         }
 
         public void SkipNextNode()
