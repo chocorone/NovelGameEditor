@@ -41,6 +41,7 @@ namespace NovelEditor
             _image = GetComponent<Image>();
             _defaultColor = _image.color;
             EffectManager.Instance.InitMaterial(_image);
+            _image.raycastTarget = false;
         }
 
         internal async UniTask<bool> Fade(Color from, Color dest, float fadeTime, CancellationToken token)
