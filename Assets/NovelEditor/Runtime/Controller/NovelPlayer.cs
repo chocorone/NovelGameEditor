@@ -362,12 +362,7 @@ namespace NovelEditor
 
         void Update()
         {
-            if (!_isPlaying || _isImageChangeing)
-            {
-                return;
-            }
-
-            if (_isChoicing)
+            if (!_isPlaying || _isImageChangeing || !_isDisplay)
             {
                 return;
             }
@@ -378,6 +373,11 @@ namespace NovelEditor
                     HideUI();
                 else if (!_isUIDisplay)
                     DisplayUI();
+            }
+
+            if (_isChoicing || !_isUIDisplay)
+            {
+                return;
             }
 
             if (_inputProvider.GetNext())
