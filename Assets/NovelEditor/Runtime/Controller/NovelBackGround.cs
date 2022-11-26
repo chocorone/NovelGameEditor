@@ -22,7 +22,6 @@ namespace NovelEditor
             backObj.transform.SetParent(this.transform);
             CopyRectTransformSize(backTransform, backObj);
             _backFade = backObj.gameObject.AddComponent<NovelImage>();
-            _backFade.image.raycastTarget = false;
             _backFade.HideImage();
 
             RectTransform frontObj = new GameObject("frontFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
@@ -30,14 +29,12 @@ namespace NovelEditor
             frontObj.transform.SetSiblingIndex(2);
             CopyRectTransformSize(backTransform, frontObj);
             _frontFade = frontObj.gameObject.AddComponent<NovelImage>();
-            _frontFade.image.raycastTarget = false;
             _frontFade.HideImage();
 
             RectTransform allObj = new GameObject("allFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
             allObj.transform.SetParent(this.transform.parent);
             CopyRectTransformSize(backTransform, allObj);
             _allFade = allObj.gameObject.AddComponent<NovelImage>();
-            _allFade.image.raycastTarget = false;
             _allFade.HideImage();
         }
 
