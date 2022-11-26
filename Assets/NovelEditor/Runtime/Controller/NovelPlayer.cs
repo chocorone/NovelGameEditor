@@ -191,7 +191,7 @@ namespace NovelEditor
             _isPlaying = true;
         }
 
-        public async void Load(NovelSaveData saveData, bool hideAfterPlay)
+        public void Load(NovelSaveData saveData, bool hideAfterPlay)
         {
             _novelData = saveData.novelData;
             _hideAfterPlay = hideAfterPlay;
@@ -208,13 +208,7 @@ namespace NovelEditor
             UnPause();
             _isPlaying = true;
 
-            _isImageChangeing = true;
-            _imageCTS = new CancellationTokenSource();
-            _isImageChangeing = !await _novelUI.SetNextImage(newData, _imageCTS.Token);
-            _audioPlayer.SetSound(newData);
-            _textCTS = new CancellationTokenSource();
-            _isReading = true;
-            _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
+            SetNextDialogue(newData);
         }
 
         public void Pause()
@@ -243,36 +237,18 @@ namespace NovelEditor
 
         public void Skip()
         {
-
-            Debug.Log("Skip");
             if (_isChoicing || _isImageChangeing)
             {
                 return;
             }
             _textCTS.Cancel();
-            while (true)
+            SkipedData newData = DataLoader.Instance.Skip(novelData, _nowParagraph, _nowDialogueNum, _passedParagraphID, _ParagraphName);
+            if (newData.next == Next.Choice)
             {
-                Debug.Log(_nowParagraph.index);
-                //選択肢を表示
-                if (_nowParagraph.next == Next.Choice)
-                {
-                    _nowDialogueNum = _nowParagraph.dialogueList.Count - 1;
-                    SetNext();
-                    break;
-                }
-                else
-                {
-                    //選択肢のノードが続きになければ終わる
-                    if (_nowParagraph.next == Next.End || _nowParagraph.nextParagraphIndex == -1)
-                    {
-                        end();
-                        break;
-                    }
-                    _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
-                    _ParagraphName.Add(_nowParagraph.name);
-                    _passedParagraphID.Add(_nowParagraph.index);
-                }
+                _nowParagraph = novelData.paragraphList[newData.ParagraphIndex];
+                _nowDialogueNum = _nowParagraph.dialogueList.Count - 1;
             }
+            SetNextDialogue(newData.dialogue);
         }
 
         public void SkipNextNode()
@@ -280,15 +256,25 @@ namespace NovelEditor
             if (!_isChoicing && !_isImageChangeing)
             {
                 _textCTS.Cancel();
+
+                NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.SkipNextNode(novelData, _nowParagraph, _nowDialogueNum);
+
+                if (newData == null || (_nowParagraph.next == Next.Continue && _nowParagraph.nextParagraphIndex == -1))
+                {
+                    end();
+                    return;
+                }
+
                 if (_nowParagraph.next == Next.Choice)
                 {
                     _nowDialogueNum = _nowParagraph.dialogueList.Count - 1;
-                    SetNextDialogue();
                 }
                 else
                 {
-                    SetNextParagraph(_nowParagraph.nextParagraphIndex);
+                    _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
+                    _nowDialogueNum = 0;
                 }
+                SetNextDialogue(newData);
 
             }
         }
@@ -469,6 +455,18 @@ namespace NovelEditor
             _choiceName.Add(ans.name);
             _isChoicing = false;
             SetNextParagraph(ans.nextParagraphIndex);
+        }
+
+
+        async void SetNextDialogue(NovelData.ParagraphData.Dialogue newData)
+        {
+            _isImageChangeing = true;
+            _imageCTS = new CancellationTokenSource();
+            _isImageChangeing = !await _novelUI.SetNextImage(newData, _imageCTS.Token);
+            _audioPlayer.SetSound(newData);
+            _textCTS = new CancellationTokenSource();
+            _isReading = true;
+            _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
         }
 
         async void SetNextDialogue()
