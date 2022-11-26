@@ -172,6 +172,24 @@ namespace NovelEditor
 
         #endregion
 
+        #region delegate
+        public delegate void OnBeginDelegate();
+        public OnBeginDelegate OnBegin;
+
+        public delegate void OnEndDelegate();
+        public OnEndDelegate OnEnd;
+
+        public delegate void OnDialogueChangedDelegate();
+        public OnDialogueChangedDelegate OnDialogueChanged;
+
+        public delegate void NodeChangedDelegate(string nodeName);
+        public NodeChangedDelegate ParagraphNodeChanged;
+        public NodeChangedDelegate OnChoiced;
+
+
+
+        #endregion
+
 
         #region publicMethod
 
@@ -184,12 +202,15 @@ namespace NovelEditor
 
             _nowDialogueNum = 0;
             _nowParagraph = _novelData.paragraphList[0];
-            _ParagraphName.Add(_nowParagraph.name);
+            _ParagraphName.Add(_nowParagraph.nodeName);
+            ParagraphNodeChanged(_nowParagraph.nodeName);
             _passedParagraphID.Add(0);
-            SetNext();
 
             UnPause();
             _isPlaying = true;
+            OnBegin();
+
+            SetNext();
         }
 
         public void Load(NovelSaveData saveData, bool hideAfterPlay)
@@ -211,6 +232,7 @@ namespace NovelEditor
 
             UnPause();
             _isPlaying = true;
+            OnBegin();
 
             SetNextDialogue(newData);
         }
@@ -282,7 +304,8 @@ namespace NovelEditor
                 {
                     _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
                     _nowDialogueNum = 0;
-                    _ParagraphName.Add(_nowParagraph.name);
+                    _ParagraphName.Add(_nowParagraph.nodeName);
+                    ParagraphNodeChanged(_nowParagraph.nodeName);
                 }
                 SetNextDialogue(newData);
 
@@ -415,7 +438,8 @@ namespace NovelEditor
             else
             {
                 _nowParagraph = _novelData.paragraphList[nextIndex];
-                _ParagraphName.Add(_nowParagraph.name);
+                _ParagraphName.Add(_nowParagraph.nodeName);
+                ParagraphNodeChanged(_nowParagraph.nodeName);
                 _nowDialogueNum = 0;
                 SetNextDialogue();
             }
@@ -462,7 +486,8 @@ namespace NovelEditor
             }
 
             var ans = await _choiceManager.WaitChoice(list);
-            _choiceName.Add(ans.name);
+            _choiceName.Add(ans.nodeName);
+            OnChoiced(ans.nodeName);
             _isChoicing = false;
             SetNextParagraph(ans.nextParagraphIndex);
         }
@@ -480,6 +505,7 @@ namespace NovelEditor
             _novelUI.SetDefaultFont();
             _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
             _nowDialogueNum++;
+            OnDialogueChanged();
         }
 
         async void SetNextDialogue()
@@ -492,6 +518,7 @@ namespace NovelEditor
             _isReading = true;
             _isReading = !await _novelUI.SetNextText(_nowParagraph.dialogueList[_nowDialogueNum], _textCTS.Token);
             _nowDialogueNum++;
+            OnDialogueChanged();
         }
 
         async void end()
@@ -503,6 +530,7 @@ namespace NovelEditor
                 _audioPlayer.AllStop();
                 await _novelUI.FadeOut(_hideFadeTime, _endFadeCTS.Token);
                 SetDisplay(false);
+                OnEnd();
             }
         }
 
