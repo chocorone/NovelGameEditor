@@ -191,19 +191,19 @@ namespace NovelEditor
             _isPlaying = true;
         }
 
-        public async void Load(NovelData data, bool hideAfterPlay, int dialogueIndex, int paragraphID, List<int> passedParagraphId, List<string> ParagraphName)
+        public async void Load(NovelSaveData saveData, bool hideAfterPlay)
         {
-            _novelData = data;
+            _novelData = saveData.novelData;
             _hideAfterPlay = hideAfterPlay;
 
             Reset();
 
-            _nowDialogueNum = dialogueIndex + 1;
-            _nowParagraph = _novelData.paragraphList[paragraphID];
+            _nowDialogueNum = saveData.dialogueIndex + 1;
+            _nowParagraph = _novelData.paragraphList[saveData.paragraphIndex];
             _ParagraphName = ParagraphName;
 
             //復元、新しいデータをとりあえず再生
-            NovelData.ParagraphData.Dialogue newData = new DataLoader().LoadDialogue(_novelData, paragraphID, dialogueIndex, passedParagraphId);
+            NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.LoadDialogue(saveData);
 
             UnPause();
             _isPlaying = true;
@@ -293,19 +293,9 @@ namespace NovelEditor
             }
         }
 
-        public int GetNowParagraphID()
+        public NovelSaveData save()
         {
-            return _nowParagraph.index;
-        }
-
-        public int GetNowDialogueIndex()
-        {
-            return _nowDialogueNum;
-        }
-
-        public List<int> GetPassedParagraphID()
-        {
-            return _passedParagraphID;
+            return DataLoader.Instance.SaveDialogue(novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID);
         }
 
         public void SetInputProvider(NovelInputProvider input)
