@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using TMPro;
 
 namespace NovelEditor
 {
@@ -69,9 +70,9 @@ namespace NovelEditor
             return data;
         }
 
-        internal NovelSaveData SaveDialogue(NovelData novelData, int paragraphIndex, int dialogueIndex, List<int> passedParagraphId)
+        internal NovelSaveData SaveDialogue(NovelData novelData, int paragraphIndex, int dialogueIndex, List<int> passedParagraphIdList, List<string> choiceName, List<string> ParagraphName)
         {
-            NovelSaveData savedData = new(novelData, paragraphIndex, dialogueIndex, passedParagraphId);
+            NovelSaveData savedData = new(novelData, paragraphIndex, dialogueIndex, passedParagraphIdList, choiceName, ParagraphName);
             return savedData;
         }
 
@@ -121,6 +122,8 @@ namespace NovelEditor
         internal NovelData.ParagraphData.Dialogue SkipNextNode(NovelData novelData, NovelData.ParagraphData nowParagraphData, int dialogueIndex)
         {
             progress = 0;
+            if (dialogueIndex >= nowParagraphData.dialogueList.Count)
+                dialogueIndex = nowParagraphData.dialogueList.Count - 1;
             NovelData.ParagraphData.Dialogue first = nowParagraphData.dialogueList[dialogueIndex];
             NovelData.ParagraphData.Dialogue data = JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(first));
 
@@ -173,6 +176,7 @@ namespace NovelEditor
 
             if (nowDialogue.changeFont)
             {
+                data.changeFont = true;
                 data.font = nowDialogue.font;
                 data.fontColor = nowDialogue.fontColor;
                 data.fontSize = nowDialogue.fontSize;
@@ -180,6 +184,7 @@ namespace NovelEditor
 
             if (nowDialogue.changeNameFont)
             {
+                data.changeNameFont = true;
                 data.nameFont = nowDialogue.nameFont;
                 data.nameColor = nowDialogue.nameColor;
             }
@@ -210,18 +215,22 @@ namespace NovelEditor
 
     public struct NovelSaveData
     {
-        public NovelSaveData(NovelData novelData, int paragraphIndex, int dialogueIndex, List<int> passedParagraphId)
+        public NovelSaveData(NovelData novelData, int paragraphIndex, int dialogueIndex, List<int> passedParagraphId, List<string> choiceName, List<string> ParagraphName)
         {
             this.novelData = novelData;
             this.paragraphIndex = paragraphIndex;
             this.dialogueIndex = dialogueIndex;
             this.passedParagraphId = passedParagraphId;
+            this.ParagraphName = ParagraphName;
+            this.choiceName = choiceName;
         }
-
         public NovelData novelData;
         public int paragraphIndex;
         public int dialogueIndex;
         public List<int> passedParagraphId;
+        public List<string> choiceName;
+        public List<string> ParagraphName;
+
     }
 
     internal struct SkipedData
