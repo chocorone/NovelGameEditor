@@ -374,8 +374,6 @@ namespace NovelEditor
                 public int[] charaEffectStrength;
                 public Effect DialogueEffect;
                 public int DialogueEffectStrength;
-                public Effect AllEffect;
-                public int AllEffectStrength;
             }
 
         }
