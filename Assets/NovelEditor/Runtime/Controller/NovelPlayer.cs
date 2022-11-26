@@ -201,7 +201,7 @@ namespace NovelEditor
 
             Reset();
 
-            _nowDialogueNum = saveData.dialogueIndex + 1;
+            _nowDialogueNum = saveData.dialogueIndex;
             _nowParagraph = _novelData.paragraphList[saveData.paragraphIndex];
             _ParagraphName = saveData.ParagraphName;
             _choiceName = saveData.choiceName;
@@ -246,7 +246,7 @@ namespace NovelEditor
                 return;
             }
             _textCTS.Cancel();
-            SkipedData newData = DataLoader.Instance.Skip(novelData, _nowParagraph, _nowDialogueNum, _passedParagraphID, _ParagraphName);
+            SkipedData newData = DataLoader.Instance.Skip(novelData, _nowParagraph, _nowDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
             if (newData.next == Next.Choice)
             {
                 _nowParagraph = novelData.paragraphList[newData.ParagraphIndex];
@@ -261,7 +261,7 @@ namespace NovelEditor
             {
                 _textCTS.Cancel();
 
-                NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.SkipNextNode(novelData, _nowParagraph, _nowDialogueNum);
+                NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.SkipNextNode(novelData, _nowParagraph, _nowDialogueNum, _novelUI.GetNowBack());
 
                 if (newData == null || (_nowParagraph.next == Next.Continue && _nowParagraph.nextParagraphIndex == -1))
                 {
@@ -271,12 +271,13 @@ namespace NovelEditor
 
                 if (_nowParagraph.next == Next.Choice)
                 {
-                    _nowDialogueNum = _nowParagraph.dialogueList.Count - 1;
+                    _nowDialogueNum = _nowParagraph.dialogueList.Count;
                 }
                 else
                 {
                     _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
-                    _nowDialogueNum = 1;
+                    _nowDialogueNum = 0;
+                    _ParagraphName.Add(_nowParagraph.name);
                 }
                 SetNextDialogue(newData);
 
@@ -473,6 +474,7 @@ namespace NovelEditor
             _isReading = true;
             _novelUI.SetDefaultFont();
             _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
+            _nowDialogueNum++;
         }
 
         async void SetNextDialogue()

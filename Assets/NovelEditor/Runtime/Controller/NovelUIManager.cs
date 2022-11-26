@@ -160,5 +160,10 @@ namespace NovelEditor
         {
             _dialogueText.textSpeed = speed;
         }
+
+        internal Sprite GetNowBack()
+        {
+            return _backGround.image.sprite;
+        }
     }
 }
