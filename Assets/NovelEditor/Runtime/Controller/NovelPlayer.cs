@@ -403,6 +403,7 @@ namespace NovelEditor
 
             if (_inputProvider.GetHideOrDisplay())
             {
+                 Debug.Log("Hide");
                 if (_isUIDisplay)
                     HideUI();
                 if (!_isUIDisplay)
@@ -522,7 +523,9 @@ namespace NovelEditor
 
         void allCancel()
         {
-            _audioPlayer.AllStop();
+            try{
+                _audioPlayer.AllStop();
+            }catch{}    
             _textCTS.Cancel();
             _imageCTS.Cancel();
             _endFadeCTS.Cancel();
