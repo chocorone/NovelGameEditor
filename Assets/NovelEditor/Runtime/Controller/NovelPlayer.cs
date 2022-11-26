@@ -102,7 +102,7 @@ namespace NovelEditor
                 {
                     Pause();
                 }
-                _novelUI.SetDisplay(true);
+                _novelUI.SetDisplay(value);
                 _isDisplay = value;
             }
         }
