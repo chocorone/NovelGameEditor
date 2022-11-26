@@ -80,6 +80,7 @@ namespace NovelEditor
                 UIparents.alpha = 0;
                 UIparents.interactable = false;
             }
+            Debug.Log(UIparents.alpha);
         }
 
         internal async UniTask<bool> FadeOut(float time, CancellationToken token)
