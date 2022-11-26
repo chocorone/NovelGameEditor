@@ -120,7 +120,7 @@ namespace NovelEditor
                         return skipData;
                     }
                     nowParagraphData = novelData.paragraphList[nowParagraphData.nextParagraphIndex];
-                    paragraphName.Add(nowParagraphData.name);
+                    paragraphName.Add(nowParagraphData.nodeName);
                     passedParagraphID.Add(nowParagraphData.index);
                 }
             }

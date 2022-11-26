@@ -149,7 +149,7 @@ namespace NovelEditor
             [SerializeField, HideInInspector] int _index;
             [SerializeField, HideInInspector] Rect _nodePosition;
             [SerializeField, HideInInspector] int _nextParagraphIndex = -1;
-            public string name;
+            public string nodeName;
             #endregion
 
             #region プロパティ
