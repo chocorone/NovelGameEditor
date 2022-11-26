@@ -160,12 +160,9 @@ namespace NovelEditor
                 }
             }
             catch (OperationCanceledException)
-            { }
-            finally
-            {
-                _isFading = false;
-                player.volume = dest;
-            }
+            { return false; }
+            _isFading = false;
+            player.volume = dest;
             return true;
         }
 
