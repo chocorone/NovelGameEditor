@@ -197,14 +197,14 @@ namespace NovelEditor
                 data.nameColor = nowDialogue.nameColor;
             }
 
-            data.SE = nowDialogue.SE;
+            data.SE = nowDialogue.SEStyle != SoundStyle.UnChange ? nowDialogue.SE : data.SE;
             data.SEStyle = nowDialogue.SEStyle != SoundStyle.UnChange ? nowDialogue.SEStyle : data.SEStyle;
             data.SELoop = nowDialogue.SELoop;
             data.SECount = nowDialogue.SECount;
             data.SEFadeTime = nowDialogue.SEFadeTime;
             data.SEEndFadeTime = nowDialogue.SEEndFadeTime;
 
-            data.BGM = nowDialogue.BGM;
+            data.BGM = nowDialogue.BGMStyle != SoundStyle.UnChange ? nowDialogue.BGM : data.BGM;
             data.BGMStyle = nowDialogue.BGMStyle != SoundStyle.UnChange ? nowDialogue.BGMStyle : data.BGMStyle;
             data.BGMLoop = nowDialogue.BGMLoop;
             data.BGMCount = nowDialogue.BGMCount;
