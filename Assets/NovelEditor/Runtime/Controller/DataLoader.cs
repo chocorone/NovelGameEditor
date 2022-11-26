@@ -32,6 +32,11 @@ namespace NovelEditor
             progress = 0;
             NovelData.ParagraphData.Dialogue first = savedData.novelData.paragraphList[savedData.passedParagraphId[0]].dialogueList[0];
             NovelData.ParagraphData.Dialogue data = JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(first));
+            if (data.BGMStyle == SoundStyle.UnChange)
+                data.BGMStyle = SoundStyle.Stop;
+
+            if (data.SEStyle == SoundStyle.UnChange)
+                data.SEStyle = SoundStyle.Stop;
 
             foreach (var i in savedData.passedParagraphId)
             {
@@ -72,14 +77,17 @@ namespace NovelEditor
 
         internal NovelSaveData SaveDialogue(NovelData novelData, int paragraphIndex, int dialogueIndex, List<int> passedParagraphIdList, List<string> choiceName, List<string> ParagraphName)
         {
-            NovelSaveData savedData = new(novelData, paragraphIndex, dialogueIndex, passedParagraphIdList, choiceName, ParagraphName);
+            NovelSaveData savedData = new(novelData, paragraphIndex, --dialogueIndex, passedParagraphIdList, choiceName, ParagraphName);
             return savedData;
         }
 
-        internal SkipedData Skip(NovelData novelData, NovelData.ParagraphData nowParagraphData, int dialogueIndex, List<int> passedParagraphID, List<string> paragraphName)
+        internal SkipedData Skip(NovelData novelData, NovelData.ParagraphData nowParagraphData, int dialogueIndex, List<int> passedParagraphID, List<string> paragraphName, Sprite nowBack)
         {
+            if (dialogueIndex >= nowParagraphData.dialogueList.Count)
+                dialogueIndex = nowParagraphData.dialogueList.Count - 1;
             NovelData.ParagraphData.Dialogue first = nowParagraphData.dialogueList[dialogueIndex];
             NovelData.ParagraphData.Dialogue data = JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(first));
+            data.back = nowBack;
             SkipedData skipData = new SkipedData();
 
             while (true)
@@ -119,20 +127,20 @@ namespace NovelEditor
         }
 
 
-        internal NovelData.ParagraphData.Dialogue SkipNextNode(NovelData novelData, NovelData.ParagraphData nowParagraphData, int dialogueIndex)
+        internal NovelData.ParagraphData.Dialogue SkipNextNode(NovelData novelData, NovelData.ParagraphData nowParagraphData, int dialogueIndex, Sprite nowBack)
         {
             progress = 0;
             if (dialogueIndex >= nowParagraphData.dialogueList.Count)
                 dialogueIndex = nowParagraphData.dialogueList.Count - 1;
             NovelData.ParagraphData.Dialogue first = nowParagraphData.dialogueList[dialogueIndex];
             NovelData.ParagraphData.Dialogue data = JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(first));
-
+            data.back = nowBack;
             if (nowParagraphData.next == Next.End || (nowParagraphData.next == Next.Continue && nowParagraphData.nextParagraphIndex == -1))
             {
                 return null;
             }
 
-            for (int i = dialogueIndex + 1; i < nowParagraphData.dialogueList.Count; i++)
+            for (int i = dialogueIndex; i < nowParagraphData.dialogueList.Count; i++)
             {
                 SaveNext(data, nowParagraphData.dialogueList[i]);
                 progress += 100 / (nowParagraphData.dialogueList.Count - dialogueIndex);
