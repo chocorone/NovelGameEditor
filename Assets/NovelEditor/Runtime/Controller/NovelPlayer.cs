@@ -230,12 +230,14 @@ namespace NovelEditor
         public void HideUI()
         {
             _novelUI.SetUIDisplay(false);
+            Pause();
             _isUIDisplay = false;
         }
 
         public void DisplayUI()
         {
             _novelUI.SetUIDisplay(true);
+            UnPause();
             _isUIDisplay = true;
         }
 
@@ -374,10 +376,24 @@ namespace NovelEditor
 
         void Update()
         {
-            if (!_isPlaying || _isChoicing || _isImageChangeing)
+            if (!_isPlaying || _isImageChangeing)
             {
                 return;
             }
+
+            if (_isChoicing)
+            {
+                return;
+            }
+
+            if (_inputProvider.GetHideOrDisplay())
+            {
+                if (_isUIDisplay)
+                    HideUI();
+                else if (!_isUIDisplay)
+                    DisplayUI();
+            }
+
             if (_inputProvider.GetNext())
             {
                 //全部表示
@@ -401,14 +417,7 @@ namespace NovelEditor
                 _novelUI.SwitchStopText();
             }
 
-            if (_inputProvider.GetHideOrDisplay())
-            {
-                 Debug.Log("Hide");
-                if (_isUIDisplay)
-                    HideUI();
-                if (!_isUIDisplay)
-                    DisplayUI();
-            }
+
         }
 
         void SetNextParagraph(int nextIndex)
@@ -523,9 +532,11 @@ namespace NovelEditor
 
         void allCancel()
         {
-            try{
+            try
+            {
                 _audioPlayer.AllStop();
-            }catch{}    
+            }
+            catch { }
             _textCTS.Cancel();
             _imageCTS.Cancel();
             _endFadeCTS.Cancel();

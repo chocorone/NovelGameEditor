@@ -44,9 +44,7 @@ namespace NovelEditor
         }
         public override bool GetHideOrDisplay()
         {
-            Debug.Log("hide");
-            Debug.Log(Input.GetKeyDown(KeyCode.H));
-            return Input.GetKey(KeyCode.H);
+            return Input.GetKeyDown(KeyCode.H);
         }
 
         public override bool GetStopOrStart()
