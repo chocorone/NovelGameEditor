@@ -26,6 +26,8 @@ namespace NovelEditor
         private Sprite _nonameDialogueSprites;
         private Sprite _dialogueSprite;
 
+        public bool canFlush => _dialogueText.canFlush;
+
 
         internal void Init(float charaFadeTime, Sprite nonameDialogueSprite, Sprite dialogueSprite)
         {
