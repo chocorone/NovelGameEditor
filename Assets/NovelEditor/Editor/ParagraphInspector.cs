@@ -50,6 +50,18 @@ namespace NovelEditor.Editor
             }
             _root.Add(label);
 
+            var nameText = new IMGUIContainer(() =>
+            {
+                serializedObject.Update();
+
+                SerializedProperty nodeName = serializedObject.FindProperty("data").FindPropertyRelative("nodeName");
+                nodeName.stringValue = EditorGUILayout.TextField("ノードの名前(必要な場合のみ)", nodeName.stringValue);
+                serializedObject.ApplyModifiedProperties(); serializedObject.ApplyModifiedProperties();
+
+            });
+
+            _root.Add(nameText);
+
             var list = new ListView();
             list.reorderable = true;
             list.showBorder = true;
