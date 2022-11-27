@@ -15,6 +15,7 @@ namespace NovelEditor.Editor
             var novelUI = Resources.Load<GameObject>("NovelPlayer"); ;
 
             var obj = GameObject.Instantiate(novelUI);
+            obj.name = "NovelPlayer";
 
             // 親を設定して同じレイヤーを継承
             GameObjectUtility.SetParentAndAlign(obj, menuCommand.context as GameObject);
@@ -33,6 +34,7 @@ namespace NovelEditor.Editor
             var button = Resources.Load<GameObject>("ChoiceButton"); ;
 
             var obj = GameObject.Instantiate(button);
+            obj.name = "ChoiceButton";
 
             // 親を設定して同じレイヤーを継承
             GameObjectUtility.SetParentAndAlign(obj, menuCommand.context as GameObject);
