@@ -382,11 +382,11 @@ namespace NovelEditor
         //現在再生しているものをリセット
         void Reset()
         {
-            _isEnd = false;
             _novelUI.Reset(_novelData.locations);
             //選択肢を全部消す
             _choiceManager.ResetChoice();
             _isChoicing = false;
+            _isEnd = false;
 
             //今までのやつを消す
             _choiceName.Clear();
@@ -543,15 +543,16 @@ namespace NovelEditor
             _isEnd = true;
             if (_hideAfterPlay)
             {
+                _isImageChangeing = true;
                 _endFadeCTS = new CancellationTokenSource();
                 _audioPlayer.AllStop();
                 await _novelUI.FadeOut(_hideFadeTime, _endFadeCTS.Token);
                 SetDisplay(false);
                 if (OnEnd != null)
                     OnEnd();
+                _isImageChangeing = false;
             }
             _isPlaying = false;
-            Debug.Log("end");
         }
 
         void FlashText()
