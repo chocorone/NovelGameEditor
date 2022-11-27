@@ -71,7 +71,15 @@ namespace NovelEditor
 
         public override bool GetNext()
         {
-            return _nextButton.Any(key => Input.GetKeyDown(key));
+
+            return _nextButton.Any(key =>
+            {
+                if (key == KeyCode.Mouse0)
+                    return Input.GetKeyDown(key) && !OnUI();
+
+                return Input.GetKeyDown(key);
+            }
+            );
         }
         public override bool GetSkip()
         {
