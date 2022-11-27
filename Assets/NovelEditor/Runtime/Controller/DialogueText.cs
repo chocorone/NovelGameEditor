@@ -23,6 +23,8 @@ namespace NovelEditor
         float defaultFontSize;
         Color defaultFontColor;
 
+        public bool canFlush { get; private set; }
+
         void Awake()
         {
             tmpro = GetComponent<TextMeshProUGUI>();
@@ -63,6 +65,7 @@ namespace NovelEditor
 
         private async UniTask<bool> PlayText(string text, CancellationToken token)
         {
+            canFlush = false;
             tmpro.text = "";
             nowText = text;
 
@@ -73,6 +76,7 @@ namespace NovelEditor
             {
                 while (wordCnt < words.Count)
                 {
+                    canFlush = wordCnt > 0;
                     await UniTask.Delay(250 / textSpeed, cancellationToken: token);
 
                     tmpro.text += words[wordCnt];

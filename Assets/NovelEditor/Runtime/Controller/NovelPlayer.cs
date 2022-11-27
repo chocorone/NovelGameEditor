@@ -47,6 +47,7 @@ namespace NovelEditor
         private bool _isChoicing = false;
         private bool _isUIDisplay = true;
         private bool _mute = false;
+        private bool _isEnd = false;
 
         private List<string> _choiceName = new();
         private List<string> _ParagraphName = new();
@@ -379,8 +380,9 @@ namespace NovelEditor
         }
 
         //現在再生しているものをリセット
-        async void Reset()
+        void Reset()
         {
+            _isEnd = false;
             _novelUI.Reset(_novelData.locations);
             //選択肢を全部消す
             _choiceManager.ResetChoice();
@@ -416,11 +418,11 @@ namespace NovelEditor
             if (_inputProvider.GetNext())
             {
                 //全部表示
-                if (_isReading)
+                if (_isReading && _novelUI.canFlush)
                 {
                     FlashText();
                 }
-                else
+                else if (!_isReading)
                 {
                     SetNext();
                 }
@@ -499,8 +501,8 @@ namespace NovelEditor
             _choiceName.Add(ans.nodeName);
             if (OnChoiced != null)
                 OnChoiced(ans.nodeName);
-            _isChoicing = false;
             SetNextParagraph(ans.nextParagraphIndex);
+            _isChoicing = false;
         }
 
 
@@ -536,7 +538,9 @@ namespace NovelEditor
 
         async void end()
         {
-            _isPlaying = false;
+            if (_isEnd)
+                return;
+            _isEnd = true;
             if (_hideAfterPlay)
             {
                 _endFadeCTS = new CancellationTokenSource();
@@ -546,6 +550,8 @@ namespace NovelEditor
                 if (OnEnd != null)
                     OnEnd();
             }
+            _isPlaying = false;
+            Debug.Log("end");
         }
 
         void FlashText()
