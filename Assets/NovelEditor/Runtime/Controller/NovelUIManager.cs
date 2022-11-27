@@ -22,10 +22,6 @@ namespace NovelEditor
         [SerializeField] DialogueText _dialogueText;
         [SerializeField] TextMeshProUGUI _nameText;
         [SerializeField] CanvasGroup UIparents;
-
-        private Sprite _nonameDialogueSprites;
-        private Sprite _dialogueSprite;
-
         public bool canFlush => _dialogueText.canFlush;
 
 
@@ -33,8 +29,7 @@ namespace NovelEditor
         {
             NovelCanvas = GetComponent<CanvasGroup>();
             imageManager = new ImageManager(_charaTransform, _backGround, _dialogueImage, charaFadeTime);
-            _dialogueSprite = dialogueSprite;
-            _nonameDialogueSprites = nonameDialogueSprite;
+            _dialogueImage.SetDialogueSprite(dialogueSprite, nonameDialogueSprite);
         }
 
         internal void Reset(List<Image> data)
@@ -117,7 +112,8 @@ namespace NovelEditor
 
         internal async UniTask<bool> SetNextImage(NovelData.ParagraphData.Dialogue data, CancellationToken token)
         {
-            await imageManager.SetNextImage(data, token);
+            DeleteText();
+            await imageManager.SetNextImage(data, data.Name != "", token);
             return true;
         }
 
@@ -131,15 +127,6 @@ namespace NovelEditor
 
                 if (data.nameFont != null)
                     _nameText.font = data.nameFont;
-            }
-
-            if (data.Name == "")
-            {
-                _dialogueImage.image.sprite = _nonameDialogueSprites;
-            }
-            else
-            {
-                _dialogueImage.image.sprite = _dialogueSprite;
             }
         }
 

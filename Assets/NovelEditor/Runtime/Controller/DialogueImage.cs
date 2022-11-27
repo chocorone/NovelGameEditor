@@ -9,9 +9,31 @@ namespace NovelEditor
 {
     internal class DialogueImage : NovelImage
     {
+        Sprite NonameDialogueSprite;
+        Sprite DialogueSprite;
+
         void Awake()
         {
             Init();
+        }
+
+        internal void SetDialogueSprite(Sprite dialogueSprite, Sprite nonameDialogueSprite)
+        {
+            this.DialogueSprite = dialogueSprite;
+            this.NonameDialogueSprite = nonameDialogueSprite;
+        }
+
+        internal void ChangeDialogueSprite(bool hasName)
+        {
+            if (hasName)
+            {
+                Change(DialogueSprite);
+            }
+            else
+            {
+                Change(NonameDialogueSprite);
+            }
+
         }
     }
 }

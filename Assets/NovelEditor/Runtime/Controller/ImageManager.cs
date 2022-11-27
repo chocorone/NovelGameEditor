@@ -24,7 +24,7 @@ namespace NovelEditor
             _charaFadetime = charaFadeTime;
         }
 
-        internal async UniTask<bool> SetNextImage(NovelData.ParagraphData.Dialogue data, CancellationToken token)
+        internal async UniTask<bool> SetNextImage(NovelData.ParagraphData.Dialogue data, bool hasName, CancellationToken token)
         {
             switch (data.howBack)
             {
@@ -56,10 +56,12 @@ namespace NovelEditor
                     await _backGround.BackFadeIn(data, token);
                     ChangeAllCharaQuick(data.howCharas, data.charas, data.charaEffects, data.charaEffectStrength);
                     EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
+                    _dialogueImage.ChangeDialogueSprite(hasName);
                     EffectManager.Instance.SetEffect(_backGround.image, data.backEffect, data.backEffectStrength);
                     await _backGround.BackFadeOut(data, token);
                     break;
             }
+            _dialogueImage.ChangeDialogueSprite(hasName);
 
             return true;
         }
@@ -124,6 +126,7 @@ namespace NovelEditor
                 _charas.Add(charaImage);
             }
             _backGround.Change(null);
+            _dialogueImage.Change(null);
         }
 
     }
