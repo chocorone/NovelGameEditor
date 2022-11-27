@@ -112,7 +112,10 @@ namespace NovelEditor
         internal void Init(List<Image> data)
         {
             _charas.Clear();
-            _charaTransform.DetachChildren();
+            for (int i = 0; i < _charaTransform.childCount; i++)
+            {
+                GameObject.Destroy(_charaTransform.GetChild(i).gameObject);
+            }
             foreach (var image in data)
             {
                 var obj = GameObject.Instantiate(image, _charaTransform);
@@ -120,6 +123,7 @@ namespace NovelEditor
                 charaImage.Change(null);
                 _charas.Add(charaImage);
             }
+            _backGround.Change(null);
         }
 
     }
