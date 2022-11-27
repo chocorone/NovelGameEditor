@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using System;
 using System.Threading;
 using TMPro;
 
@@ -207,11 +208,11 @@ namespace NovelEditor
             _passedParagraphID.Add(0);
 
             UnPause();
-            _isPlaying = true;
             if (OnBegin != null)
                 OnBegin();
 
             SetNext();
+            _isPlaying = true;
         }
 
         public void Load(NovelSaveData saveData, bool hideAfterPlay)
@@ -232,11 +233,12 @@ namespace NovelEditor
             NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.LoadDialogue(saveData);
 
             UnPause();
-            _isPlaying = true;
+
             if (OnLoad != null)
                 OnLoad();
 
             SetNextDialogue(newData);
+            _isPlaying = true;
         }
 
         public void Pause()
@@ -377,7 +379,7 @@ namespace NovelEditor
         }
 
         //現在再生しているものをリセット
-        void Reset()
+        async void Reset()
         {
             _novelUI.Reset(_novelData.locations);
             //選択肢を全部消す
@@ -387,6 +389,8 @@ namespace NovelEditor
             //今までのやつを消す
             _choiceName.Clear();
             _ParagraphName.Clear();
+
+            SetDisplay(true);
         }
 
         void Update()
