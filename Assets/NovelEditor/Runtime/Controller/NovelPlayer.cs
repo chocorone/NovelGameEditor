@@ -457,7 +457,6 @@ namespace NovelEditor
                 switch (_nowParagraph.next)
                 {
                     case Next.Choice:
-                        Debug.Log("choice");
                         SetChoice();
                         break;
                     case Next.Continue:
@@ -509,8 +508,8 @@ namespace NovelEditor
             _textCTS = new CancellationTokenSource();
             _isReading = true;
             _novelUI.SetDefaultFont();
-            _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
             _nowDialogueNum++;
+            _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
             if (OnDialogueChanged != null)
                 OnDialogueChanged();
         }
@@ -523,8 +522,8 @@ namespace NovelEditor
             _audioPlayer.SetSound(_nowParagraph.dialogueList[_nowDialogueNum]);
             _textCTS = new CancellationTokenSource();
             _isReading = true;
-            _isReading = !await _novelUI.SetNextText(_nowParagraph.dialogueList[_nowDialogueNum], _textCTS.Token);
             _nowDialogueNum++;
+            _isReading = !await _novelUI.SetNextText(_nowParagraph.dialogueList[_nowDialogueNum - 1], _textCTS.Token);
             if (OnDialogueChanged != null)
                 OnDialogueChanged();
         }
