@@ -10,22 +10,22 @@ namespace NovelEditor
     public class NovelPlayer : MonoBehaviour
     {
         # region variable
-        [SerializeField] private NovelData _novelData;
-        [SerializeField] private ChoiceButton _choiceButton;
-        [SerializeField] private Sprite _dialogueSprite;
-        [SerializeField] private Sprite _nonameDialogueSprite;
-        [SerializeField] private bool _playOnAwake = true;
-        [SerializeField] private bool _hideAfterPlay = false;
-        [SerializeField] private float _hideFadeTime = 0.5f;
-        [SerializeField] private bool _isDisplay = true;
+        [SerializeField, HideInInspector] private NovelData _novelData;
+        [SerializeField, HideInInspector] private ChoiceButton _choiceButton;
+        [SerializeField, HideInInspector] private Sprite _dialogueSprite;
+        [SerializeField, HideInInspector] private Sprite _nonameDialogueSprite;
+        [SerializeField, HideInInspector] private bool _playOnAwake = true;
+        [SerializeField, HideInInspector] private bool _hideAfterPlay = false;
+        [SerializeField, HideInInspector] private float _hideFadeTime = 0.5f;
+        [SerializeField, HideInInspector] private bool _isDisplay = true;
 
-        [SerializeField] private float _charaFadeTime = 0.2f;
-        [SerializeField] private int _textSpeed = 6;
+        [SerializeField, HideInInspector] private float _charaFadeTime = 0.2f;
+        [SerializeField, HideInInspector] private int _textSpeed = 6;
 
-        [SerializeField, Range(0, 1)] private float _BGMVolume = 1;
-        [SerializeField, Range(0, 1)] private float _SEVolume = 1;
+        [SerializeField, HideInInspector] private float _BGMVolume = 1;
+        [SerializeField, HideInInspector] private float _SEVolume = 1;
 
-        [SerializeField] private HowInput _inputSystem;
+        [SerializeField, HideInInspector] private HowInput _inputSystem;
         [SerializeField] private KeyCode[] _nextButton;
         [SerializeField] private KeyCode[] _skipButton;
         [SerializeField] private KeyCode[] _hideOrDisplayButton;
@@ -203,12 +203,14 @@ namespace NovelEditor
             _nowDialogueNum = 0;
             _nowParagraph = _novelData.paragraphList[0];
             _ParagraphName.Add(_nowParagraph.nodeName);
-            ParagraphNodeChanged(_nowParagraph.nodeName);
+            if (ParagraphNodeChanged != null)
+                ParagraphNodeChanged(_nowParagraph.nodeName);
             _passedParagraphID.Add(0);
 
             UnPause();
             _isPlaying = true;
-            OnBegin();
+            if (OnBegin != null)
+                OnBegin();
 
             SetNext();
         }
@@ -232,7 +234,8 @@ namespace NovelEditor
 
             UnPause();
             _isPlaying = true;
-            OnBegin();
+            if (OnBegin != null)
+                OnBegin();
 
             SetNextDialogue(newData);
         }
@@ -305,7 +308,8 @@ namespace NovelEditor
                     _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
                     _nowDialogueNum = 0;
                     _ParagraphName.Add(_nowParagraph.nodeName);
-                    ParagraphNodeChanged(_nowParagraph.nodeName);
+                    if (ParagraphNodeChanged != null)
+                        ParagraphNodeChanged(_nowParagraph.nodeName);
                 }
                 SetNextDialogue(newData);
 
@@ -439,7 +443,8 @@ namespace NovelEditor
             {
                 _nowParagraph = _novelData.paragraphList[nextIndex];
                 _ParagraphName.Add(_nowParagraph.nodeName);
-                ParagraphNodeChanged(_nowParagraph.nodeName);
+                if (ParagraphNodeChanged != null)
+                    ParagraphNodeChanged(_nowParagraph.nodeName);
                 _nowDialogueNum = 0;
                 SetNextDialogue();
             }
@@ -487,7 +492,8 @@ namespace NovelEditor
 
             var ans = await _choiceManager.WaitChoice(list);
             _choiceName.Add(ans.nodeName);
-            OnChoiced(ans.nodeName);
+            if (OnChoiced != null)
+                OnChoiced(ans.nodeName);
             _isChoicing = false;
             SetNextParagraph(ans.nextParagraphIndex);
         }
@@ -505,7 +511,8 @@ namespace NovelEditor
             _novelUI.SetDefaultFont();
             _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
             _nowDialogueNum++;
-            OnDialogueChanged();
+            if (OnDialogueChanged != null)
+                OnDialogueChanged();
         }
 
         async void SetNextDialogue()
@@ -518,7 +525,8 @@ namespace NovelEditor
             _isReading = true;
             _isReading = !await _novelUI.SetNextText(_nowParagraph.dialogueList[_nowDialogueNum], _textCTS.Token);
             _nowDialogueNum++;
-            OnDialogueChanged();
+            if (OnDialogueChanged != null)
+                OnDialogueChanged();
         }
 
         async void end()
@@ -530,7 +538,8 @@ namespace NovelEditor
                 _audioPlayer.AllStop();
                 await _novelUI.FadeOut(_hideFadeTime, _endFadeCTS.Token);
                 SetDisplay(false);
-                OnEnd();
+                if (OnEnd != null)
+                    OnEnd();
             }
         }
 
