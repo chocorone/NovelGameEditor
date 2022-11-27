@@ -343,6 +343,7 @@ namespace NovelEditor
 
             _novelUI = GetComponent<NovelUIManager>();
             _novelUI.Init(_charaFadeTime, _nonameDialogueSprite, _dialogueSprite);
+            SetDisplay(_isDisplay);
             _audioPlayer = gameObject.AddComponent<AudioPlayer>();
             _audioPlayer.Init(_BGMVolume, _SEVolume);
             _choiceManager = GetComponentInChildren<ChoiceManager>();
@@ -371,6 +372,8 @@ namespace NovelEditor
                 _novelUI.SetDisplay(isDisplay);
                 _isDisplay = false;
             }
+
+
         }
 
         //現在再生しているものをリセット
@@ -547,14 +550,33 @@ namespace NovelEditor
             _novelUI.FlashText();
         }
 
-        void OnValidate()
+#if UNITY_EDITOR
+        private void OnValidate()
         {
+            UnityEditor.EditorApplication.delayCall += _OnValidate;
+        }
+
+        private void _OnValidate()
+        {
+            UnityEditor.EditorApplication.delayCall -= _OnValidate;
+            if (this == null) return;
             if (_audioPlayer != null)
             {
                 _audioPlayer.SetSEVolume(_SEVolume);
                 _audioPlayer.SetBGMVolume(_BGMVolume);
             }
+
+            if (_novelUI == null)
+            {
+                GetComponent<CanvasGroup>().alpha = _isDisplay ? 1 : 0;
+            }
+            else
+            {
+                SetDisplay(_isDisplay);
+            }
+
         }
+#endif
 
         void OnDisable()
         {
