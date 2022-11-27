@@ -175,6 +175,7 @@ namespace NovelEditor
         #region delegate
         public delegate void OnBeginDelegate();
         public OnBeginDelegate OnBegin;
+        public OnBeginDelegate OnLoad;
 
         public delegate void OnEndDelegate();
         public OnEndDelegate OnEnd;
@@ -185,8 +186,6 @@ namespace NovelEditor
         public delegate void NodeChangedDelegate(string nodeName);
         public NodeChangedDelegate ParagraphNodeChanged;
         public NodeChangedDelegate OnChoiced;
-
-
 
         #endregion
 
@@ -234,8 +233,8 @@ namespace NovelEditor
 
             UnPause();
             _isPlaying = true;
-            if (OnBegin != null)
-                OnBegin();
+            if (OnLoad != null)
+                OnLoad();
 
             SetNextDialogue(newData);
         }
