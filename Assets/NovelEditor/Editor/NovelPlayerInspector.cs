@@ -12,10 +12,14 @@ namespace NovelEditor.Editor
     {
         public override void OnInspectorGUI()
         {
+            try
+            {
+                serializedObject.Update();
+                base.OnInspectorGUI();
+                serializedObject.ApplyModifiedProperties();
+            }
+            catch { }
 
-            serializedObject.Update();
-            base.OnInspectorGUI();
-            serializedObject.ApplyModifiedProperties();
         }
 
         public override VisualElement CreateInspectorGUI()
