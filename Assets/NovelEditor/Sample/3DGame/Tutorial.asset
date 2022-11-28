@@ -19,9 +19,9 @@ MonoBehaviour:
     _nodePosition:
       serializedVersion: 2
       x: 238.66667
-      y: 198.66667
-      width: 109.33334
-      height: 100
+      y: 199.33334
+      width: 111.33334
+      height: 99.999985
     _nextParagraphIndex: -1
     nodeName: 
     _dialogueList:
@@ -29,7 +29,7 @@ MonoBehaviour:
       open: 0
       elementNum: 7
       Name: 
-      text: "<color=\"Blue\"><b>\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB</b></color>\nwasd\u30AD\u30FC\u3001\u77E2\u5370\u30AD\u30FC\u3067\u79FB\u52D5\u304C\u3067\u304D\u307E\u3059\u3002"
+      text: "<color=\"blue\"><b>\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB</b></color>\nwasd\u30AD\u30FC\u3001\u77E2\u5370\u30AD\u30FC\u3067\u79FB\u52D5\u304C\u3067\u304D\u307E\u3059\u3002"
       back: {fileID: 0}
       howBack: 0
       backFadeColor: {r: 1, g: 1, b: 1, a: 1}
