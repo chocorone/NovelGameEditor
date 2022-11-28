@@ -19,7 +19,7 @@ MonoBehaviour:
     _index: 0
     _nodePosition:
       serializedVersion: 2
-      x: 277.3333
+      x: 278
       y: 192
       width: 114
       height: 100.000015
@@ -35,7 +35,7 @@ MonoBehaviour:
       howBack: 5
       backFadeColor: {r: 1, g: 1, b: 1, a: 1}
       backFadeSpeed: 0.5
-      howCharas: 02000000
+      howCharas: 01000000
       charas:
       - {fileID: 21300000, guid: 076d556822a6adf42879937dcc542fb2, type: 3}
       charaFadeColor:
