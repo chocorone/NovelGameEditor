@@ -71,10 +71,9 @@ namespace NovelEditor
 
         public override bool GetNext()
         {
-
             return _nextButton.Any(key =>
             {
-                if (key == KeyCode.Mouse0)
+                if (key == KeyCode.Mouse0 || key == KeyCode.Mouse1 || key == KeyCode.Mouse2)
                     return Input.GetKeyDown(key) && !OnUI();
 
                 return Input.GetKeyDown(key);
@@ -83,16 +82,37 @@ namespace NovelEditor
         }
         public override bool GetSkip()
         {
-            return _skipButton.Any(key => Input.GetKeyDown(key));
+            return _skipButton.Any(key =>
+            {
+                if (key == KeyCode.Mouse0 || key == KeyCode.Mouse1 || key == KeyCode.Mouse2)
+                    return Input.GetKeyDown(key) && !OnUI();
+
+                return Input.GetKeyDown(key);
+            }
+            );
         }
         public override bool GetHideOrDisplay()
         {
-            return _hideOrDisplayButton.Any(key => Input.GetKeyDown(key));
+            return _hideOrDisplayButton.Any(key =>
+            {
+                if (key == KeyCode.Mouse0 || key == KeyCode.Mouse1 || key == KeyCode.Mouse2)
+                    return Input.GetKeyDown(key) && !OnUI();
+
+                return Input.GetKeyDown(key);
+            }
+            );
         }
 
         public override bool GetStopOrStart()
         {
-            return _stopOrStartButton.Any(key => Input.GetKeyDown(key));
+            return _stopOrStartButton.Any(key =>
+            {
+                if (key == KeyCode.Mouse0 || key == KeyCode.Mouse1 || key == KeyCode.Mouse2)
+                    return Input.GetKeyDown(key) && !OnUI();
+
+                return Input.GetKeyDown(key);
+            }
+            );
         }
 
     }
