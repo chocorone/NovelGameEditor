@@ -1,0 +1,16 @@
+{
+    "name": "rirunee.NovelEditor.Sample",
+    "rootNamespace": "NovelEditor.Sample",
+    "references": [
+        "GUID:d9a89c1498959154a8b8c96725b392a8"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
