@@ -72,15 +72,18 @@ namespace NovelEditor.Editor
             list.itemIndexChanged += (index1, index2) =>
             {
                 tmpdata.data.UpdateOrder(NovelEditorWindow.editingData);
+                EditorUtility.SetDirty(NovelEditorWindow.editingData);
             };
             list.itemsAdded += (a) =>
             {
                 tmpdata.data.UpdateOrder(NovelEditorWindow.editingData);
+                EditorUtility.SetDirty(NovelEditorWindow.editingData);
             };
 
             list.itemsRemoved += (a) =>
             {
                 tmpdata.data.UpdateOrder(NovelEditorWindow.editingData);
+                EditorUtility.SetDirty(NovelEditorWindow.editingData);
             };
 
             _root.Add(list);
@@ -91,6 +94,7 @@ namespace NovelEditor.Editor
         internal static void UpdateValue()
         {
             editingData.data.UpdateOrder(NovelEditorWindow.editingData);
+            EditorUtility.SetDirty(NovelEditorWindow.editingData);
         }
 
     }
