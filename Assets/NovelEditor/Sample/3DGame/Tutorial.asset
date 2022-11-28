@@ -29,7 +29,7 @@ MonoBehaviour:
       open: 0
       elementNum: 7
       Name: 
-      text: "<color=\"blue\"><b>\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB</b></color>\nwasd\u30AD\u30FC\u3001\u77E2\u5370\u30AD\u30FC\u3067\u79FB\u52D5\u304C\u3067\u304D\u307E\u3059\u3002"
+      text: "<color=\"blue\"><b>\u30C1\u30E5\u30FC\u30C8\u30EA\u30A2\u30EB</b></color>\nwasd\u30AD\u30FC\u3001\u77E2\u5370\u30AD\u30FC\u3067\u79FB\u52D5\u304C\u3067\u304D\u307E\u3059\u3002\n\u30B9\u30DA\u30FC\u30B9\u30AD\u30FC\u3067\u3082\u8FD1\u304F\u306E\u30AA\u30D6\u30B8\u30A7\u30AF\u30C8\u306B\u8A71\u3057\u304B\u3051\u308B\u3053\u3068\u3082\u3067\u304D\u307E\u3059"
       back: {fileID: 0}
       howBack: 0
       backFadeColor: {r: 1, g: 1, b: 1, a: 1}
@@ -67,7 +67,18 @@ MonoBehaviour:
     detailOpen: 0
     _next: 2
     _nextChoiceIndexes: ffffffff
-  _choiceList: []
+  _choiceList:
+  - _enabled: 0
+    _index: 0
+    _nodePosition:
+      serializedVersion: 2
+      x: 497
+      y: 234.00002
+      width: 100
+      height: 100
+    _nextParagraphIndex: -1
+    nodeName: 
+    text: Choice
   graphScale: {x: 1, y: 1, z: 1}
   graphPosition: {x: 0, y: 0, z: 0}
   havePreLocations: 0
