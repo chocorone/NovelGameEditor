@@ -354,10 +354,10 @@ MonoBehaviour:
   _textSpeed: 6
   _BGMVolume: 0.094
   _SEVolume: 1
-  _inputSystem: 0
-  _nextButton: 
+  _inputSystem: 1
+  _nextButton: 0d0000002000000043010000
   _skipButton: 
-  _hideOrDisplayButton: 
+  _hideOrDisplayButton: 44010000
   _stopOrStartButton: 
 --- !u!1 &388248992
 GameObject:
