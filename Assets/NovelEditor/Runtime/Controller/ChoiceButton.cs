@@ -24,7 +24,10 @@ namespace NovelEditor
             {
                 await UniTask.WaitUntil(() => _choiced, cancellationToken: token);
             }
-            catch { }
+            catch
+            {
+                return null;
+            }
 
             return data;
         }
