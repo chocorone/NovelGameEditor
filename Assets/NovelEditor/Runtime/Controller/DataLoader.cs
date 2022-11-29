@@ -38,6 +38,17 @@ namespace NovelEditor
             if (data.SEStyle == SoundStyle.UnChange)
                 data.SEStyle = SoundStyle.Stop;
 
+            if (data.backEffect == Effect.UnChange)
+                data.backEffect = Effect.None;
+
+            if (data.DialogueEffect == Effect.UnChange)
+                data.DialogueEffect = Effect.None;
+
+            for (int i = 0; i < data.charaEffects.Length; i++)
+            {
+                if (data.charaEffects[i] == Effect.UnChange)
+                    data.charaEffects[i] = Effect.None;
+            }
             foreach (var i in savedData.passedParagraphId)
             {
                 NovelData.ParagraphData nowParagraph = savedData.novelData.paragraphList[i];
@@ -70,8 +81,9 @@ namespace NovelEditor
             return savedData;
         }
 
-        internal SkipedData Skip(NovelData novelData, NovelData.ParagraphData nowParagraphData, int dialogueIndex, List<int> passedParagraphID, List<string> paragraphName, Sprite nowBack)
+        internal SkipedData Skip(NovelData novelData, int paragraphIndex, int dialogueIndex, List<int> passedParagraphID, List<string> paragraphName, Sprite nowBack)
         {
+            NovelData.ParagraphData nowParagraphData = novelData.paragraphList[paragraphIndex];
             if (dialogueIndex >= nowParagraphData.dialogueList.Count)
                 dialogueIndex = nowParagraphData.dialogueList.Count - 1;
             NovelData.ParagraphData.Dialogue first = nowParagraphData.dialogueList[dialogueIndex];
@@ -102,12 +114,6 @@ namespace NovelEditor
                 }
                 else
                 {
-                    //選択肢のノードが続きになければ終わる
-                    if (nowParagraphData.next == Next.End || nowParagraphData.nextParagraphIndex == -1)
-                    {
-                        skipData.next = Next.End;
-                        return skipData;
-                    }
                     nowParagraphData = novelData.paragraphList[nowParagraphData.nextParagraphIndex];
                     paragraphName.Add(nowParagraphData.nodeName);
                     passedParagraphID.Add(nowParagraphData.index);
@@ -191,9 +197,19 @@ namespace NovelEditor
 
             for (int charaIndex = 0; charaIndex < data.charas.Length; charaIndex++)
             {
-                data.charas[charaIndex] = data.howCharas[charaIndex] != CharaChangeStyle.UnChange ? nowDialogue.charas[charaIndex] : data.charas[charaIndex];
-                data.charaEffects[charaIndex] = data.charaEffects[charaIndex] != Effect.UnChange ? nowDialogue.charaEffects[charaIndex] : data.charaEffects[charaIndex];
+
+                if (nowDialogue.howCharas[charaIndex] != CharaChangeStyle.UnChange)
+                {
+                    data.charas[charaIndex] = nowDialogue.charas[charaIndex];
+                    data.howCharas[charaIndex] = CharaChangeStyle.Quick;
+                }
+
+                if (nowDialogue.charaEffects[charaIndex] != Effect.UnChange)
+                {
+                    data.charaEffects[charaIndex] = nowDialogue.charaEffects[charaIndex];
+                }
                 data.charaEffectStrength[charaIndex] = data.charaEffectStrength[charaIndex];
+
             }
 
         }

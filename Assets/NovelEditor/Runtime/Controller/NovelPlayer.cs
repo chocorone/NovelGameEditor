@@ -56,6 +56,7 @@ namespace NovelEditor
 
         private CancellationTokenSource _textCTS = new CancellationTokenSource();
         private CancellationTokenSource _imageCTS = new CancellationTokenSource();
+        private CancellationTokenSource _choiceCTS = new CancellationTokenSource();
         private CancellationTokenSource _endFadeCTS = new CancellationTokenSource();
 
         #endregion
@@ -221,6 +222,7 @@ namespace NovelEditor
         public void Load(NovelSaveData saveData, bool hideAfterPlay)
         {
             _isLoading = true;
+            _choiceCTS.Cancel();
             _novelData = saveData.novelData;
             _hideAfterPlay = hideAfterPlay;
             _textCTS.Cancel();
@@ -276,9 +278,11 @@ namespace NovelEditor
             {
                 return;
             }
+
             _isLoading = true;
             _textCTS.Cancel();
-            SkipedData newData = DataLoader.Instance.Skip(novelData, _nowParagraph, _nowDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
+            _choiceCTS.Cancel();
+            SkipedData newData = DataLoader.Instance.Skip(_novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
             if (newData.next == Next.Choice)
             {
                 _nowParagraph = novelData.paragraphList[newData.ParagraphIndex];
@@ -299,6 +303,7 @@ namespace NovelEditor
             {
                 _isLoading = true;
                 _textCTS.Cancel();
+                _choiceCTS.Cancel();
 
                 NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.SkipNextNode(novelData, _nowParagraph, _nowDialogueNum, _novelUI.GetNowBack());
 
@@ -391,6 +396,7 @@ namespace NovelEditor
         {
             _novelUI.Reset(_novelData.locations, isLoad);
             //選択肢を全部消す
+            _choiceCTS.Cancel();
             _choiceManager.ResetChoice();
             _isChoicing = false;
             _isEnd = false;
@@ -458,6 +464,7 @@ namespace NovelEditor
             {
                 _nowParagraph = _novelData.paragraphList[nextIndex];
                 _ParagraphName.Add(_nowParagraph.nodeName);
+                _passedParagraphID.Add(_nowParagraph.index);
                 if (ParagraphNodeChanged != null)
                     ParagraphNodeChanged(_nowParagraph.nodeName);
                 _nowDialogueNum = 0;
@@ -491,6 +498,7 @@ namespace NovelEditor
         async void SetChoice()
         {
             _isChoicing = true;
+            _choiceCTS = new CancellationTokenSource();
             List<NovelData.ChoiceData> list = new();
             foreach (int i in _nowParagraph.nextChoiceIndexes)
             {
@@ -504,11 +512,15 @@ namespace NovelEditor
                 return;
             }
 
-            var ans = await _choiceManager.WaitChoice(list);
-            _choiceName.Add(ans.nodeName);
-            if (OnChoiced != null)
-                OnChoiced(ans.nodeName);
-            SetNextParagraph(ans.nextParagraphIndex);
+            var ans = await _choiceManager.WaitChoice(list, _choiceCTS.Token);
+            if (ans != null)
+            {
+                _choiceName.Add(ans.nodeName);
+                if (OnChoiced != null)
+                    OnChoiced(ans.nodeName);
+                SetNextParagraph(ans.nextParagraphIndex);
+            }
+
             _isChoicing = false;
         }
 
