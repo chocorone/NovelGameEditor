@@ -68,7 +68,7 @@ namespace NovelEditor
             _locations = newLocations;
         }
 
-        public void ResetData()
+        internal void ResetData()
         {
             _paragraphList.Clear();
 
@@ -77,7 +77,7 @@ namespace NovelEditor
             pdata.SetIndex(0);
         }
 
-        public ParagraphData CreateParagraph()
+        internal ParagraphData CreateParagraph()
         {
             ParagraphData data;
             if (ParagraphStack.Count == 0)
@@ -104,7 +104,7 @@ namespace NovelEditor
             return data;
         }
 
-        public ParagraphData CreateParagraphFromJson(string sdata)
+        internal ParagraphData CreateParagraphFromJson(string sdata)
         {
             ParagraphData data = JsonUtility.FromJson<ParagraphData>(sdata);
             ParagraphData popData = CreateParagraph();
@@ -112,7 +112,7 @@ namespace NovelEditor
             return popData;
         }
 
-        public ChoiceData CreateChoice()
+        internal ChoiceData CreateChoice()
         {
             ChoiceData data;
             if (ChoiceStack.Count == 0)
@@ -131,7 +131,7 @@ namespace NovelEditor
             return data;
         }
 
-        public ChoiceData CreateChoiceFromJson(string sdata)
+        internal ChoiceData CreateChoiceFromJson(string sdata)
         {
             ChoiceData data = JsonUtility.FromJson<ChoiceData>(sdata);
             ChoiceData popData = CreateChoice();
@@ -153,28 +153,28 @@ namespace NovelEditor
             #endregion
 
             #region プロパティ
-            public bool enabled => _enabled;
+            internal bool enabled => _enabled;
             public int index => _index;
             public int nextParagraphIndex => _nextParagraphIndex;
-            public Rect nodePosition => _nodePosition;
+            internal Rect nodePosition => _nodePosition;
 
             #endregion
 
-            public void SavePosition(Rect rect)
+            internal void SavePosition(Rect rect)
             {
                 _nodePosition = rect;
             }
-            public abstract void SetNodeDeleted(NovelData editingData);
-            public void ChangeNextParagraph(int nextIndex)
+            internal abstract void SetNodeDeleted(NovelData editingData);
+            internal void ChangeNextParagraph(int nextIndex)
             {
                 _nextParagraphIndex = nextIndex;
             }
-            public void SetIndex(int newIndex)
+            internal void SetIndex(int newIndex)
             {
                 _index = newIndex;
             }
 
-            public void SetEnable(bool flag)
+            internal void SetEnable(bool flag)
             {
                 _enabled = flag;
             }
@@ -186,7 +186,7 @@ namespace NovelEditor
         {
             public string text;
 
-            public override void SetNodeDeleted(NovelData editingData)
+            internal override void SetNodeDeleted(NovelData editingData)
             {
                 this.SetEnable(false);
                 editingData.ChoiceStack.Push(this);
@@ -203,7 +203,7 @@ namespace NovelEditor
             List<Dialogue> _dialogueList = new List<Dialogue>();
 
             [SerializeField, HideInInspector]
-            public bool detailOpen = false;
+            internal bool detailOpen = false;
 
             [SerializeField, HideInInspector]
             Next _next = Next.End;
@@ -240,7 +240,7 @@ namespace NovelEditor
                 _nextChoiceIndexes.Add(-1);
             }
 
-            public override void SetNodeDeleted(NovelData editingData)
+            internal override void SetNodeDeleted(NovelData editingData)
             {
                 this.ChangeNextParagraph(-1);
                 this._dialogueList.Clear();
@@ -325,9 +325,8 @@ namespace NovelEditor
             [System.SerializableAttribute]
             public class Dialogue
             {
-                public int index = 0;
+                internal int index = 0;
                 public bool open;
-                public int elementNum = 7;
 
                 public string Name = "";
                 public string text;
