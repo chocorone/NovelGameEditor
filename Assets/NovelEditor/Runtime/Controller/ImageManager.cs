@@ -111,7 +111,7 @@ namespace NovelEditor
             }
         }
 
-        internal void Init(List<Image> data)
+        internal void Init(List<Image> data, bool isLoad)
         {
             _charas.Clear();
             for (int i = 0; i < _charaTransform.childCount; i++)
@@ -125,8 +125,12 @@ namespace NovelEditor
                 charaImage.Change(null);
                 _charas.Add(charaImage);
             }
-            _backGround.Change(null);
+            if (!isLoad)
+            {
+                _backGround.Change(null);
+            }
             _dialogueImage.Change(null);
+
         }
 
     }

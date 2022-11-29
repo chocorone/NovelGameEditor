@@ -223,7 +223,7 @@ namespace NovelEditor
             _textCTS.Cancel();
             _novelUI.FlashText();
 
-            Reset();
+            Reset(true);
 
             _nowDialogueNum = saveData.dialogueIndex;
             _nowParagraph = _novelData.paragraphList[saveData.paragraphIndex];
@@ -380,9 +380,9 @@ namespace NovelEditor
         }
 
         //現在再生しているものをリセット
-        void Reset()
+        void Reset(bool isLoad = false)
         {
-            _novelUI.Reset(_novelData.locations);
+            _novelUI.Reset(_novelData.locations, isLoad);
             //選択肢を全部消す
             _choiceManager.ResetChoice();
             _isChoicing = false;
@@ -510,12 +510,10 @@ namespace NovelEditor
         {
             _isImageChangeing = true;
             _imageCTS = new CancellationTokenSource();
-            _novelUI.DeleteText();
             _isImageChangeing = !await _novelUI.SetNextImage(newData, _imageCTS.Token);
             _audioPlayer.SetSound(newData);
             _textCTS = new CancellationTokenSource();
             _isReading = true;
-            _novelUI.SetDefaultFont();
             _nowDialogueNum++;
             _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
             if (OnDialogueChanged != null)

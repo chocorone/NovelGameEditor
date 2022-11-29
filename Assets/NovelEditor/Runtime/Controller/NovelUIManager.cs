@@ -32,11 +32,11 @@ namespace NovelEditor
             _dialogueImage.SetDialogueSprite(dialogueSprite, nonameDialogueSprite);
         }
 
-        internal void Reset(List<Image> data)
+        internal void Reset(List<Image> data, bool isLoad)
         {
-            imageManager.Init(data);
-
+            imageManager.Init(data, isLoad);
             DeleteText();
+            _dialogueText.SetDefaultFont();
         }
 
         internal void FlashText()
@@ -138,11 +138,6 @@ namespace NovelEditor
         internal void SetStopText(bool flag)
         {
             _dialogueText.IsStop = flag;
-        }
-
-        internal void SetDefaultFont()
-        {
-            _dialogueText.SetDefaultFont();
         }
 
         internal void SetTextSpeed(int speed)
