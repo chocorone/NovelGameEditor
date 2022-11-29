@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571336, b: 0.3069219, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -317,7 +317,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 380645930}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -340,7 +340,7 @@ MonoBehaviour:
   _playOnAwake: 0
   _hideAfterPlay: 0
   _hideFadeTime: 0.5
-  _isDisplay: 1
+  _isDisplay: 0
   _charaFadeTime: 0.5
   _textSpeed: 6
   _BGMVolume: 0.094
@@ -363,7 +363,7 @@ GameObject:
   - component: {fileID: 400247991}
   - component: {fileID: 400247990}
   m_Layer: 5
-  m_Name: EscapeBackGround
+  m_Name: BackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
