@@ -13,8 +13,8 @@ namespace NovelEditor.Sample
         private Rigidbody _rigidbody;
 
         public SpeekableObject nearObj { get; private set; }
-        float x = 0;
-        float z = 0;
+        float x;
+        float z;
 
         void Awake()
         {
@@ -25,9 +25,8 @@ namespace NovelEditor.Sample
 
         void Update()
         {
-            x = Input.GetAxis("Horizontal");
-            z = Input.GetAxis("Vertical");
-
+            x = Input.GetAxisRaw("Horizontal");
+            z = Input.GetAxisRaw("Vertical");
             _animator.SetBool("move", Mathf.Abs(x) > 0.1f || Mathf.Abs(z) > 0.1f);
 
             if (Input.GetKeyDown(KeyCode.Space) && nearObj != null)
@@ -52,6 +51,7 @@ namespace NovelEditor.Sample
         void OnDisable()
         {
             _animator.SetBool("move", false);
+            //_rigidbody.velocity = Vector3.zero;
         }
 
         void OnTriggerEnter(Collider collisionInfo)
