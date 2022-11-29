@@ -40,6 +40,10 @@ namespace NovelEditor
         {
             _image = GetComponent<Image>();
             _defaultColor = _image.color;
+            if (_defaultColor.a == 0)
+            {
+                _defaultColor = Color.white;
+            }
             EffectManager.Instance.InitMaterial(_image);
             _image.raycastTarget = false;
         }

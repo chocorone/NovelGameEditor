@@ -16,26 +16,30 @@ namespace NovelEditor
         void Awake()
         {
             Init();
-            RectTransform backTransform = GetComponent<RectTransform>();
+            if (_backFade == null)
+            {
+                RectTransform backTransform = GetComponent<RectTransform>();
 
-            RectTransform backObj = new GameObject("backFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
-            backObj.transform.SetParent(this.transform);
-            CopyRectTransformSize(backTransform, backObj);
-            _backFade = backObj.gameObject.AddComponent<NovelImage>();
-            _backFade.HideImage();
+                RectTransform backObj = new GameObject("backFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
+                backObj.transform.SetParent(this.transform);
+                CopyRectTransformSize(backTransform, backObj);
+                _backFade = backObj.gameObject.AddComponent<NovelImage>();
+                _backFade.HideImage();
 
-            RectTransform frontObj = new GameObject("frontFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
-            frontObj.transform.SetParent(this.transform.parent);
-            frontObj.transform.SetSiblingIndex(2);
-            CopyRectTransformSize(backTransform, frontObj);
-            _frontFade = frontObj.gameObject.AddComponent<NovelImage>();
-            _frontFade.HideImage();
+                RectTransform frontObj = new GameObject("frontFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
+                frontObj.transform.SetParent(this.transform.parent);
+                frontObj.transform.SetSiblingIndex(2);
+                CopyRectTransformSize(backTransform, frontObj);
+                _frontFade = frontObj.gameObject.AddComponent<NovelImage>();
+                _frontFade.HideImage();
 
-            RectTransform allObj = new GameObject("allFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
-            allObj.transform.SetParent(this.transform.parent);
-            CopyRectTransformSize(backTransform, allObj);
-            _allFade = allObj.gameObject.AddComponent<NovelImage>();
-            _allFade.HideImage();
+                RectTransform allObj = new GameObject("allFadePanel", typeof(RectTransform)).GetComponent<RectTransform>();
+                allObj.transform.SetParent(this.transform.parent);
+                CopyRectTransformSize(backTransform, allObj);
+                _allFade = allObj.gameObject.AddComponent<NovelImage>();
+                _allFade.HideImage();
+            }
+
         }
 
         void CopyRectTransformSize(RectTransform source, RectTransform dest)
@@ -45,6 +49,7 @@ namespace NovelEditor
             dest.anchoredPosition = source.anchoredPosition;
             dest.sizeDelta = source.sizeDelta;
             dest.localScale = source.localScale;
+            dest.transform.position = source.transform.position;
         }
 
         internal async UniTask<bool> BackFadeIn(NovelData.ParagraphData.Dialogue data, CancellationToken token)
