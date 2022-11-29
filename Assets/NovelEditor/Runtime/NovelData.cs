@@ -327,7 +327,6 @@ namespace NovelEditor
             {
                 internal int index = 0;
                 public bool open;
-
                 public string Name = "";
                 public string text;
 
