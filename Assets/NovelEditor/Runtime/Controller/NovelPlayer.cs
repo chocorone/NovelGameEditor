@@ -48,6 +48,7 @@ namespace NovelEditor
         private bool _isUIDisplay = true;
         private bool _mute = false;
         private bool _isEnd = false;
+        private bool _isLoading = false;
 
         private List<string> _choiceName = new();
         private List<string> _ParagraphName = new();
@@ -64,6 +65,7 @@ namespace NovelEditor
         public bool IsStop => _isStop;
         public bool IsPlaying => _isPlaying;
         public bool IsChoicing => _isChoicing;
+        public float loadProgress => DataLoader.Instance.progress;
         public bool IsUIDisplay
         {
             get
@@ -218,6 +220,7 @@ namespace NovelEditor
 
         public void Load(NovelSaveData saveData, bool hideAfterPlay)
         {
+            _isLoading = true;
             _novelData = saveData.novelData;
             _hideAfterPlay = hideAfterPlay;
             _textCTS.Cancel();
@@ -239,6 +242,7 @@ namespace NovelEditor
                 OnLoad();
 
             SetNextDialogue(newData);
+            _isLoading = false;
             _isPlaying = true;
         }
 
@@ -272,6 +276,7 @@ namespace NovelEditor
             {
                 return;
             }
+            _isLoading = true;
             _textCTS.Cancel();
             SkipedData newData = DataLoader.Instance.Skip(novelData, _nowParagraph, _nowDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
             if (newData.next == Next.Choice)
@@ -284,6 +289,7 @@ namespace NovelEditor
             {
                 end();
             }
+            _isLoading = false;
 
         }
 
@@ -291,6 +297,7 @@ namespace NovelEditor
         {
             if (!_isChoicing && !_isImageChangeing)
             {
+                _isLoading = true;
                 _textCTS.Cancel();
 
                 NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.SkipNextNode(novelData, _nowParagraph, _nowDialogueNum, _novelUI.GetNowBack());
@@ -314,7 +321,7 @@ namespace NovelEditor
                         ParagraphNodeChanged(_nowParagraph.nodeName);
                 }
                 SetNextDialogue(newData);
-
+                _isLoading = false;
             }
         }
 
@@ -410,7 +417,7 @@ namespace NovelEditor
                     DisplayUI();
             }
 
-            if (_isChoicing || !_isUIDisplay)
+            if (_isChoicing || !_isUIDisplay || _isLoading)
             {
                 return;
             }

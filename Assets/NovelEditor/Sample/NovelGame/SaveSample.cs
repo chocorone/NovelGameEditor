@@ -10,17 +10,15 @@ namespace NovelEditor.Sample
 
         [SerializeField] NovelPlayer player;
         NovelSaveData data;
-        bool saved = false;
 
         public void Save()
         {
             data = player.save();
-            saved = true;
         }
 
         public void Load()
         {
-            if (saved)
+            if (data != null)
                 player.Load(data, true);
         }
 

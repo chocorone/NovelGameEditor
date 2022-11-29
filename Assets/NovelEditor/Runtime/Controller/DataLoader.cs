@@ -30,7 +30,7 @@ namespace NovelEditor
         internal NovelData.ParagraphData.Dialogue LoadDialogue(NovelSaveData savedData)
         {
             progress = 0;
-            NovelData.ParagraphData.Dialogue first = savedData.novelData.paragraphList[savedData.passedParagraphId[0]].dialogueList[0];
+            NovelData.ParagraphData.Dialogue first = savedData.novelData.paragraphList[0].dialogueList[0];
             NovelData.ParagraphData.Dialogue data = JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(first));
             if (data.BGMStyle == SoundStyle.UnChange)
                 data.BGMStyle = SoundStyle.Stop;
@@ -54,8 +54,11 @@ namespace NovelEditor
                         data.howBack = BackChangeStyle.FadeAll;
                         data.backFadeColor = Color.black;
                         data.backFadeSpeed = 1.0f;
-
-                        break;
+                        progress = 1;
+#if UNITY_EDITOR
+                EditorUtility.ClearProgressBar();
+#endif
+                        return data;
                     }
 
                     progress += (100 / savedData.passedParagraphId.Count) / nowParagraph.dialogueList.Count;
@@ -67,11 +70,7 @@ namespace NovelEditor
                             progress / 100);
 #endif
                 }
-#if UNITY_EDITOR
-                EditorUtility.ClearProgressBar();
-#endif
             }
-
             return data;
         }
 
@@ -221,7 +220,7 @@ namespace NovelEditor
         }
     }
 
-    public struct NovelSaveData
+    public class NovelSaveData
     {
         public NovelSaveData(NovelData novelData, int paragraphIndex, int dialogueIndex, List<int> passedParagraphId, List<string> choiceName, List<string> ParagraphName)
         {
@@ -229,8 +228,8 @@ namespace NovelEditor
             this.paragraphIndex = paragraphIndex;
             this.dialogueIndex = dialogueIndex;
             this.passedParagraphId = passedParagraphId;
-            this.ParagraphName = ParagraphName;
-            this.choiceName = choiceName;
+            this.ParagraphName = new List<string>(ParagraphName);
+            this.choiceName = new List<string>(choiceName);
         }
         public NovelData novelData;
         public int paragraphIndex;
