@@ -6,18 +6,22 @@ namespace NovelEditor.Sample
 {
     public class SaveSample : MonoBehaviour
     {
-        [SerializeField] NovelSaveData data;
+
 
         [SerializeField] NovelPlayer player;
+        NovelSaveData data;
+        bool saved = false;
 
         public void Save()
         {
             data = player.save();
+            saved = true;
         }
 
         public void Load()
         {
-            player.Load(data, true);
+            if (saved)
+                player.Load(data, true);
         }
 
     }
