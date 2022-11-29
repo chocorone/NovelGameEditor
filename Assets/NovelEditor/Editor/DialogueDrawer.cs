@@ -45,7 +45,7 @@ namespace NovelEditor.Editor
                     var style = new GUIStyle(EditorStyles.textArea)
                     {
                         wordWrap = true,
-                        fixedHeight = EditorGUIUtility.singleLineHeight * 3
+                        fixedHeight = EditorGUIUtility.singleLineHeight * 4
                     };
 
                     var talkTextProperty = data.FindPropertyRelative("text");
