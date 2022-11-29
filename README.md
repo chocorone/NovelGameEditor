@@ -34,7 +34,7 @@ https://usagi-meteor.com/noveleditor/
 [SerializeField]NovelData data;
 
 void Start(){
-  player.play(data);
+  player.play(data,false);
 }
 ```
 AudioSource的な感じで簡単に再生できます。
