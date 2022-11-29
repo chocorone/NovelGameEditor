@@ -25,9 +25,12 @@ namespace NovelEditor
         {
             _BGM = gameObject.AddComponent<AudioSource>();
             _BGM.playOnAwake = false;
+            _BGM.loop=true;
 
             _SE = gameObject.AddComponent<AudioSource>();
             _SE.playOnAwake = false;
+            _SE.loop=true;
+            
 
             SetSEVolume(seVolume);
             SetBGMVolume(bgmVolume);
