@@ -20,8 +20,8 @@ namespace NovelEditor.Editor
             // 親を設定して同じレイヤーを継承
             GameObjectUtility.SetParentAndAlign(obj, menuCommand.context as GameObject);
 
-            // Undo できるように
-            Undo.RegisterCreatedObjectUndo(obj, "Create NovelUI");
+            //クラッシュする...
+            //Undo.RegisterCreatedObjectUndo(obj, "Create NovelUI");
 
             // 生成したゲームオブジェクトを選択状態に
             Selection.activeObject = obj;
@@ -39,8 +39,8 @@ namespace NovelEditor.Editor
             // 親を設定して同じレイヤーを継承
             GameObjectUtility.SetParentAndAlign(obj, menuCommand.context as GameObject);
 
-            // Undo できるように
-            Undo.RegisterCreatedObjectUndo(obj, "Create Button");
+            //クラッシュする...
+            //Undo.RegisterCreatedObjectUndo(obj, "Create Button");
 
             // 生成したゲームオブジェクトを選択状態に
             Selection.activeObject = obj;
