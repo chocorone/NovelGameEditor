@@ -186,7 +186,7 @@ namespace NovelEditor
         {
             public string text;
 
-            public override void SetNodeDeleted(NovelData editingData)
+            internal override void SetNodeDeleted(NovelData editingData)
             {
                 this.SetEnable(false);
                 editingData.ChoiceStack.Push(this);
@@ -326,8 +326,7 @@ namespace NovelEditor
             public class Dialogue
             {
                 internal int index = 0;
-                internal bool open;
-
+                public bool open;
                 public string Name = "";
                 public string text;
 
