@@ -55,20 +55,10 @@ namespace NovelEditor
                         data.backFadeColor = Color.black;
                         data.backFadeSpeed = 1.0f;
                         progress = 1;
-#if UNITY_EDITOR
-                EditorUtility.ClearProgressBar();
-#endif
                         return data;
                     }
 
                     progress += (100 / savedData.passedParagraphId.Count) / nowParagraph.dialogueList.Count;
-
-#if UNITY_EDITOR
-                    EditorUtility.DisplayProgressBar(
-                            "NovelEditor",
-                            "ロードしています",
-                            progress / 100);
-#endif
                 }
             }
             return data;
@@ -143,23 +133,12 @@ namespace NovelEditor
             {
                 SaveNext(data, nowParagraphData.dialogueList[i]);
                 progress += 100 / (nowParagraphData.dialogueList.Count - dialogueIndex);
-
-#if UNITY_EDITOR
-                EditorUtility.DisplayProgressBar(
-                        "NovelEditor",
-                        "次のノードへスキップしています",
-                        progress / 100);
-#endif
             }
 
             if (nowParagraphData.next == Next.Continue)
             {
                 SaveNext(data, novelData.paragraphList[nowParagraphData.nextParagraphIndex].dialogueList[0]);
             }
-
-#if UNITY_EDITOR
-            EditorUtility.ClearProgressBar();
-#endif
 
             return data;
         }
