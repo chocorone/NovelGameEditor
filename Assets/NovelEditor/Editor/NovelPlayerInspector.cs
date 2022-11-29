@@ -75,10 +75,16 @@ namespace NovelEditor.Editor
             {
                 if ((HowInput)serializedObject.FindProperty("_inputSystem").enumValueIndex == HowInput.UserSetting)
                 {
-                    var inputList = new IMGUIContainer(OnInspectorGUI);
-                    root.Add(inputList);
+                    root.Q<IMGUIContainer>().style.display = DisplayStyle.Flex;
+                }
+                else
+                {
+                    root.Q<IMGUIContainer>().style.display = DisplayStyle.None;
                 }
             });
+
+            var inputList = new IMGUIContainer(OnInspectorGUI);
+            root.Add(inputList);
 
             return root;
         }
