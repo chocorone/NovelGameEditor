@@ -192,6 +192,9 @@ namespace NovelEditor
         public NodeChangedDelegate ParagraphNodeChanged;
         public NodeChangedDelegate OnChoiced;
 
+        public delegate void SkipedDeleteDelegate();
+        public SkipedDeleteDelegate OnSkiped;
+
         #endregion
 
 
@@ -287,6 +290,8 @@ namespace NovelEditor
             _choiceCTS.Cancel();
             SkipedData newData = DataLoader.Instance.Skip(_novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
             UnPause();
+            if (OnSkiped != null)
+                OnSkiped();
             if (newData.next == Next.Choice)
             {
                 _nowParagraph = novelData.paragraphList[newData.ParagraphIndex];
@@ -310,7 +315,9 @@ namespace NovelEditor
                 _choiceCTS.Cancel();
 
                 NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.SkipNextNode(novelData, _nowParagraph, _nowDialogueNum, _novelUI.GetNowBack());
-
+                UnPause();
+                if (OnSkiped != null)
+                    OnSkiped();
                 if (newData == null || (_nowParagraph.next == Next.Continue && _nowParagraph.nextParagraphIndex == -1))
                 {
                     end();
@@ -329,7 +336,7 @@ namespace NovelEditor
                     if (ParagraphNodeChanged != null)
                         ParagraphNodeChanged(_nowParagraph.nodeName);
                 }
-                UnPause();
+
                 SetNextDialogue(newData);
                 _isLoading = false;
             }
