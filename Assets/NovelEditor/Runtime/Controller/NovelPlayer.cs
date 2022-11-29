@@ -185,7 +185,7 @@ namespace NovelEditor
         public delegate void OnEndDelegate();
         public OnEndDelegate OnEnd;
 
-        public delegate void OnDialogueChangedDelegate();
+        public delegate void OnDialogueChangedDelegate(NovelData.ParagraphData.Dialogue data);
         public OnDialogueChangedDelegate OnDialogueChanged;
 
         public delegate void NodeChangedDelegate(string nodeName);
@@ -246,15 +246,18 @@ namespace NovelEditor
             SetNextDialogue(newData);
             _isLoading = false;
             _isPlaying = true;
+
         }
 
         public void Pause()
         {
+            _isStop = true;
             _novelUI.SetStopText(true);
         }
 
         public void UnPause()
         {
+            _isStop = false;
             _novelUI.SetStopText(false);
         }
 
@@ -283,6 +286,7 @@ namespace NovelEditor
             _textCTS.Cancel();
             _choiceCTS.Cancel();
             SkipedData newData = DataLoader.Instance.Skip(_novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
+            UnPause();
             if (newData.next == Next.Choice)
             {
                 _nowParagraph = novelData.paragraphList[newData.ParagraphIndex];
@@ -325,6 +329,7 @@ namespace NovelEditor
                     if (ParagraphNodeChanged != null)
                         ParagraphNodeChanged(_nowParagraph.nodeName);
                 }
+                UnPause();
                 SetNextDialogue(newData);
                 _isLoading = false;
             }
@@ -415,6 +420,12 @@ namespace NovelEditor
                 return;
             }
 
+            if (_inputProvider.GetStopOrStart())
+            {
+                _isStop = !_isStop;
+                _novelUI.SwitchStopText();
+            }
+
             if (_inputProvider.GetHideOrDisplay())
             {
                 if (_isUIDisplay)
@@ -423,7 +434,7 @@ namespace NovelEditor
                     DisplayUI();
             }
 
-            if (_isChoicing || !_isUIDisplay || _isLoading)
+            if (_isChoicing || !_isUIDisplay || _isLoading || _isStop)
             {
                 return;
             }
@@ -444,11 +455,6 @@ namespace NovelEditor
             if (_inputProvider.GetSkip())
             {
                 Skip();
-            }
-
-            if (_inputProvider.GetStopOrStart())
-            {
-                _novelUI.SwitchStopText();
             }
 
 
@@ -536,7 +542,7 @@ namespace NovelEditor
             _nowDialogueNum++;
             _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
             if (OnDialogueChanged != null)
-                OnDialogueChanged();
+                OnDialogueChanged(JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(newData)));
         }
 
         async void SetNextDialogue()
@@ -550,7 +556,7 @@ namespace NovelEditor
             _nowDialogueNum++;
             _isReading = !await _novelUI.SetNextText(_nowParagraph.dialogueList[_nowDialogueNum - 1], _textCTS.Token);
             if (OnDialogueChanged != null)
-                OnDialogueChanged();
+                OnDialogueChanged(JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(_nowParagraph.dialogueList[_nowDialogueNum - 1])));
         }
 
         async void end()
