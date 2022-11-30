@@ -72,12 +72,17 @@ namespace NovelEditor
                     progress += (100 / savedData.passedParagraphId.Count) / nowParagraph.dialogueList.Count;
                 }
             }
-            return data;
+            Debug.Log("load failed");
+            return null;
         }
 
         internal NovelSaveData SaveDialogue(NovelData novelData, int paragraphIndex, int dialogueIndex, List<int> passedParagraphIdList, List<string> choiceName, List<string> ParagraphName)
         {
-            NovelSaveData savedData = new(novelData, paragraphIndex, --dialogueIndex, passedParagraphIdList, choiceName, ParagraphName);
+            if (dialogueIndex == novelData.paragraphList[paragraphIndex].dialogueList.Count)
+            {
+                dialogueIndex--;
+            }
+            NovelSaveData savedData = new(novelData, paragraphIndex, dialogueIndex, passedParagraphIdList, choiceName, ParagraphName);
             return savedData;
         }
 
