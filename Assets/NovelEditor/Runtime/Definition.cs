@@ -60,7 +60,6 @@ namespace NovelEditor
         GrayScale,
         Sepia,
         Jaggy,
-        Holo,
         ChromaticAberration,
         Blur
     }

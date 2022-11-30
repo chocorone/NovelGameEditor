@@ -26,7 +26,6 @@ namespace NovelEditor
         Shader GrayScale;
         Shader Sepia;
         Shader Jaggy;
-        Shader Holo;
         Shader ChromaticAberration;
         Shader Blur;
 
@@ -38,7 +37,6 @@ namespace NovelEditor
             GrayScale = Resources.Load<Shader>("GrayScaleEffect");
             Sepia = Resources.Load<Shader>("SepiaEffect");
             Jaggy = Resources.Load<Shader>("JaggyEffect");
-            Holo = Resources.Load<Shader>("HoloEffect");
             ChromaticAberration = Resources.Load<Shader>("ChromaticEffect");
             Blur = Resources.Load<Shader>("BlurEffect");
         }
@@ -75,9 +73,6 @@ namespace NovelEditor
                     break;
                 case Effect.Jaggy:
                     image.material.shader = Jaggy;
-                    break;
-                case Effect.Holo:
-                    image.material.shader = Holo;
                     break;
                 case Effect.ChromaticAberration:
                     image.material.shader = ChromaticAberration;
