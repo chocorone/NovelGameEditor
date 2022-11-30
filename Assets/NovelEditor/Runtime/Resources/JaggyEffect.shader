@@ -49,8 +49,7 @@ Properties
                 float _FrameRate;
                 float _Strength;
 
-                //ランダムな値を返す
-                float rand(float2 co) //引数はシード値と呼ばれる　同じ値を渡せば同じものを返す
+                float rand(float2 co)
                 {
                     return frac(sin(dot(co.xy, float2(12.9898, 78.233))) * 43758.5453);
                 }
@@ -85,23 +84,16 @@ Properties
                 {
                     float2 uv = i.uv;
                     _Strength *=0.1;
-                    //ポスタライズ 
                     float posterize1 = floor(frac(perlinNoise(_SinTime) * 10) / (1 / _FrameRate)) * (1 / _FrameRate);
                     float posterize2 = floor(frac(perlinNoise(_SinTime) * 5) / (1 / _FrameRate)) * (1 / _FrameRate);
-                    //uv.x方向のノイズ計算 -0.1 < noiseX < 0.1
                     float noiseX = (2.0 * rand(posterize1) - 0.5) * 0.1;
-                    //step(t,x) はxがtより大きい場合1を返す
                     float strength = step(rand(posterize2), _Strength);
                     noiseX *= strength;
-                    //uv.y方向のノイズ計算 -1 < noiseY < 1
                     float noiseY = 2.0 * rand(posterize1) - 0.5;
-                    //グリッチの高さの補間値計算 どの高さに出現するかは時間変化でランダム
                     float glitchLine1 = step(uv.y - noiseY, rand(uv));
                     float glitchLine2 = step(uv.y + noiseY, noiseY);
                     float glitch = saturate(glitchLine1 - glitchLine2);
-                    //速度調整
                     uv.x = lerp(uv.x, uv.x + noiseX, glitch);
-                    //テクスチャサンプリング
                     float4 glitchColor = tex2D(_MainTex, uv);
                     glitchColor*= i.color;
                     return glitchColor;

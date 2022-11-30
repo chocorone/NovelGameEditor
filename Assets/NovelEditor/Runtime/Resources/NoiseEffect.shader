@@ -56,7 +56,6 @@ Shader "NovelEditor/NoiseEffect"
                 return OUT;
             }
 
-            //疑似乱数生成関数
             float rand(float3 co)
             {
                 return frac(sin(dot(co.xyz, float3(12.9898, 78.233, 45.5432))) * 43758.5453);
@@ -72,28 +71,21 @@ Shader "NovelEditor/NoiseEffect"
             fixed4 frag(v2f i) : COLOR
             {
                 _Strength *=0.01;
-                //画面Y座標を分割
                 int divisionindex = i.uv.y * division;
 
-                //一定間隔で横に区切ったブロックを作る
                 int noiseindex = divisionindex / blackinterval;
 
-                //ブロックごとに横にずらす座標を決める前処理
-                //時間による乱数のシード値（timeに互いに素っぽい数をかけたのを複数用意するといい感じになる）
                 float3 timenoise = float3(0, int(_Time.x * 61), int(_Time.x * 83));
-                //ときどき大きくずらす（時間のシード値が変更されるたびに5%の確率でノイズが10倍になる）
                 float noiserate = rand(timenoise) < 0.05 ? 10 : 1;
 
-                //横にずらす大きさを乱数で決める（0~1）（時間的にも位置的にもランダムになるように位置によるシード値と時間によるシード値を別次元で与える）
                 float xnoise = rand(float3(noiseindex, 0, 0) + timenoise);
-                xnoise = xnoise * xnoise - 0.5;             //ずれを2乗して0.5引く（2乗しないと乱れすぎる気がした）
-                xnoise = xnoise * _Strength * noiserate;   //ずれにスケールをかける
-                xnoise = xnoise * (_SinTime.w / 2 + 1.1);   //時間的にずれに波があるようにする（いい感じになる気がする）
-                xnoise = xnoise + (abs((int(_Time.x * 2000) % int(division / blackinterval)) - noiseindex) < 5 ? 0.005 : 0);    //ラスタースキャンっぽいノイズ
+                xnoise = xnoise * xnoise - 0.5; 
+                xnoise = xnoise * _Strength * noiserate;
+                xnoise = xnoise * (_SinTime.w / 2 + 1.1); 
+                xnoise = xnoise + (abs((int(_Time.x * 2000) % int(division / blackinterval)) - noiseindex) < 5 ? 0.005 : 0); 
 
                 float2 uv = i.uv + float2(xnoise, 0);
 
-                //ぼやけさせる
                 fixed4 col1 = tex2D(_MainTex, uv);
                 fixed4 col2 = tex2D(_MainTex, uv + float2(0.005, 0));
                 fixed4 col3 = tex2D(_MainTex, uv + float2(-0.005, 0));
