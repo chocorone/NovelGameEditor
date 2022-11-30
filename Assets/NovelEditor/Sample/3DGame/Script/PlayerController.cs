@@ -51,7 +51,7 @@ namespace NovelEditor.Sample
         void OnDisable()
         {
             _animator.SetBool("move", false);
-            //_rigidbody.velocity = Vector3.zero;
+            _rigidbody.velocity = Vector3.zero;
         }
 
         void OnTriggerEnter(Collider collisionInfo)
