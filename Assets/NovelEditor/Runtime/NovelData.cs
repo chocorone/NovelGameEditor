@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
@@ -276,7 +275,9 @@ namespace NovelEditor
                             }
                             else
                             {
+#if UNITY_EDITOR
                                 data.charas[i] = (Sprite)EditorUtility.InstanceIDToObject(charas[i]);
+#endif
                             }
 
                         }
@@ -302,7 +303,9 @@ namespace NovelEditor
                         }
                         else
                         {
+#if UNITY_EDITOR
                             data.back = (Sprite)EditorUtility.InstanceIDToObject(back);
+#endif
                         }
                     }
                     else
