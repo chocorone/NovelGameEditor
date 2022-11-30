@@ -318,7 +318,7 @@ namespace NovelEditor
                 UnPause();
                 if (OnSkiped != null)
                     OnSkiped();
-                if (newData == null || (_nowParagraph.next == Next.Continue && _nowParagraph.nextParagraphIndex == -1))
+                if (newData == null)
                 {
                     end();
                     return;
@@ -332,6 +332,7 @@ namespace NovelEditor
                 {
                     _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
                     _nowDialogueNum = 0;
+                    _passedParagraphID.Add(_nowParagraph.index);
                     _ParagraphName.Add(_nowParagraph.nodeName);
                     if (ParagraphNodeChanged != null)
                         ParagraphNodeChanged(_nowParagraph.nodeName);
@@ -344,7 +345,7 @@ namespace NovelEditor
 
         public NovelSaveData save()
         {
-            return DataLoader.Instance.SaveDialogue(novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID, ChoiceName, ParagraphName);
+            return DataLoader.Instance.SaveDialogue(novelData, _nowParagraph.index, _nowDialogueNum - 1, _passedParagraphID, ChoiceName, ParagraphName);
         }
 
         public void SetInputProvider(NovelInputProvider input)
@@ -561,9 +562,10 @@ namespace NovelEditor
             _textCTS = new CancellationTokenSource();
             _isReading = true;
             _nowDialogueNum++;
-            _isReading = !await _novelUI.SetNextText(_nowParagraph.dialogueList[_nowDialogueNum - 1], _textCTS.Token);
             if (OnDialogueChanged != null)
                 OnDialogueChanged(JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(_nowParagraph.dialogueList[_nowDialogueNum - 1])));
+            _isReading = !await _novelUI.SetNextText(_nowParagraph.dialogueList[_nowDialogueNum - 1], _textCTS.Token);
+
         }
 
         async void end()
