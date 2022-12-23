@@ -69,7 +69,7 @@ namespace NovelEditor.Editor
                     if (node.data.nextParagraphIndex == -1)
                         continue;
 
-                    Edge edge = node.CountinuePort.ConnectTo(ParagraphNode.nodes[node.data.nextParagraphIndex].InputPort);
+                    Edge edge = node.ContinuePort.ConnectTo(ParagraphNode.nodes[node.data.nextParagraphIndex].InputPort);
                     graphView.AddElement(edge);
                 }
 
@@ -99,7 +99,7 @@ namespace NovelEditor.Editor
                 if (node.data.nextParagraphIndex == -1)
                     continue;
 
-                Edge edge = node.CountinuePort.ConnectTo(ParagraphNode.nodes[node.data.nextParagraphIndex].InputPort);
+                Edge edge = node.ContinuePort.ConnectTo(ParagraphNode.nodes[node.data.nextParagraphIndex].InputPort);
                 graphView.AddElement(edge);
             }
         }

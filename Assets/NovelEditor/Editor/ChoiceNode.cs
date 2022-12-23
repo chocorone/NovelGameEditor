@@ -62,9 +62,9 @@ namespace NovelEditor.Editor
             inputContainer.Add(InputPort);
 
             //OutputPort作成
-            CountinuePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(BaseNode));
-            CountinuePort.portName = "next";
-            outputContainer.Add(CountinuePort);
+            ContinuePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(BaseNode));
+            ContinuePort.portName = "next";
+            outputContainer.Add(ContinuePort);
         }
 
         protected override void SetTitle()

@@ -157,10 +157,10 @@ namespace NovelEditor.Editor
             switch (data.next)
             {
                 case Next.Continue:
-                    CountinuePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(BaseNode));
-                    CountinuePort.portColor = new Color(0.8f, 0.2f, 0.4f);
-                    CountinuePort.portName = "next";
-                    outputContainer.Add(CountinuePort);
+                    ContinuePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(BaseNode));
+                    ContinuePort.portColor = new Color(0.8f, 0.2f, 0.4f);
+                    ContinuePort.portName = "next";
+                    outputContainer.Add(ContinuePort);
                     break;
 
                 case Next.Choice:
@@ -194,9 +194,9 @@ namespace NovelEditor.Editor
             }
             choicePorts = new List<Port>();
 
-            if (CountinuePort != null)
+            if (ContinuePort != null)
             {
-                foreach (Edge e in CountinuePort.connections)
+                foreach (Edge e in ContinuePort.connections)
                 {
                     e.input.Disconnect(e);
                     e.RemoveFromHierarchy();

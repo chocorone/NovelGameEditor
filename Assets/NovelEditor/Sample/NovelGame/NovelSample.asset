@@ -21,8 +21,8 @@ MonoBehaviour:
     _index: 0
     _nodePosition:
       serializedVersion: 2
-      x: -21.5
-      y: 119.5
+      x: -25.5
+      y: 121
       width: 169
       height: 96.5
     _nextParagraphIndex: 7
@@ -1141,8 +1141,19 @@ MonoBehaviour:
     _nextParagraphIndex: 2
     nodeName: "\u3044\u3044\u3048\u3092\u3048\u3089\u3093\u3060"
     text: "\u3044\u3044\u3048"
+  - _enabled: 1
+    _index: 2
+    _nodePosition:
+      serializedVersion: 2
+      x: 222.80818
+      y: 53.23063
+      width: 100
+      height: 100
+    _nextParagraphIndex: -1
+    nodeName: a
+    text: Choice
   graphScale: {x: 0.65751624, y: 0.65751624, z: 1}
-  graphPosition: {x: -76, y: 114, z: 0}
+  graphPosition: {x: 57.5, y: 114, z: 0}
   havePreLocations: 0
   newLocations:
   - {fileID: 3646998453675562630, guid: cde0554b62a86487990eb95910ffad4d, type: 3}
