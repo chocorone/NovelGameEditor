@@ -7,6 +7,9 @@ using NovelEditor.Editor;
 
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// 選択肢のノードを表示した時のインスペクター拡張
+    /// </summary>
     [CustomEditor(typeof(TempChoice))]
     internal class ChoiceInspector : UnityEditor.Editor
     {
@@ -15,8 +18,8 @@ namespace NovelEditor.Editor
         void OnEnable()
         {
             tmpdata = target as TempChoice;
-
         }
+
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
@@ -38,7 +41,6 @@ namespace NovelEditor.Editor
 
             var container = new IMGUIContainer(OnInspectorGUI);
             root.Add(container);
-
 
             return root;
         }
