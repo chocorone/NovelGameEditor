@@ -8,27 +8,19 @@ using System.Linq;
 using NovelEditor;
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// 右クリックで表示するメニューをグラフに追加するクラス
+    /// </summary>
     internal class MenuWindow : ScriptableObject, ISearchWindowProvider
     {
         private NovelGraphView graphView;
         private EditorWindow _editorWindow;
 
-        public void Init(NovelGraphView newGraphView)
-        {
+        public void Init(NovelGraphView newGraphView,EditorWindow window){
             graphView = newGraphView;
-            _editorWindow = Resources.FindObjectsOfTypeAll<NovelEditorWindow>()[0] as EditorWindow;
-
-            graphView.nodeCreationRequest += context =>
-            {
-                SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), this);
-            };
-            graphView.OnContextMenuNodeCreate = OnContextMenuNodeCreate;
-            graphView.CopyNodes = OnContextMenuNodeCopy;
-            graphView.PasteOnNode = OnContextMenuPasteOnNode;
-            graphView.PasteOnGraph = OnContextMenuPasteOnGraph;
+            _editorWindow = window;
         }
 
-        //右クリックで開くメニュー
         List<SearchTreeEntry> ISearchWindowProvider.CreateSearchTree(SearchWindowContext context)
         {
             var entries = new List<SearchTreeEntry>();
@@ -39,7 +31,6 @@ namespace NovelEditor.Editor
             return entries;
         }
 
-        //メニュからノードを追加する処理
         bool ISearchWindowProvider.OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
         {
             var type = searchTreeEntry.userData as Type;
@@ -56,9 +47,15 @@ namespace NovelEditor.Editor
             return true;
         }
 
+        public void nodeCreationRequest(NodeCreationContext context){
+            SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), this);
+        }
 
-        //Create Nodeを選んだ時の動作
-        void OnContextMenuNodeCreate(DropdownMenuAction a)
+        /// <summary>
+        /// Create Nodeを選んだ時の動作
+        /// </summary>
+        /// <param name="a"></param>
+        public void OnContextMenuNodeCreate(DropdownMenuAction a)
         {
             if (graphView.nodeCreationRequest == null)
                 return;
@@ -69,7 +66,12 @@ namespace NovelEditor.Editor
             graphView.nodeCreationRequest(new NodeCreationContext() { screenMousePosition = screenPoint });
         }
 
-        string OnContextMenuNodeCopy(IEnumerable<GraphElement> elements)
+        /// <summary>
+        /// コピーを選択した時の動作
+        /// </summary>
+        /// <param name="elements">選択しているGraphElement</param>
+        /// <returns>Jsonにしたデータ</returns>
+        public string OnContextMenuNodeCopy(IEnumerable<GraphElement> elements)
         {
             CopyData copyData = new CopyData();
             foreach (GraphElement element in elements)
@@ -88,7 +90,12 @@ namespace NovelEditor.Editor
             return data;
         }
 
-        void OnContextMenuPasteOnNode(string data, BaseNode node)
+        /// <summary>
+        /// ノード上でPasteを選択した時の動作
+        /// </summary>
+        /// <param name="data">Jsonにしたデータ</param>
+        /// <param name="node">ペーストするノード</param>
+        public void OnContextMenuPasteOnNode(string data, BaseNode node)
         {
             Undo.RecordObject(NovelEditorWindow.editingData, "Paste Node");
             CopyData copyData = JsonUtility.FromJson<CopyData>(data);
@@ -104,7 +111,12 @@ namespace NovelEditor.Editor
             }
         }
 
-        void OnContextMenuPasteOnGraph(string data, Vector2 mousePos)
+        /// <summary>
+        /// グラフ上でPasteを選択した時の動作
+        /// </summary>
+        /// <param name="data">Jsonにしたデータ</param>
+        /// <param name="mousePos">右クリックしたグラフ上の位置</param>
+        public void OnContextMenuPasteOnGraph(string data, Vector2 mousePos)
         {
             Undo.RecordObject(NovelEditorWindow.editingData, "Paste Node");
             CopyData copyData = JsonUtility.FromJson<CopyData>(data);

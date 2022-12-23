@@ -29,8 +29,7 @@ namespace NovelEditor.Editor
                 graphView.graphViewChanged += OnGraphChange;
 
                 //右クリックで表示できるメニューの作成
-                MenuWindow menuWindow = ScriptableObject.CreateInstance<MenuWindow>();
-                menuWindow.Init(graphView);
+                SetMenu();
 
                 LoadNodes();
 
@@ -70,6 +69,20 @@ namespace NovelEditor.Editor
                     ChoiceNode.nodes[data.index]?.OnSelected();
                 }
             }
+        }
+        
+        /// <summary>
+        /// 右クリックで表示するメニューを作成する
+        /// </summary>
+        void SetMenu(){
+            MenuWindow menuWindow = ScriptableObject.CreateInstance<MenuWindow>();
+            menuWindow.Init(graphView,Resources.FindObjectsOfTypeAll<NovelEditorWindow>()[0] as EditorWindow);
+
+            graphView.nodeCreationRequest += menuWindow.nodeCreationRequest;
+            graphView.OnContextMenuNodeCreate = menuWindow.OnContextMenuNodeCreate;
+            graphView.CopyNodes = menuWindow.OnContextMenuNodeCopy;
+            graphView.PasteOnNode = menuWindow.OnContextMenuPasteOnNode;
+            graphView.PasteOnGraph = menuWindow.OnContextMenuPasteOnGraph;
         }
 
         /// <summary>
