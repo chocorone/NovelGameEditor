@@ -9,6 +9,9 @@ using System.Reflection;
 
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// ParagraphNodeを選択した時のインスペクター拡張
+    /// </summary>
     [CustomEditor(typeof(TempParagraph))]
     internal class ParagraphInspector : UnityEditor.Editor
     {
@@ -25,7 +28,6 @@ namespace NovelEditor.Editor
             SerializedProperty data = serializedObject.FindProperty(nameof(tmpdata.data));
             index = tmpdata.data.index;
         }
-
 
         public override VisualElement CreateInspectorGUI()
         {
