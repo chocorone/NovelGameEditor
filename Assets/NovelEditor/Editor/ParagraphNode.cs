@@ -48,7 +48,7 @@ namespace NovelEditor.Editor
 
         }
 
-        internal override void overrideNode(string pasteData)
+        internal override void OverwriteNode(string pasteData)
         {
             NovelData.ParagraphData newData = JsonUtility.FromJson<NovelData.ParagraphData>(pasteData);
             data.ChangeDialogue(newData.dialogueList);

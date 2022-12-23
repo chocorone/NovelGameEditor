@@ -75,7 +75,7 @@ namespace NovelEditor.Editor
             SetTitle();
         }
 
-        internal abstract void overrideNode(string pasteData);
+        internal abstract void OverwriteNode(string pasteData);
         internal abstract void AddNext(BaseNode nextNode, Port outPort);
 
     }

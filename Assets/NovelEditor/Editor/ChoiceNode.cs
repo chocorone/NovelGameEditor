@@ -42,7 +42,7 @@ namespace NovelEditor.Editor
             }
 
         }
-        internal override void overrideNode(string pasteData)
+        internal override void OverwriteNode(string pasteData)
         {
             NovelData.ChoiceData newData = JsonUtility.FromJson<NovelData.ChoiceData>(pasteData);
             data.text = newData.text;
