@@ -47,14 +47,14 @@ namespace NovelEditor.Editor
         /// <summary>
         /// 次のノードの情報を設定する
         /// </summary>
-        /// <param name="nextNode"></param>
-        /// <param name="outPort"></param>
+        /// <param name="nextNode">新しく接続されたノード</param>
+        /// <param name="outPort">接続したポート</param>
         internal abstract void AddNext(BaseNode nextNode, Port outPort);
 
         /// <summary>
-        /// 次のノードの情報を削除する
+        /// 次に接続されたノードの情報を削除する
         /// </summary>
-        /// <param name="edge"></param>
+        /// <param name="edge">削除されたエッジ</param>
         public abstract void ResetNext(Edge edge);
 
         /// <summary>
