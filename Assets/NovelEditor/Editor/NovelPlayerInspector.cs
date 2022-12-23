@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// NovelPlayerのインスペクター拡張
+    /// </summary>
     [CustomEditor(typeof(NovelPlayer))]
     public class NovelPlayerInspector : UnityEditor.Editor
     {

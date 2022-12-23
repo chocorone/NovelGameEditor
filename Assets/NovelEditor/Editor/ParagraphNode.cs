@@ -12,15 +12,32 @@ using Newtonsoft.Json.Linq;
 
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// 会話用のノードのクラス
+    /// </summary>
     internal class ParagraphNode : BaseNode
     {
-        //編集しているデータにあるParagraphDataから作られたノード
+        /// <summary>
+        /// ParagraphNodeのリスト、使用されていないノードも含む
+        /// </summary>
         public static List<ParagraphNode> nodes = new List<ParagraphNode>();
+        
+        /// <summary>
+        /// ノードの持つ会話のデータ
+        /// </summary>
         public NovelData.ParagraphData data => (NovelData.ParagraphData)nodeData;
+        
+        /// <summary>
+        /// 選択肢のポート
+        /// </summary>
+        /// <typeparam name="Port"></typeparam>
+        /// <returns></returns>
         internal List<Port> choicePorts = new List<Port>();
 
 
-        //0から作られるとき
+        /// <summary>
+        /// ノードを作成するコンストラクタ。データを新しく作成する
+        /// </summary>
         public ParagraphNode()
         {
             //データを作成する
@@ -30,7 +47,10 @@ namespace NovelEditor.Editor
         }
 
 
-        //データをもとに作られるとき
+        /// <summary>
+        /// 指定されたデータでノードを作成するコンストラクタ
+        /// </summary>
+        /// <param name="Pdata">ノードに設定するデータ</param>
         public ParagraphNode(NovelData.ParagraphData Pdata)
         {
             nodeData = Pdata;
