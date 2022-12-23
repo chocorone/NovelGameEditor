@@ -230,5 +230,13 @@ namespace NovelEditor.Editor
             }
 
         }
+
+        public override void OnSelected(){
+            base.OnSelected();
+            TempParagraph temp = ScriptableObject.CreateInstance<TempParagraph>();
+            temp.data = data;
+            temp.dialogueList = data.dialogueList;
+            Selection.activeObject = temp;
+        }
     }
 }

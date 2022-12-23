@@ -86,5 +86,12 @@ namespace NovelEditor.Editor
             data.ChangeNextParagraph(-1);
         }
 
+        public override void OnSelected(){
+            base.OnSelected();
+            TempChoice temp = ScriptableObject.CreateInstance<TempChoice>();
+            temp.data = data;
+            Selection.activeObject = temp;
+        }
+
     }
 }

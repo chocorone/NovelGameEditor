@@ -58,20 +58,6 @@ namespace NovelEditor.Editor
         {
             if (nodeData != null)
             {
-                if (nodeData is NovelData.ChoiceData)
-                {
-                    TempChoice temp = ScriptableObject.CreateInstance<TempChoice>();
-                    temp.data = (NovelData.ChoiceData)nodeData;
-                    Selection.activeObject = temp;
-                }
-
-                if (nodeData is NovelData.ParagraphData)
-                {
-                    TempParagraph temp = ScriptableObject.CreateInstance<TempParagraph>();
-                    temp.data = (NovelData.ParagraphData)nodeData;
-                    temp.dialogueList = ((NovelData.ParagraphData)nodeData).dialogueList;
-                    Selection.activeObject = temp;
-                }
                 nowSelection = this;
             }
             else
