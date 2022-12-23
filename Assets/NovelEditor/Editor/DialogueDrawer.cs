@@ -11,6 +11,9 @@ using NovelEditor.Editor;
 
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// 会話のリストに表示するDialogueのPropertyDrawer
+    /// </summary>
     [CustomPropertyDrawer(typeof(NovelData.ParagraphData.Dialogue))]
     internal class DialogueDrawer : PropertyDrawer
     {
