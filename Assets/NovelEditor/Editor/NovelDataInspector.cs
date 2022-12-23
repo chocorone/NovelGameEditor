@@ -10,6 +10,9 @@ using NovelEditor;
 
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// NovelDataのインスペクター拡張
+    /// </summary>
     [CustomEditor(typeof(NovelData))]
     internal class NovelDataInspector : UnityEditor.Editor
     {
@@ -63,7 +66,6 @@ namespace NovelEditor.Editor
             return visualElement;
         }
 
-
         void SetReorderableList()
         {
             reorderableList = new ReorderableList(this.serializedObject, this.serializedObject.FindProperty("newLocations"));
@@ -84,6 +86,9 @@ namespace NovelEditor.Editor
             NovelEditor.Open(noveldata);
         }
 
+        /// <summary>
+        /// 立ち絵位置のプレハブを変更した時、同じプレハブなら設定を引き継ぐ処理
+        /// </summary>
         void ChangePrefab()
         {
             if (noveldata.newData)
@@ -94,6 +99,9 @@ namespace NovelEditor.Editor
             label.text = "処理中";
             bar.value = 0;
             bar.style.display = DisplayStyle.Flex;
+
+
+            //idとインデックスの辞書型
             Dictionary<int, int> locationsKey = new Dictionary<int, int>();
 
             for (int i = 0; i < noveldata.locations.Count; i++)
@@ -101,34 +109,40 @@ namespace NovelEditor.Editor
                 locationsKey.Add(noveldata.locations[i].GetInstanceID(), i);
             }
 
+            //nullの項目を削除する
             noveldata.newLocations.RemoveAll(item => item == null);
             noveldata.newLocations = noveldata.newLocations.Distinct().ToList();
-
             noveldata.changeLocation(noveldata.newLocations);
 
+            //プログレスバー用の数値
             float perParagraph = 100 / noveldata.paragraphList.Count;
 
-            //データを初期化
+            //全てのParagraphDataのDialogueの立ち絵情報を変更
             foreach (NovelData.ParagraphData pdata in noveldata.paragraphList)
             {
+                //一つのParagraphを処理するたびにプログレスバーに加算される
                 float perDialogue = perParagraph / pdata.dialogueList.Count;
+
+                //オブジェクトプールにあるParagraphならスキップ
                 if (!pdata.enabled)
                 {
                     bar.value += perDialogue;
                     continue;
                 }
+
                 foreach (NovelData.ParagraphData.Dialogue dialogue in pdata.dialogueList)
                 {
-                    //データ保存
+                    //前のデータを保存
                     NovelData.ParagraphData.Dialogue preData = JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(dialogue));
 
+                    //現在の立ち絵でデータを初期化
                     dialogue.charas = new Sprite[noveldata.locations.Count];
                     dialogue.howCharas = new CharaChangeStyle[noveldata.locations.Count];
                     dialogue.charaFadeColor = new Color[noveldata.locations.Count];
                     dialogue.charaEffects = new Effect[noveldata.locations.Count];
                     dialogue.charaEffectStrength = new int[noveldata.locations.Count];
 
-                    //同じ名前のデータがあれば差し替え
+                    //同じIDのプレハブがあれば差し替え
                     for (int i = 0; i < noveldata.locations.Count; i++)
                     {
                         if (locationsKey.ContainsKey(noveldata.locations[i].GetInstanceID()))
