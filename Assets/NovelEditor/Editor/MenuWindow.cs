@@ -95,12 +95,12 @@ namespace NovelEditor.Editor
 
             if (node is ChoiceNode && copyData.cdatas.Count > 0)
             {
-                node.overrideNode(JsonUtility.ToJson(copyData.cdatas[0]));
+                node.OverwriteNode(JsonUtility.ToJson(copyData.cdatas[0]));
             }
 
             if (node is ParagraphNode && copyData.pdatas.Count > 0)
             {
-                node.overrideNode(JsonUtility.ToJson(copyData.pdatas[0]));
+                node.OverwriteNode(JsonUtility.ToJson(copyData.pdatas[0]));
             }
         }
 
