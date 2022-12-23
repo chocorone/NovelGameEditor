@@ -8,10 +8,17 @@ using NovelEditor;
 
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// グラフの管理を行うクラス
+    /// </summary>
     internal class GraphController
     {
         NovelGraphView graphView;
 
+        /// <summary>
+        /// グラフの作成
+        /// </summary>
+        /// <returns>作成したグラフ</returns>
         internal NovelGraphView CreateGraph()
         {
             graphView = new NovelGraphView();
@@ -27,37 +34,47 @@ namespace NovelEditor.Editor
 
                 LoadNodes();
 
-                Undo.undoRedoPerformed += () =>
-                {
-                    NovelData.NodeData data = BaseNode.nowSelection?.nodeData;
-
-                    foreach (var element in graphView.graphElements)
-                    {
-                        if (element is BaseNode || element is Edge)
-                        {
-                            element.RemoveFromHierarchy();
-                        }
-                    }
-                    LoadNodes();
-                    if (data != null)
-                    {
-                        Selection.activeObject = null;
-                        if (data is NovelData.ParagraphData && ParagraphNode.nodes.Count > data.index)
-                        {
-                            ParagraphNode.nodes[data.index]?.OnSelected();
-                        }
-                        else if (ChoiceNode.nodes.Count > data.index)
-                        {
-                            ChoiceNode.nodes[data.index]?.OnSelected();
-                        }
-                    }
-                };
+                Undo.undoRedoPerformed  += UndoRedoGraph;
 
             }
 
             return graphView;
         }
 
+        /// <summary>
+        /// UndoRedoをした時の処理
+        /// </summary>
+        void UndoRedoGraph(){
+            NovelData.NodeData data = BaseNode.nowSelection?.nodeData;
+
+            //グラフを作り直す
+            foreach (var element in graphView.graphElements)
+            {
+                if (element is BaseNode || element is Edge)
+                {
+                    element.RemoveFromHierarchy();
+                }
+            }
+            LoadNodes();
+
+            //UndoRedoをする前に選択していたデータを表示
+            if (data != null)
+            {
+                Selection.activeObject = null;
+                if (data is NovelData.ParagraphData && ParagraphNode.nodes.Count > data.index)
+                {
+                    ParagraphNode.nodes[data.index]?.OnSelected();
+                }
+                else if (ChoiceNode.nodes.Count > data.index)
+                {
+                    ChoiceNode.nodes[data.index]?.OnSelected();
+                }
+            }
+        }
+
+        /// <summary>
+        /// データからノードを作成する
+        /// </summary>
         internal void LoadNodes()
         {
             //データからノードを作る
