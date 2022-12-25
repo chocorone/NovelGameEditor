@@ -7,12 +7,6 @@
 /// from https://gist.github.com/neon-izm/512a439fe6d07348f6f421c6061338e3
 /// </summary>
 
-/* usage
-  var rect = GetComponent<RectTransform>();
-  rect.SetAnchor(AnchorPresets.MiddleCenter);
-  rect.localPosition = Vector3.zero;
-  */
-
 namespace NovelEditor
 {
     public enum AnchorPresets

@@ -12,15 +12,32 @@ using Newtonsoft.Json.Linq;
 
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// 会話用のノードのクラス
+    /// </summary>
     internal class ParagraphNode : BaseNode
     {
-        //編集しているデータにあるParagraphDataから作られたノード
+        /// <summary>
+        /// ParagraphNodeのリスト、使用されていないノードも含む
+        /// </summary>
         public static List<ParagraphNode> nodes = new List<ParagraphNode>();
+        
+        /// <summary>
+        /// ノードの持つ会話のデータ
+        /// </summary>
         public NovelData.ParagraphData data => (NovelData.ParagraphData)nodeData;
+        
+        /// <summary>
+        /// 選択肢のポート
+        /// </summary>
+        /// <typeparam name="Port"></typeparam>
+        /// <returns></returns>
         internal List<Port> choicePorts = new List<Port>();
 
 
-        //0から作られるとき
+        /// <summary>
+        /// ノードを作成するコンストラクタ。データを新しく作成する
+        /// </summary>
         public ParagraphNode()
         {
             //データを作成する
@@ -30,7 +47,10 @@ namespace NovelEditor.Editor
         }
 
 
-        //データをもとに作られるとき
+        /// <summary>
+        /// 指定されたデータでノードを作成するコンストラクタ
+        /// </summary>
+        /// <param name="Pdata">ノードに設定するデータ</param>
         public ParagraphNode(NovelData.ParagraphData Pdata)
         {
             nodeData = Pdata;
@@ -48,7 +68,7 @@ namespace NovelEditor.Editor
 
         }
 
-        internal override void overrideNode(string pasteData)
+        internal override void OverwriteNode(string pasteData)
         {
             NovelData.ParagraphData newData = JsonUtility.FromJson<NovelData.ParagraphData>(pasteData);
             data.ChangeDialogue(newData.dialogueList);
@@ -157,10 +177,10 @@ namespace NovelEditor.Editor
             switch (data.next)
             {
                 case Next.Continue:
-                    CountinuePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(BaseNode));
-                    CountinuePort.portColor = new Color(0.8f, 0.2f, 0.4f);
-                    CountinuePort.portName = "next";
-                    outputContainer.Add(CountinuePort);
+                    ContinuePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(BaseNode));
+                    ContinuePort.portColor = new Color(0.8f, 0.2f, 0.4f);
+                    ContinuePort.portName = "next";
+                    outputContainer.Add(ContinuePort);
                     break;
 
                 case Next.Choice:
@@ -194,9 +214,9 @@ namespace NovelEditor.Editor
             }
             choicePorts = new List<Port>();
 
-            if (CountinuePort != null)
+            if (ContinuePort != null)
             {
-                foreach (Edge e in CountinuePort.connections)
+                foreach (Edge e in ContinuePort.connections)
                 {
                     e.input.Disconnect(e);
                     e.RemoveFromHierarchy();
@@ -229,6 +249,14 @@ namespace NovelEditor.Editor
                 data.ChangeNextParagraph(-1);
             }
 
+        }
+
+        public override void OnSelected(){
+            base.OnSelected();
+            TempParagraph temp = ScriptableObject.CreateInstance<TempParagraph>();
+            temp.data = data;
+            temp.dialogueList = data.dialogueList;
+            Selection.activeObject = temp;
         }
     }
 }

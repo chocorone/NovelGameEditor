@@ -26,6 +26,9 @@ namespace NovelEditor.Editor
             window.Init(data);
         }
 
+        /// <summary>
+        /// メニューからウィンドウを開くためのメソッド
+        /// </summary>
         [MenuItem("Tool/NovelEditor")]
         public static void Open()
         {

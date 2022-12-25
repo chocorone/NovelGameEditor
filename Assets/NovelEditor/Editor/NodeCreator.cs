@@ -10,8 +10,16 @@ using Newtonsoft.Json.Linq;
 
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// グラフを復元するためのクラス
+    /// </summary>
     internal static class NodeCreator
     {
+        /// <summary>
+        /// データからグラフを復元
+        /// </summary>
+        /// <param name="graphView">ノードを貼り付けるGraphView</param>
+        /// <param name="data">復元するデータ</param>
         internal static void RestoreGraph(GraphView graphView, NovelData data)
         {
             RestoreParagraphNode(graphView, data.paragraphList);
@@ -56,9 +64,12 @@ namespace NovelEditor.Editor
             }
         }
 
+        /// <summary>
+        /// ParagraphNodeから繋がれるエッジを復元する
+        /// </summary>
+        /// <param name="graphView">エッジをつけるGraphView</param>
         static void RestoreParagraphEdge(GraphView graphView)
         {
-            //ノードを接続する
             foreach (ParagraphNode node in ParagraphNode.nodes)
             {
                 if (node == null) continue;
@@ -69,7 +80,7 @@ namespace NovelEditor.Editor
                     if (node.data.nextParagraphIndex == -1)
                         continue;
 
-                    Edge edge = node.CountinuePort.ConnectTo(ParagraphNode.nodes[node.data.nextParagraphIndex].InputPort);
+                    Edge edge = node.ContinuePort.ConnectTo(ParagraphNode.nodes[node.data.nextParagraphIndex].InputPort);
                     graphView.AddElement(edge);
                 }
 
@@ -89,6 +100,10 @@ namespace NovelEditor.Editor
             }
         }
 
+        /// <summary>
+        /// ChoiceNodeから繋がれるエッジを復元する
+        /// </summary>
+        /// <param name="graphView">エッジをつけるGraphView</param>
         static void RestoreChoiceEdge(GraphView graphView)
         {
             //ノードを接続する
@@ -99,7 +114,7 @@ namespace NovelEditor.Editor
                 if (node.data.nextParagraphIndex == -1)
                     continue;
 
-                Edge edge = node.CountinuePort.ConnectTo(ParagraphNode.nodes[node.data.nextParagraphIndex].InputPort);
+                Edge edge = node.ContinuePort.ConnectTo(ParagraphNode.nodes[node.data.nextParagraphIndex].InputPort);
                 graphView.AddElement(edge);
             }
         }
