@@ -10,7 +10,7 @@ namespace NovelEditor
     {
         Default,
         UserSetting,
-        Override
+        OverWrite
     }
 
     public enum Next

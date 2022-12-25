@@ -7,6 +7,9 @@ using System.Linq;
 
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// NovelEditor用に使用するGraphViewのクラス
+    /// </summary>
     internal class NovelGraphView : GraphView
     {
         public System.Action<DropdownMenuAction> OnContextMenuNodeCreate;
@@ -21,6 +24,9 @@ namespace NovelEditor.Editor
             SettingGraph();
         }
 
+        /// <summary>
+        /// GraphViewの見た目の設定
+        /// </summary>
         void CreateGraph()
         {
             // 親のサイズに合わせてGraphViewのサイズを設定
@@ -31,6 +37,9 @@ namespace NovelEditor.Editor
             Insert(0, gridBackground);
         }
 
+        /// <summary>
+        /// GraphViewの初期設定
+        /// </summary>
         void SettingGraph()
         {
             //ズームの設定
@@ -49,6 +58,10 @@ namespace NovelEditor.Editor
             this.AddManipulator(new RectangleSelector());
         }
 
+        /// <summary>
+        /// グラフ変化時に画面位置やズームの数値を保存する
+        /// </summary>
+        /// <param name="graphView">変化したGraphView</param>
         void viewChanged(GraphView graphView)
         {
             if (NovelEditorWindow.editingData != null)

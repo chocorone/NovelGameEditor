@@ -14,9 +14,23 @@ namespace NovelEditor.Editor
     /// </summary>
     public class NovelEditorWindow : EditorWindow
     {
+        /// <summary>
+        /// 現在編集しているデータ、保存用
+        /// </summary>
         [SerializeField] NovelData _editingData;
+
+        /// <summary>
+        /// 現在編集しているデータ
+        /// </summary>
+        /// <value>現在編集しているNovelData</value>
         internal static NovelData editingData => Instance._editingData;
+
         private static NovelEditorWindow instance;
+
+        /// <summary>
+        /// 現在開いているNovelEditorWindowを返す、常にひとつ
+        /// </summary>
+        /// <value>現在開いているNovelEditorWindow</value>
         public static NovelEditorWindow Instance
         {
             get
@@ -49,7 +63,6 @@ namespace NovelEditor.Editor
         void OnEnable()
         {
             Draw();
-
         }
 
         void Draw()

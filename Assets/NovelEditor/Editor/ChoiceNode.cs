@@ -10,13 +10,25 @@ using NovelEditor.Editor;
 
 namespace NovelEditor.Editor
 {
+    /// <summary>
+    /// 選択肢のノードのクラス
+    /// </summary>
     internal class ChoiceNode : BaseNode
     {
-        //編集しているデータにあるChoiceDataから作られたノード
+        /// <summary>
+        /// ChoiceNodeのリスト、使用されていないノードも含む
+        /// </summary>
+        /// <typeparam name="ChoiceNode"></typeparam>
         public static List<ChoiceNode> nodes = new List<ChoiceNode>();
+
+        /// <summary>
+        /// ノードの持つ選択肢のデータ
+        /// </summary>
         public NovelData.ChoiceData data => (NovelData.ChoiceData)nodeData;
 
-        //0から作られるとき
+        /// <summary>
+        /// ノードを作成するコンストラクタ。データを新しく作成する
+        /// </summary>
         public ChoiceNode()
         {
             //データを作成する
@@ -25,7 +37,10 @@ namespace NovelEditor.Editor
             nodes.Add(this);
         }
 
-        //データをもとに作られるとき
+        /// <summary>
+        /// 指定されたデータでノードを作成するコンストラクタ
+        /// </summary>
+        /// <param name="Cdata">ノードに設定するデータ</param>
         public ChoiceNode(NovelData.ChoiceData Cdata)
         {
             nodeData = Cdata;
@@ -40,9 +55,21 @@ namespace NovelEditor.Editor
             {
                 nodes.Add(this);
             }
-
         }
-        internal override void overrideNode(string pasteData)
+
+        public override void ResetNext(Edge edge)
+        {
+            data.ChangeNextParagraph(-1);
+        }
+
+        public override void OnSelected(){
+            base.OnSelected();
+            TempChoice temp = ScriptableObject.CreateInstance<TempChoice>();
+            temp.data = data;
+            Selection.activeObject = temp;
+        }
+
+        internal override void OverwriteNode(string pasteData)
         {
             NovelData.ChoiceData newData = JsonUtility.FromJson<NovelData.ChoiceData>(pasteData);
             data.text = newData.text;
@@ -62,9 +89,9 @@ namespace NovelEditor.Editor
             inputContainer.Add(InputPort);
 
             //OutputPort作成
-            CountinuePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(BaseNode));
-            CountinuePort.portName = "next";
-            outputContainer.Add(CountinuePort);
+            ContinuePort = Port.Create<Edge>(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(BaseNode));
+            ContinuePort.portName = "next";
+            outputContainer.Add(ContinuePort);
         }
 
         protected override void SetTitle()
@@ -80,11 +107,5 @@ namespace NovelEditor.Editor
         {
             data.ChangeNextParagraph(((ParagraphNode)nextNode).data.index);
         }
-
-        public override void ResetNext(Edge edge)
-        {
-            data.ChangeNextParagraph(-1);
-        }
-
     }
 }

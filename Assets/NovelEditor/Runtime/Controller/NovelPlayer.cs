@@ -7,6 +7,9 @@ using TMPro;
 
 namespace NovelEditor
 {
+    /// <summary>
+    /// 会話パートを再生するクラス
+    /// </summary>
     [RequireComponent(typeof(NovelUIManager))]
     public class NovelPlayer : MonoBehaviour
     {
@@ -62,11 +65,30 @@ namespace NovelEditor
         #endregion
 
         #region property
+        /// <summary>
+        /// 現在セットしてあるNovelData
+        /// </summary>
         public NovelData novelData => _novelData;
+        /// <summary>
+        /// 現在停止しているか
+        /// </summary>
         public bool IsStop => _isStop;
+        /// <summary>
+        /// 現在再生中か
+        /// </summary>
         public bool IsPlaying => _isPlaying;
+        /// <summary>
+        /// 選択肢が表示されているか
+        /// </summary>
         public bool IsChoicing => _isChoicing;
+        /// <summary>
+        /// ロード中、現在の進捗0〜1で返します。
+        /// </summary>
         public float loadProgress => DataLoader.Instance.progress;
+        /// <summary>
+        /// UIの表示状態を変更できます
+        /// </summary>
+        /// <value>UIを表示しているか</value>
         public bool IsUIDisplay
         {
             get
@@ -90,6 +112,10 @@ namespace NovelEditor
                 _isDisplay = value;
             }
         }
+        /// <summary>
+        /// 背景や立ち絵を含める会話パートのUIの表示状態を変えられます
+        /// </summary>
+        /// <value>背景や立ち絵を含める会話パートのUIの表示状態</value>
         public bool IsDisplay
         {
             get
@@ -112,6 +138,10 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// ミュートを切り替えられます
+        /// </summary>
+        /// <value>ミュート中かどうか</value>
         public bool mute
         {
             get
@@ -125,6 +155,10 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// BGMの大きさを変えられます
+        /// </summary>
+        /// <value>BGMの大きさ</value>
         public float BGMVolume
         {
             get
@@ -139,6 +173,10 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// SEの大きさを変えられます
+        /// </summary>
+        /// <value>SEの大きさ</value>
         public float SEVolume
         {
             get
@@ -153,6 +191,10 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// テキストの再生速度を変えられます
+        /// </summary>
+        /// <value>テキスト再生速度</value>
         public int textSpeed
         {
             get
@@ -172,27 +214,56 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// 今まで再生した会話ノードのName
+        /// </summary>
         public List<string> ParagraphName => _ParagraphName;
+        /// <summary>
+        /// 今まで選択した選択肢のName
+        /// </summary>
         public List<string> ChoiceName => _choiceName;
 
         #endregion
 
         #region delegate
         public delegate void OnBeginDelegate();
+        /// <summary>
+        /// 再生を開始した時に呼び出されます
+        /// </summary>
         public OnBeginDelegate OnBegin;
-        public OnBeginDelegate OnLoad;
+
+        /// <summary>
+        /// ロード時に呼び出されます
+        /// </summary>
+        public delegate void OnLoadDelegate();
+        public OnLoadDelegate OnLoad;
 
         public delegate void OnEndDelegate();
+        /// <summary>
+        /// 再生終了時に呼び出されます
+        /// </summary>
         public OnEndDelegate OnEnd;
 
         public delegate void OnDialogueChangedDelegate(NovelData.ParagraphData.Dialogue data);
+        /// <summary>
+        /// 次のセリフへ進んだ時に呼び出されます
+        /// </summary>
         public OnDialogueChangedDelegate OnDialogueChanged;
 
         public delegate void NodeChangedDelegate(string nodeName);
+        /// <summary>
+        /// 次の会話ノードへ進んだときに呼び出されます
+        /// </summary>
         public NodeChangedDelegate ParagraphNodeChanged;
+        /// <summary>
+        /// 選択肢を選んだ時に呼び出されます
+        /// </summary>
         public NodeChangedDelegate OnChoiced;
 
         public delegate void SkipedDeleteDelegate();
+        /// <summary>
+        /// 
+        /// </summary>
         public SkipedDeleteDelegate OnSkiped;
 
         #endregion
@@ -200,6 +271,11 @@ namespace NovelEditor
 
         #region publicMethod
 
+        /// <summary>
+        /// 会話を最初から再生します
+        /// </summary>
+        /// <param name="data">再生するデータ</param>
+        /// <param name="hideAfterPlay">再生終了後に画面を非表示にするか</param>
         public void Play(NovelData data, bool hideAfterPlay)
         {
             _novelData = data;
@@ -222,6 +298,11 @@ namespace NovelEditor
             _isPlaying = true;
         }
 
+        /// <summary>
+        /// 会話を保存されたデータからロードして再生します
+        /// </summary>
+        /// <param name="saveData">再生するセーブデータ</param>
+        /// <param name="hideAfterPlay">再生終了時に非表示にするか</param>
         public void Load(NovelSaveData saveData, bool hideAfterPlay)
         {
             _isLoading = true;
@@ -252,18 +333,27 @@ namespace NovelEditor
 
         }
 
+        /// <summary>
+        /// 会話を一時停止する
+        /// </summary>
         public void Pause()
         {
             _isStop = true;
             _novelUI.SetStopText(true);
         }
 
+        /// <summary>
+        /// 会話の一時停止を解除する
+        /// </summary>
         public void UnPause()
         {
             _isStop = false;
             _novelUI.SetStopText(false);
         }
 
+        /// <summary>
+        /// UIを非表示にする
+        /// </summary>
         public void HideUI()
         {
             _novelUI.SetUIDisplay(false);
@@ -271,6 +361,9 @@ namespace NovelEditor
             _isUIDisplay = false;
         }
 
+        /// <summary>
+        /// UIを表示する
+        /// </summary>
         public void DisplayUI()
         {
             _novelUI.SetUIDisplay(true);
@@ -278,6 +371,9 @@ namespace NovelEditor
             _isUIDisplay = true;
         }
 
+        /// <summary>
+        /// 次の選択肢までスキップします。選択肢がなければ会話を終了します。
+        /// </summary>
         public void Skip()
         {
             if (_isChoicing || _isImageChangeing)
@@ -306,6 +402,9 @@ namespace NovelEditor
 
         }
 
+        /// <summary>
+        /// 次の会話ノードまでスキップします。次のノードが選択肢なら選択肢までスキップします。
+        /// </summary>
         public void SkipNextNode()
         {
             if (!_isChoicing && !_isImageChangeing)
@@ -343,11 +442,20 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// 現在の状態をセーブします。
+        /// </summary>
+        /// <returns>セーブデータ</returns>
         public NovelSaveData save()
         {
             return DataLoader.Instance.SaveDialogue(novelData, _nowParagraph.index, _nowDialogueNum - 1, _passedParagraphID, ChoiceName, ParagraphName);
         }
 
+
+        /// <summary>
+        /// 入力方法を設定できます
+        /// </summary>
+        /// <param name="input">NovelInputProviderを継承して入力方法を定義したクラスのインスタンス</param>
         public void SetInputProvider(NovelInputProvider input)
         {
             _inputProvider = input;
@@ -359,6 +467,7 @@ namespace NovelEditor
         #region privateMethod
         void Awake()
         {
+            //入力方法の指定
             switch (_inputSystem)
             {
                 case HowInput.UserSetting:
@@ -367,13 +476,21 @@ namespace NovelEditor
                 case HowInput.Default:
                     _inputProvider = new DefaultInputProvider();
                     break;
+                case HowInput.OverWrite:
+                    if(_inputProvider==null){
+                        _inputProvider =  new DefaultInputProvider();
+                    }
+                break;
             }
 
+            //UIの設定、表示
             _novelUI = GetComponent<NovelUIManager>();
             _novelUI.Init(_charaFadeTime, _nonameDialogueSprite, _dialogueSprite);
             SetDisplay(_isDisplay);
+
             _audioPlayer = gameObject.AddComponent<AudioPlayer>();
             _audioPlayer.Init(_BGMVolume, _SEVolume);
+
             _choiceManager = GetComponentInChildren<ChoiceManager>();
             _choiceManager.Init(_choiceButton);
 
@@ -385,7 +502,6 @@ namespace NovelEditor
 
         void SetDisplay(bool isDisplay)
         {
-
             if (isDisplay)
             {
                 UnPause();
@@ -400,14 +516,16 @@ namespace NovelEditor
                 _novelUI.SetDisplay(isDisplay);
                 _isDisplay = false;
             }
-
-
         }
 
-        //現在再生しているものをリセット
+        /// <summary>
+        /// 現在再生しているものをリセット
+        /// </summary>
+        /// <param name="isLoad">ロード後かどうか</param>
         void Reset(bool isLoad = false)
         {
             _novelUI.Reset(_novelData.locations, isLoad);
+
             //選択肢を全部消す
             _choiceCTS.Cancel();
             _choiceManager.ResetChoice();
@@ -464,8 +582,6 @@ namespace NovelEditor
             {
                 Skip();
             }
-
-
         }
 
         void SetNextParagraph(int nextIndex)
@@ -548,9 +664,9 @@ namespace NovelEditor
             _textCTS = new CancellationTokenSource();
             _isReading = true;
             _nowDialogueNum++;
-            _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
             if (OnDialogueChanged != null)
                 OnDialogueChanged(JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(newData)));
+            _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
         }
 
         async void SetNextDialogue()
