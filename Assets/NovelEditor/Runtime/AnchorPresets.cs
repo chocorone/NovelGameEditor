@@ -9,7 +9,7 @@
 
 namespace NovelEditor
 {
-    public enum AnchorPresets
+    internal enum AnchorPresets
     {
         TopLeft,
         TopCenter,
@@ -35,7 +35,7 @@ namespace NovelEditor
         StretchAll
     }
 
-    public enum PivotPresets
+    internal enum PivotPresets
     {
         TopLeft,
         TopCenter,
@@ -50,7 +50,7 @@ namespace NovelEditor
         BottomRight,
     }
 
-    public static class RectTransformExtensions
+    internal static class RectTransformExtensions
     {
         public static void SetAnchor(this RectTransform source, AnchorPresets allign, int offsetX = 0, int offsetY = 0)
         {
