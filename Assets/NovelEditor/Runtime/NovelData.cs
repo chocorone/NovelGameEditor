@@ -9,6 +9,9 @@ using TMPro;
 namespace NovelEditor
 {
     [CreateAssetMenu(menuName = "NovelData")]
+    /// <summary>
+    /// NovelEditorで使用されるデータのScriptableObject
+    /// </summary>
     public class NovelData : ScriptableObject
     {
         #region 会話基本データ
@@ -56,8 +59,19 @@ namespace NovelEditor
         #endregion
 
         #region プロパティ
+        /// <summary>
+        /// 立ち絵の位置のリスト
+        /// </summary>
         public List<Image> locations => _locations;
+        /// <summary>
+        /// データに含まれる会話ノードのデータのリスト
+        /// 未使用のデータも含まれます。グラフ内にあるかはParagraphDataのisActiveで判断できます
+        /// </summary>
         public List<ParagraphData> paragraphList => _paragraphList;
+        /// <summary>
+        /// データに含まれる選択肢のデータのリスト
+        /// 未使用のデータも含まれます。グラフ内にあるかはChoiceDataのisActiveで判断できます
+        /// </summary>
         public List<ChoiceData> choiceList => _choiceList;
 
         #endregion
@@ -139,7 +153,9 @@ namespace NovelEditor
         }
 
 
-
+        /// <summary>
+        /// ノードの基本データです
+        /// </summary>
         [System.SerializableAttribute]
         public abstract class NodeData
         {
@@ -153,7 +169,17 @@ namespace NovelEditor
 
             #region プロパティ
             internal bool enabled => _enabled;
+            /// <summary>
+            /// 現在グラフ内で使用されているノードかどうか
+            /// </summary>
+            public bool isActive => _enabled;
+            /// <summary>
+            /// NovelDataのリストでのIndex
+            /// </summary>
             public int index => _index;
+            /// <summary>
+            /// 次の会話ノードのNovelDataのリストでのIndex
+            /// </summary>
             public int nextParagraphIndex => _nextParagraphIndex;
             internal Rect nodePosition => _nodePosition;
 
@@ -183,6 +209,9 @@ namespace NovelEditor
         [System.SerializableAttribute]
         public class ChoiceData : NodeData
         {
+            /// <summary>
+            /// 選択肢のテキスト
+            /// </summary>
             public string text;
 
             internal override void SetNodeDeleted(NovelData editingData)
@@ -196,7 +225,6 @@ namespace NovelEditor
         [System.SerializableAttribute]
         public class ParagraphData : NodeData
         {
-
             #region 段落の基本データ
             [SerializeField, HideInInspector]
             List<Dialogue> _dialogueList = new List<Dialogue>();
@@ -214,8 +242,17 @@ namespace NovelEditor
             #endregion
 
             #region プロパティ
+            /// <summary>
+            /// セリフのリスト
+            /// </summary>
             public List<Dialogue> dialogueList => _dialogueList;
+            /// <summary>
+            /// 次のノードの種類
+            /// </summary>
             public Next next => _next;
+            /// <summary>
+            /// 接続されている選択肢のリスト
+            /// </summary>
             public List<int> nextChoiceIndexes => _nextChoiceIndexes;
             #endregion
 
@@ -323,8 +360,9 @@ namespace NovelEditor
 
             }
 
-            //会話文ごとのデータ
-            //SerializedPropertyで参照するため全部public
+            /// <summary>
+            /// セリフごとのデータ
+            /// </summary>
             [System.SerializableAttribute]
             public class Dialogue
             {

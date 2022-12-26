@@ -8,7 +8,7 @@ using TMPro;
 namespace NovelEditor
 {
     /// <summary>
-    /// 会話パートを再生するクラス
+    /// 会話パートを再生するためのコンポーネント
     /// </summary>
     [RequireComponent(typeof(NovelUIManager))]
     public class NovelPlayer : MonoBehaviour
@@ -232,10 +232,10 @@ namespace NovelEditor
         /// </summary>
         public OnBeginDelegate OnBegin;
 
+        public delegate void OnLoadDelegate();
         /// <summary>
         /// ロード時に呼び出されます
         /// </summary>
-        public delegate void OnLoadDelegate();
         public OnLoadDelegate OnLoad;
 
         public delegate void OnEndDelegate();
@@ -262,7 +262,7 @@ namespace NovelEditor
 
         public delegate void SkipedDeleteDelegate();
         /// <summary>
-        /// 
+        /// スキップ時に呼ばれます
         /// </summary>
         public SkipedDeleteDelegate OnSkiped;
 
