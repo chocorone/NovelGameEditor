@@ -8,10 +8,10 @@ using TMPro;
 
 namespace NovelEditor
 {
-    [CreateAssetMenu(menuName = "NovelData")]
     /// <summary>
     /// NovelEditorで使用されるデータのScriptableObject
     /// </summary>
+    [CreateAssetMenu(menuName = "NovelData")]
     public class NovelData : ScriptableObject
     {
         #region 会話基本データ
@@ -206,6 +206,9 @@ namespace NovelEditor
 
         }
 
+        /// <summary>
+        /// 選択肢のデータです
+        /// </summary>
         [System.SerializableAttribute]
         public class ChoiceData : NodeData
         {
@@ -221,7 +224,9 @@ namespace NovelEditor
             }
         }
 
-
+        /// <summary>
+        /// 会話ノードのデータです
+        /// </summary>
         [System.SerializableAttribute]
         public class ParagraphData : NodeData
         {
