@@ -35,7 +35,7 @@ namespace NovelEditor
         StretchAll
     }
 
-    public enum PivotPresets
+    internal enum PivotPresets
     {
         TopLeft,
         TopCenter,

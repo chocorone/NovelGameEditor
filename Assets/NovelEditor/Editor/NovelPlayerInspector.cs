@@ -11,7 +11,7 @@ namespace NovelEditor.Editor
     /// NovelPlayerのインスペクター拡張
     /// </summary>
     [CustomEditor(typeof(NovelPlayer))]
-    public class NovelPlayerInspector : UnityEditor.Editor
+    internal class NovelPlayerInspector : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

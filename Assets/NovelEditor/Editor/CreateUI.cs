@@ -9,7 +9,7 @@ namespace NovelEditor.Editor
     /// <summary>
     /// ヒエラルキーにて右クリックでUIを作成するためのクラス
     /// </summary>
-    public class CreateUI
+    internal class CreateUI
     {
         [MenuItem("GameObject/UI/NovelUI", false, 10)]
         private static void CreateNovelUI(MenuCommand menuCommand)
