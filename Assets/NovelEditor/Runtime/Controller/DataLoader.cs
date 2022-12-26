@@ -219,7 +219,10 @@ namespace NovelEditor
 
         }
     }
-
+    
+    /// <summary>
+    /// セーブデータのクラス。これをNovelPlayerのLoadメソッドに渡すとデータをロードできます
+    /// </summary>
     public class NovelSaveData
     {
         public NovelSaveData(NovelData novelData, int paragraphIndex, int dialogueIndex, List<int> passedParagraphId, List<string> choiceName, List<string> ParagraphName)

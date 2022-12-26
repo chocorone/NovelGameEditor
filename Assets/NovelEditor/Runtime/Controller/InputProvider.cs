@@ -8,9 +8,11 @@ using TMPro;
 
 namespace NovelEditor
 {
+    /// <summary>
+    /// NovelPlayerの入力方法を決めるための抽象クラスです
+    /// </summary>
     public abstract class NovelInputProvider
     {
-
         protected bool OnUI()
         {
             PointerEventData pointData = new PointerEventData(EventSystem.current);
@@ -25,9 +27,25 @@ namespace NovelEditor
             }
             return onUI;
         }
+        /// <summary>
+        /// こちらで次のセリフの再生・テキストを一気に表示の操作を設定します
+        /// </summary>
+        /// <returns>次を再生するための入力がされているかどうか</returns>
         public abstract bool GetNext();
+        /// <summary>
+        /// 選択肢までのスキップを行うための操作方法を設定できます
+        /// </summary>
+        /// <returns>選択肢までスキップするための入力がされているかどうか</returns>
         public abstract bool GetSkip();
+        /// <summary>
+        /// UIの表示・非表示を切り替えるための操作方法を設定できます
+        /// </summary>
+        /// <returns>UIの表示・非表示を切り替えるための入力がされているかどうか</returns>
         public abstract bool GetHideOrDisplay();
+        /// <summary>
+        /// 再生の一時停止の切り替えの操作方法を設定できます
+        /// </summary>
+        /// <returns>再生の一時停止の切り替えるための入力がされているかどうか</returns>    
         public abstract bool GetStopOrStart();
     }
 
