@@ -91,6 +91,9 @@ namespace NovelEditor
                         EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
                         tasks.Add(_charas[i].DissolveOut(sprites[i], color[i], _charaFadetime, token));
                         break;
+                    case CharaChangeStyle.UnChange:
+                        EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
+                    break;
                 }
             }
             await UniTask.WhenAll(tasks);
