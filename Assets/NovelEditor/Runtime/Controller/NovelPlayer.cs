@@ -598,7 +598,7 @@ namespace NovelEditor
                 if (ParagraphNodeChanged != null)
                     ParagraphNodeChanged(_nowParagraph.nodeName);
                 _nowDialogueNum = 0;
-                SetNextDialogue();
+                SetNextDialogue(_nowParagraph.dialogueList[_nowDialogueNum]);
             }
         }
 
@@ -621,7 +621,7 @@ namespace NovelEditor
             }
             else
             {
-                SetNextDialogue();
+                SetNextDialogue(_nowParagraph.dialogueList[_nowDialogueNum]);
             }
         }
 
@@ -667,21 +667,6 @@ namespace NovelEditor
             if (OnDialogueChanged != null)
                 OnDialogueChanged(JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(newData)));
             _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
-        }
-
-        async void SetNextDialogue()
-        {
-            _isImageChangeing = true;
-            _imageCTS = new CancellationTokenSource();
-            _isImageChangeing = !await _novelUI.SetNextImage(_nowParagraph.dialogueList[_nowDialogueNum], _imageCTS.Token);
-            _audioPlayer.SetSound(_nowParagraph.dialogueList[_nowDialogueNum]);
-            _textCTS = new CancellationTokenSource();
-            _isReading = true;
-            _nowDialogueNum++;
-            if (OnDialogueChanged != null)
-                OnDialogueChanged(JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(_nowParagraph.dialogueList[_nowDialogueNum - 1])));
-            _isReading = !await _novelUI.SetNextText(_nowParagraph.dialogueList[_nowDialogueNum - 1], _textCTS.Token);
-
         }
 
         async void end()
