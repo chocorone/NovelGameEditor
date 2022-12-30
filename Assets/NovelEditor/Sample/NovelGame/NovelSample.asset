@@ -415,6 +415,49 @@ MonoBehaviour:
       charaEffectStrength: 000000000000000000000000
       DialogueEffect: 0
       DialogueEffectStrength: 0
+    - open: 0
+      Name: 
+      text: "\u4E0A\u77E2\u5370\u30AD\u30FC\u3092\u62BC\u3059\u3068\u30D0\u30C3\u30AF\u30ED\u30B0\u304C\u8868\u793A\u3055\u308C\u307E\u3059\u3002\n\u3053\u308C\u306F\u30BB\u30EA\u30D5\u304C\u5909\u308F\u308B\u305F\u3073\u306B\u547C\u3070\u308C\u308B\u30B3\u30FC\u30EB\u30D0\u30C3\u30AF\u3067\u5B9F\u88C5\u3057\u3066\u3044\u307E\u3059"
+      back: {fileID: 21300000, guid: 93d80c1a24de4af4a8718c6cf8c2eb83, type: 3}
+      howBack: 0
+      backFadeColor: {r: 1, g: 1, b: 1, a: 1}
+      backFadeSpeed: 1
+      howCharas: 000000000000000000000000
+      charas:
+      - {fileID: 21300000, guid: 7c93236d84f9a834da6a195cbf6c755f, type: 3}
+      - {fileID: 0}
+      - {fileID: 21300000, guid: c071ff3f67441f64bb709c1257fe54eb, type: 3}
+      charaFadeColor:
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      - {r: 0, g: 0, b: 0, a: 0}
+      changeFont: 0
+      font: {fileID: 0}
+      fontColor: {r: 1, g: 1, b: 1, a: 1}
+      fontSize: 30
+      changeNameFont: 0
+      nameFont: {fileID: 0}
+      nameColor: {r: 1, g: 1, b: 1, a: 1}
+      BGM: {fileID: 0}
+      BGMStyle: 0
+      BGMLoop: 0
+      BGMCount: 1
+      BGMSecond: 20
+      BGMFadeTime: 3
+      BGMEndFadeTime: 3
+      SE: {fileID: 0}
+      SEStyle: 0
+      SELoop: 0
+      SECount: 1
+      SESecond: 20
+      SEFadeTime: 3
+      SEEndFadeTime: 3
+      backEffect: 0
+      backEffectStrength: 0
+      charaEffects: 000000000000000000000000
+      charaEffectStrength: 000000000000000000000000
+      DialogueEffect: 0
+      DialogueEffectStrength: 0
     detailOpen: 0
     _next: 0
     _nextChoiceIndexes: ffffffff
@@ -1141,7 +1184,7 @@ MonoBehaviour:
     _nextParagraphIndex: 2
     nodeName: "\u3044\u3044\u3048\u3092\u3048\u3089\u3093\u3060"
     text: "\u3044\u3044\u3048"
-  - _enabled: 1
+  - _enabled: 0
     _index: 2
     _nodePosition:
       serializedVersion: 2
@@ -1152,8 +1195,8 @@ MonoBehaviour:
     _nextParagraphIndex: -1
     nodeName: a
     text: Choice
-  graphScale: {x: 0.65751624, y: 0.65751624, z: 1}
-  graphPosition: {x: 57.5, y: 114, z: 0}
+  graphScale: {x: 1, y: 1, z: 1}
+  graphPosition: {x: 101, y: 19, z: 0}
   havePreLocations: 0
   newLocations:
   - {fileID: 3646998453675562630, guid: cde0554b62a86487990eb95910ffad4d, type: 3}
