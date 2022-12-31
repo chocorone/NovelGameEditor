@@ -93,7 +93,7 @@ namespace NovelEditor
                         break;
                     case CharaChangeStyle.UnChange:
                         EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
-                    break;
+                        break;
                 }
             }
             await UniTask.WhenAll(tasks);

@@ -426,7 +426,6 @@ namespace NovelEditor
                     case Next.End:
                         end();
                         return;
-                        break;
                 }
 
                 SetNextDialogue(newData);
