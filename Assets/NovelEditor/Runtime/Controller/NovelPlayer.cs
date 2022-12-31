@@ -409,24 +409,24 @@ namespace NovelEditor
                 UnPause();
                 if (OnSkiped != null)
                     OnSkiped();
-                if (newData == null)
-                {
-                    end();
-                    return;
-                }
 
-                if (_nowParagraph.next == Next.Choice)
+                switch (_nowParagraph.next)
                 {
-                    _nowDialogueNum = _nowParagraph.dialogueList.Count;
-                }
-                else
-                {
-                    _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
-                    _nowDialogueNum = 0;
-                    _passedParagraphID.Add(_nowParagraph.index);
-                    _ParagraphName.Add(_nowParagraph.nodeName);
-                    if (ParagraphNodeChanged != null)
-                        ParagraphNodeChanged(_nowParagraph.nodeName);
+                    case Next.Choice:
+                        _nowDialogueNum = _nowParagraph.dialogueList.Count;
+                        break;
+                    case Next.Continue:
+                        _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
+                        _nowDialogueNum = 0;
+                        _passedParagraphID.Add(_nowParagraph.index);
+                        _ParagraphName.Add(_nowParagraph.nodeName);
+                        if (ParagraphNodeChanged != null)
+                            ParagraphNodeChanged(_nowParagraph.nodeName);
+                        break;
+                    case Next.End:
+                        end();
+                        return;
+                        break;
                 }
 
                 SetNextDialogue(newData);
