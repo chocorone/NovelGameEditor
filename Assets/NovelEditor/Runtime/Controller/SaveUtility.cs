@@ -6,25 +6,28 @@ using TMPro;
 
 namespace NovelEditor
 {
-    internal class DataLoader
+    /// <summary>
+    /// データのセーブ、ロードなどを行う
+    /// </summary>
+    internal class SaveUtility
     {
         internal float progress { get; private set; } = 0;
 
-        static DataLoader instance;
+        static SaveUtility instance;
 
-        internal static DataLoader Instance
+        internal static SaveUtility Instance
         {
             get
             {
                 if (instance == null)
                 {
-                    instance = new DataLoader();
+                    instance = new SaveUtility();
                 }
                 return instance;
             }
         }
 
-        DataLoader()
+        SaveUtility()
         { }
 
         internal NovelData.ParagraphData.Dialogue LoadDialogue(NovelSaveData savedData)
@@ -219,7 +222,7 @@ namespace NovelEditor
 
         }
     }
-    
+
     /// <summary>
     /// セーブデータのクラス。これをNovelPlayerのLoadメソッドに渡すとデータをロードできます
     /// </summary>

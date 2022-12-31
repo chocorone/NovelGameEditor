@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 namespace NovelEditor
 {
+    /// <summary>
+    /// 画像にエフェクトをつけるクラス
+    /// </summary>
     internal class EffectManager
     {
         static EffectManager instance;
@@ -31,6 +34,7 @@ namespace NovelEditor
 
         internal EffectManager()
         {
+            //必要なエフェクトの読み込み
             None = Resources.Load<Shader>("DefaultEffect");
             Noise = Resources.Load<Shader>("NoiseEffect");
             Mosaic = Resources.Load<Shader>("MosaicEffect");
@@ -41,16 +45,31 @@ namespace NovelEditor
             Blur = Resources.Load<Shader>("BlurEffect");
         }
 
+        /// <summary>
+        /// 指定したImageのエフェクトを初期化する
+        /// </summary>
+        /// <param name="image">エフェクトを消すImage</param>
         internal void InitMaterial(Image image)
         {
             image.material = new Material(None);
         }
 
+        /// <summary>
+        /// 指定したImageから別のImageへシェーダーをコピーする
+        /// </summary>
+        /// <param name="from">コピー元のImage</param>
+        /// <param name="dest">コピー先のImage</param>
         internal void copyShader(Image from, Image dest)
         {
             dest.material = GameObject.Instantiate(from.material);
         }
 
+        /// <summary>
+        /// 指定したImageにエフェクトを設定する
+        /// </summary>
+        /// <param name="image">エフェクトを変えるImage</param>
+        /// <param name="effect">どのエフェクトにするか</param>
+        /// <param name="strength">エフェクトの強さ</param>
         internal void SetEffect(Image image, Effect effect, float strength)
         {
 

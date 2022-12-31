@@ -8,6 +8,9 @@ using static NovelEditor.NovelData.ParagraphData;
 
 namespace NovelEditor
 {
+    /// <summary>
+    /// NovelPlayerのサウンドの再生を管理するクラス
+    /// </summary>
     internal class AudioPlayer : MonoBehaviour
     {
         AudioSource _BGM;
@@ -21,21 +24,30 @@ namespace NovelEditor
 
         bool _isFading = false;
 
+        /// <summary>
+        /// 初期化用関数
+        /// </summary>
+        /// <param name="bgmVolume">BGMの初期音量</param>
+        /// <param name="seVolume">SEの初期音量</param>
         internal void Init(float bgmVolume, float seVolume)
         {
             _BGM = gameObject.AddComponent<AudioSource>();
             _BGM.playOnAwake = false;
-            _BGM.loop=true;
+            _BGM.loop = true;
 
             _SE = gameObject.AddComponent<AudioSource>();
             _SE.playOnAwake = false;
-            _SE.loop=true;
-            
+            _SE.loop = true;
+
 
             SetSEVolume(seVolume);
             SetBGMVolume(bgmVolume);
         }
 
+        /// <summary>
+        /// Dialogueに応じてBGMとSEを設定する
+        /// </summary>
+        /// <param name="data">次のセリフのデータ</param>
         internal void SetSound(Dialogue data)
         {
             if (data.BGMStyle != SoundStyle.UnChange)
@@ -49,12 +61,19 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// サウンドをミュートにする
+        /// </summary>
+        /// <param name="flag">ミュートにするかどうか</param>
         internal void SetMute(bool flag)
         {
             _BGM.mute = flag;
             _SE.mute = flag;
         }
 
+        /// <summary>
+        /// 全てのサウンドの再生を停止する
+        /// </summary>
         internal void AllStop()
         {
             BGMcancellation.Cancel();
@@ -63,6 +82,10 @@ namespace NovelEditor
             _SE.Stop();
         }
 
+        /// <summary>
+        /// BGMを設定する
+        /// </summary>
+        /// <param name="data">次のセリフのデータ</param>
         void SetBGM(Dialogue data)
         {
             switch (data.BGMStyle)
@@ -79,6 +102,10 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// SEを設定する
+        /// </summary>
+        /// <param name="data">次のセリフのデータ</param>
         void SetSE(Dialogue data)
         {
             switch (data.SEStyle)
@@ -95,12 +122,24 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// 指定したAudioSourceの再生を停止する
+        /// </summary>
+        /// <param name="player">停止したいAudioSource</param>
+        /// <param name="cancel">停止したいAudioSourceの非同期処理のCancellationTokenSource</param>
         void Stop(AudioSource player, CancellationTokenSource cancel)
         {
             cancel.Cancel();
             player.Stop();
         }
 
+        /// <summary>
+        /// 指定したAudioSourceのサウンドを設定する
+        /// </summary>
+        /// <param name="data">サウンドのデータ</param>
+        /// <param name="defaultVolume">再生したいAudioSourceの元々の音量</param>
+        /// <param name="player">再生したいAudioSource</param>
+        /// <param name="token">フェードの非同期処理に使用するCancellationToken</param>
         async UniTask<bool> Play(SoundData data, float defaultVolume, AudioSource player, CancellationToken token)
         {
             player.clip = data.clip;
@@ -123,6 +162,10 @@ namespace NovelEditor
             return true;
         }
 
+        /// <summary>
+        /// SEの音量を変更する
+        /// </summary>
+        /// <param name="seVolume">SEの新しい音量</param>
         internal async void SetSEVolume(float seVolume)
         {
             if (_isFading)
@@ -131,6 +174,10 @@ namespace NovelEditor
             _SE.volume = _SEVolume;
         }
 
+        /// <summary>
+        /// BGMの音量を変更する
+        /// </summary>
+        /// <param name="seVolume">BGMの新しい音量</param>
         internal async void SetBGMVolume(float bgmVolume)
         {
             if (_isFading)
@@ -139,6 +186,15 @@ namespace NovelEditor
             _BGM.volume = _BGMVolume;
         }
 
+        /// <summary>
+        /// サウンドにフェードをかける
+        /// </summary>
+        /// <param name="from">最初の音量</param>
+        /// <param name="dest">目標の音量</param>
+        /// <param name="time">フェードにかける時間</param>
+        /// <param name="player">再生したいAudioSource</param>
+        /// <param name="token">フェードの非同期処理に使用するCancellationToken</param>
+        /// <returns></returns>
         async UniTask<bool> FadeVolume(float from, float dest, float time, AudioSource player, CancellationToken token)
         {
             float value = 0;

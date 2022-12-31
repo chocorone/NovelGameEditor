@@ -7,6 +7,9 @@ using System.Threading;
 
 namespace NovelEditor
 {
+    /// <summary>
+    /// 各画像やエフェクトの切り替えを行うクラス
+    /// </summary>
     internal class ImageManager
     {
         Transform _charaTransform;
@@ -24,6 +27,12 @@ namespace NovelEditor
             _charaFadetime = charaFadeTime;
         }
 
+        /// <summary>
+        /// 次のセリフの画像を設定する
+        /// </summary>
+        /// <param name="data">次のセリフのデータ</param>
+        /// <param name="hasName">次のセリフは名前ありかどうか</param>
+        /// <param name="token">使用するCancellationToken</param>
         internal async UniTask<bool> SetNextImage(NovelData.ParagraphData.Dialogue data, bool hasName, CancellationToken token)
         {
             switch (data.howBack)
@@ -33,17 +42,20 @@ namespace NovelEditor
                     EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
                     EffectManager.Instance.SetEffect(_backGround.image, data.backEffect, data.backEffectStrength);
                     break;
+
                 case BackChangeStyle.Quick:
                     _backGround.Change(data.back);
                     EffectManager.Instance.SetEffect(_backGround.image, data.backEffect, data.backEffectStrength);
                     await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
                     EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
                     break;
+
                 case BackChangeStyle.dissolve:
                     await _backGround.Dissolve(data.backFadeSpeed, data.back, data.backEffect, data.backEffectStrength, token);
                     await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
                     EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
                     break;
+
                 case BackChangeStyle.FadeBack:
                     await _backGround.BackFadeIn(data, token);
                     EffectManager.Instance.SetEffect(_backGround.image, data.backEffect, data.backEffectStrength);
@@ -51,6 +63,7 @@ namespace NovelEditor
                     await SetChara(data.howCharas, data.charas, data.charaFadeColor, data.charaEffects, data.charaEffectStrength, token);
                     EffectManager.Instance.SetEffect(_dialogueImage.image, data.DialogueEffect, data.DialogueEffectStrength);
                     break;
+
                 case BackChangeStyle.FadeFront:
                 case BackChangeStyle.FadeAll:
                     await _backGround.BackFadeIn(data, token);
@@ -66,8 +79,18 @@ namespace NovelEditor
             return true;
         }
 
+        /// <summary>
+        /// 各立ち絵の画像とエフェクトを設定する
+        /// </summary>
+        /// <param name="style">各キャラがどのように切り替わるか</param>
+        /// <param name="sprites">各キャラがどの画像に切り替わるか</param>
+        /// <param name="color">各キャラのフェード色</param>
+        /// <param name="charaEffects">各キャラのエフェクト</param>
+        /// <param name="strength">各キャラのエフェクトの強さ</param>
+        /// <param name="token">使用するCancellationToken</param>
         async UniTask<bool> SetChara(CharaChangeStyle[] style, Sprite[] sprites, Color[] color, Effect[] charaEffects, int[] strength, CancellationToken token)
         {
+            //先にフェードアウト
             List<UniTask<bool>> tasks = new();
             for (int i = 0; i < _charas.Count; i++)
             {
@@ -79,6 +102,8 @@ namespace NovelEditor
             await UniTask.WhenAll(tasks);
 
             tasks.Clear();
+
+            //キャラの画像を切り替えてフェードイン、エフェクト付与
             for (int i = 0; i < _charas.Count; i++)
             {
                 switch (style[i])
@@ -93,13 +118,20 @@ namespace NovelEditor
                         break;
                     case CharaChangeStyle.UnChange:
                         EffectManager.Instance.SetEffect(_charas[i].image, charaEffects[i], strength[i]);
-                    break;
+                        break;
                 }
             }
             await UniTask.WhenAll(tasks);
             return true;
         }
 
+        /// <summary>
+        /// 全てのキャラをパッと切り替える
+        /// </summary>
+        /// <param name="style">各キャラがどのように切り替わるか</param>
+        /// <param name="sprites">各キャラがどの画像に切り替わるか</param>
+        /// <param name="charaEffects">各キャラのエフェクト</param>
+        /// <param name="strength">各キャラのエフェクトの強さ</param>
         void ChangeAllCharaQuick(CharaChangeStyle[] style, Sprite[] sprites, Effect[] charaEffects, int[] strength)
         {
             for (int i = 0; i < _charas.Count; i++)
@@ -114,7 +146,13 @@ namespace NovelEditor
             }
         }
 
-        internal void Init(List<Image> data, bool isLoad)
+
+        /// <summary>
+        /// 立ち絵の位置、背景を初期化する。
+        /// </summary>
+        /// <param name="data">新しい立ち絵の位置のプレハブのリスト</param>
+        /// <param name="isBackInit">ロード後かどうか</param>
+        internal void Init(List<Image> data, bool isBackInit)
         {
             _charas.Clear();
             for (int i = 0; i < _charaTransform.childCount; i++)
@@ -128,7 +166,9 @@ namespace NovelEditor
                 charaImage.Change(null);
                 _charas.Add(charaImage);
             }
-            if (!isLoad)
+
+            //ロード後でないなら背景をなくす
+            if (!isBackInit)
             {
                 _backGround.Change(null);
             }

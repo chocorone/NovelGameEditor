@@ -84,7 +84,7 @@ namespace NovelEditor
         /// <summary>
         /// ロード中、現在の進捗0〜1で返します。
         /// </summary>
-        public float loadProgress => DataLoader.Instance.progress;
+        public float loadProgress => SaveUtility.Instance.progress;
         /// <summary>
         /// UIの表示状態を変更できます
         /// </summary>
@@ -283,18 +283,11 @@ namespace NovelEditor
 
             Reset();
 
-            _nowDialogueNum = 0;
-            _nowParagraph = _novelData.paragraphList[0];
-            _ParagraphName.Add(_nowParagraph.nodeName);
-            if (ParagraphNodeChanged != null)
-                ParagraphNodeChanged(_nowParagraph.nodeName);
-            _passedParagraphID.Add(0);
-
             UnPause();
             if (OnBegin != null)
                 OnBegin();
 
-            SetNext();
+            SetNextParagraph(0);
             _isPlaying = true;
         }
 
@@ -320,7 +313,7 @@ namespace NovelEditor
             _choiceName = saveData.choiceName;
 
             //復元、新しいデータをとりあえず再生
-            NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.LoadDialogue(saveData);
+            NovelData.ParagraphData.Dialogue newData = SaveUtility.Instance.LoadDialogue(saveData);
 
             UnPause();
 
@@ -330,7 +323,6 @@ namespace NovelEditor
             SetNextDialogue(newData);
             _isLoading = false;
             _isPlaying = true;
-
         }
 
         /// <summary>
@@ -384,7 +376,7 @@ namespace NovelEditor
             _isLoading = true;
             _textCTS.Cancel();
             _choiceCTS.Cancel();
-            SkipedData newData = DataLoader.Instance.Skip(_novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
+            SkipedData newData = SaveUtility.Instance.Skip(_novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
             UnPause();
             if (OnSkiped != null)
                 OnSkiped();
@@ -413,28 +405,27 @@ namespace NovelEditor
                 _textCTS.Cancel();
                 _choiceCTS.Cancel();
 
-                NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.SkipNextNode(novelData, _nowParagraph, _nowDialogueNum, _novelUI.GetNowBack());
+                NovelData.ParagraphData.Dialogue newData = SaveUtility.Instance.SkipNextNode(novelData, _nowParagraph, _nowDialogueNum, _novelUI.GetNowBack());
                 UnPause();
                 if (OnSkiped != null)
                     OnSkiped();
-                if (newData == null)
-                {
-                    end();
-                    return;
-                }
 
-                if (_nowParagraph.next == Next.Choice)
+                switch (_nowParagraph.next)
                 {
-                    _nowDialogueNum = _nowParagraph.dialogueList.Count;
-                }
-                else
-                {
-                    _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
-                    _nowDialogueNum = 0;
-                    _passedParagraphID.Add(_nowParagraph.index);
-                    _ParagraphName.Add(_nowParagraph.nodeName);
-                    if (ParagraphNodeChanged != null)
-                        ParagraphNodeChanged(_nowParagraph.nodeName);
+                    case Next.Choice:
+                        _nowDialogueNum = _nowParagraph.dialogueList.Count;
+                        break;
+                    case Next.Continue:
+                        _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
+                        _nowDialogueNum = 0;
+                        _passedParagraphID.Add(_nowParagraph.index);
+                        _ParagraphName.Add(_nowParagraph.nodeName);
+                        if (ParagraphNodeChanged != null)
+                            ParagraphNodeChanged(_nowParagraph.nodeName);
+                        break;
+                    case Next.End:
+                        end();
+                        return;
                 }
 
                 SetNextDialogue(newData);
@@ -448,7 +439,7 @@ namespace NovelEditor
         /// <returns>セーブデータ</returns>
         public NovelSaveData save()
         {
-            return DataLoader.Instance.SaveDialogue(novelData, _nowParagraph.index, _nowDialogueNum - 1, _passedParagraphID, ChoiceName, ParagraphName);
+            return SaveUtility.Instance.SaveDialogue(novelData, _nowParagraph.index, _nowDialogueNum - 1, _passedParagraphID, ChoiceName, ParagraphName);
         }
 
 
@@ -477,10 +468,11 @@ namespace NovelEditor
                     _inputProvider = new DefaultInputProvider();
                     break;
                 case HowInput.OverWrite:
-                    if(_inputProvider==null){
-                        _inputProvider =  new DefaultInputProvider();
+                    if (_inputProvider == null)
+                    {
+                        _inputProvider = new DefaultInputProvider();
                     }
-                break;
+                    break;
             }
 
             //UIの設定、表示
@@ -488,18 +480,24 @@ namespace NovelEditor
             _novelUI.Init(_charaFadeTime, _nonameDialogueSprite, _dialogueSprite);
             SetDisplay(_isDisplay);
 
+            //初期化処理
             _audioPlayer = gameObject.AddComponent<AudioPlayer>();
             _audioPlayer.Init(_BGMVolume, _SEVolume);
 
             _choiceManager = GetComponentInChildren<ChoiceManager>();
             _choiceManager.Init(_choiceButton);
 
+            //PlayOnAwakeの場合再生
             if (_playOnAwake && _novelData != null)
             {
                 Play(_novelData, _hideAfterPlay);
             }
         }
 
+        /// <summary>
+        /// 背景や立ち絵を含む全てのUIの表示を設定する
+        /// </summary>
+        /// <param name="isDisplay">表示するかどうか</param>
         void SetDisplay(bool isDisplay)
         {
             if (isDisplay)
@@ -584,6 +582,10 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// 次の会話ノードを再生する
+        /// </summary>
+        /// <param name="nextIndex">次の会話ノードのIndex</param>
         void SetNextParagraph(int nextIndex)
         {
             if (nextIndex == -1)
@@ -602,6 +604,9 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// 次のセリフ、あるいはノードを再生する
+        /// </summary>
         void SetNext()
         {
             if (_nowDialogueNum >= _nowParagraph.dialogueList.Count)
@@ -625,11 +630,17 @@ namespace NovelEditor
             }
         }
 
+        /// <summary>
+        /// 選択肢を設定する
+        /// </summary>
         async void SetChoice()
         {
             _isChoicing = true;
             _choiceCTS = new CancellationTokenSource();
+
             List<NovelData.ChoiceData> list = new();
+
+            //次の選択肢のリストを作成する
             foreach (int i in _nowParagraph.nextChoiceIndexes)
             {
                 if (i == -1)
@@ -642,6 +653,7 @@ namespace NovelEditor
                 return;
             }
 
+            //選択を待ち、それに応じて次のノードを再生する
             var ans = await _choiceManager.WaitChoice(list, _choiceCTS.Token);
             if (ans != null)
             {
@@ -655,12 +667,20 @@ namespace NovelEditor
         }
 
 
+        /// <summary>
+        /// 次のセリフを再生する
+        /// </summary>
+        /// <param name="newData">次のセリフのデータ</param>
         async void SetNextDialogue(NovelData.ParagraphData.Dialogue newData)
         {
+            //画像の変更
             _isImageChangeing = true;
             _imageCTS = new CancellationTokenSource();
             _isImageChangeing = !await _novelUI.SetNextImage(newData, _imageCTS.Token);
+
             _audioPlayer.SetSound(newData);
+
+            //テキストを1文字ずつ再生
             _textCTS = new CancellationTokenSource();
             _isReading = true;
             _nowDialogueNum++;
@@ -669,25 +689,35 @@ namespace NovelEditor
             _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
         }
 
+        /// <summary>
+        /// 終了処理
+        /// </summary>
+        /// <returns></returns>
         async void end()
         {
+            //endが連続で呼ばれてしまうので、一回呼ばれたらフラグを立てておく
             if (_isEnd)
                 return;
             _isEnd = true;
             if (_hideAfterPlay)
             {
+                //UIをフェードアウト
                 _isImageChangeing = true;
                 _endFadeCTS = new CancellationTokenSource();
                 _audioPlayer.AllStop();
                 await _novelUI.FadeOut(_hideFadeTime, _endFadeCTS.Token);
                 SetDisplay(false);
-                if (OnEnd != null)
-                    OnEnd();
                 _isImageChangeing = false;
             }
+
+            if (OnEnd != null)
+                OnEnd();
             _isPlaying = false;
         }
 
+        /// <summary>
+        /// 1文字ずつ表示していたテキストを全て表示する
+        /// </summary>
         void FlashText()
         {
             _textCTS.Cancel();
