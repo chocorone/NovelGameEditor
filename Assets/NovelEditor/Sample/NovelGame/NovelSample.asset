@@ -22,7 +22,7 @@ MonoBehaviour:
     _nodePosition:
       serializedVersion: 2
       x: -25.5
-      y: 121
+      y: 120
       width: 169
       height: 96.5
     _nextParagraphIndex: 7
@@ -224,7 +224,7 @@ MonoBehaviour:
       nameFont: {fileID: 0}
       nameColor: {r: 1, g: 1, b: 1, a: 1}
       BGM: {fileID: 8300000, guid: 0faa9d82adf2b8e4cb64f1cbe6002170, type: 3}
-      BGMStyle: 1
+      BGMStyle: 0
       BGMLoop: 0
       BGMCount: 1
       BGMSecond: 20
@@ -460,7 +460,7 @@ MonoBehaviour:
       DialogueEffectStrength: 0
     detailOpen: 0
     _next: 0
-    _nextChoiceIndexes: ffffffff
+    _nextChoiceIndexes: ffffffffffffffff
   - _enabled: 1
     _index: 1
     _nodePosition:
@@ -723,7 +723,7 @@ MonoBehaviour:
     _nodePosition:
       serializedVersion: 2
       x: 495.5
-      y: 145
+      y: 150
       width: 169
       height: 96.5
     _nextParagraphIndex: 5
@@ -753,7 +753,7 @@ MonoBehaviour:
       nameFont: {fileID: 11400000, guid: 23117d0d58d4e4ec79323630d6464d16, type: 2}
       nameColor: {r: 1, g: 0, b: 0, a: 1}
       BGM: {fileID: 0}
-      BGMStyle: 0
+      BGMStyle: 2
       BGMLoop: 0
       BGMCount: 1
       BGMSecond: 20
@@ -939,7 +939,7 @@ MonoBehaviour:
       nameFont: {fileID: 0}
       nameColor: {r: 1, g: 1, b: 1, a: 1}
       BGM: {fileID: 8300000, guid: ecb677708de1cae4e9306114873b364f, type: 3}
-      BGMStyle: 1
+      BGMStyle: 0
       BGMLoop: 0
       BGMCount: 1
       BGMSecond: 20
@@ -1196,7 +1196,7 @@ MonoBehaviour:
     nodeName: a
     text: Choice
   graphScale: {x: 1, y: 1, z: 1}
-  graphPosition: {x: 101, y: 19, z: 0}
+  graphPosition: {x: 126, y: 29, z: 0}
   havePreLocations: 0
   newLocations:
   - {fileID: 3646998453675562630, guid: cde0554b62a86487990eb95910ffad4d, type: 3}
