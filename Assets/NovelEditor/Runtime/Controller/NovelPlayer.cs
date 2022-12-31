@@ -84,7 +84,7 @@ namespace NovelEditor
         /// <summary>
         /// ロード中、現在の進捗0〜1で返します。
         /// </summary>
-        public float loadProgress => DataLoader.Instance.progress;
+        public float loadProgress => SaveUtility.Instance.progress;
         /// <summary>
         /// UIの表示状態を変更できます
         /// </summary>
@@ -313,7 +313,7 @@ namespace NovelEditor
             _choiceName = saveData.choiceName;
 
             //復元、新しいデータをとりあえず再生
-            NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.LoadDialogue(saveData);
+            NovelData.ParagraphData.Dialogue newData = SaveUtility.Instance.LoadDialogue(saveData);
 
             UnPause();
 
@@ -376,7 +376,7 @@ namespace NovelEditor
             _isLoading = true;
             _textCTS.Cancel();
             _choiceCTS.Cancel();
-            SkipedData newData = DataLoader.Instance.Skip(_novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
+            SkipedData newData = SaveUtility.Instance.Skip(_novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
             UnPause();
             if (OnSkiped != null)
                 OnSkiped();
@@ -405,7 +405,7 @@ namespace NovelEditor
                 _textCTS.Cancel();
                 _choiceCTS.Cancel();
 
-                NovelData.ParagraphData.Dialogue newData = DataLoader.Instance.SkipNextNode(novelData, _nowParagraph, _nowDialogueNum, _novelUI.GetNowBack());
+                NovelData.ParagraphData.Dialogue newData = SaveUtility.Instance.SkipNextNode(novelData, _nowParagraph, _nowDialogueNum, _novelUI.GetNowBack());
                 UnPause();
                 if (OnSkiped != null)
                     OnSkiped();
@@ -439,7 +439,7 @@ namespace NovelEditor
         /// <returns>セーブデータ</returns>
         public NovelSaveData save()
         {
-            return DataLoader.Instance.SaveDialogue(novelData, _nowParagraph.index, _nowDialogueNum - 1, _passedParagraphID, ChoiceName, ParagraphName);
+            return SaveUtility.Instance.SaveDialogue(novelData, _nowParagraph.index, _nowDialogueNum - 1, _passedParagraphID, ChoiceName, ParagraphName);
         }
 
 
