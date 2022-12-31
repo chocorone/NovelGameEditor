@@ -283,18 +283,11 @@ namespace NovelEditor
 
             Reset();
 
-            _nowDialogueNum = 0;
-            _nowParagraph = _novelData.paragraphList[0];
-            _ParagraphName.Add(_nowParagraph.nodeName);
-            if (ParagraphNodeChanged != null)
-                ParagraphNodeChanged(_nowParagraph.nodeName);
-            _passedParagraphID.Add(0);
-
             UnPause();
             if (OnBegin != null)
                 OnBegin();
 
-            SetNext();
+            SetNextParagraph(0);
             _isPlaying = true;
         }
 
