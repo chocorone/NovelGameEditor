@@ -439,7 +439,12 @@ namespace NovelEditor
         /// <returns>セーブデータ</returns>
         public NovelSaveData save()
         {
-            return SaveUtility.Instance.SaveDialogue(novelData, _nowParagraph.index, _nextDialogueNum - 1, _passedParagraphID, ChoiceName, ParagraphName);
+            int nowDialogueNum = _nextDialogueNum - 1;
+            if (nowDialogueNum == _nowParagraph.dialogueList.Count)
+            {
+                nowDialogueNum--;
+            }
+            return SaveUtility.Instance.SaveDialogue(novelData, _nowParagraph.index, nowDialogueNum, _passedParagraphID, ChoiceName, ParagraphName);
         }
 
 
