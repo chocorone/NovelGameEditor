@@ -13,13 +13,17 @@ namespace NovelEditor.Sample
 
         public void Save()
         {
+            Debug.Log("Saved");
             data = player.save();
         }
 
         public void Load()
         {
             if (data != null)
+            {
                 player.Load(data, true);
+                Debug.Log("Loaded");
+            }
         }
 
     }

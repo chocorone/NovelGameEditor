@@ -64,10 +64,10 @@ namespace NovelEditor
                     data.charaEffects[i] = Effect.None;
             }
 
-            //通過したノードを全て確認する
-            foreach (var i in savedData.passedParagraphId)
+            for (int i = 0; i < savedData.passedParagraphId.Count; i++)
             {
-                NovelData.ParagraphData nowParagraph = savedData.novelData.paragraphList[i];
+                int index = savedData.passedParagraphId[i];
+                NovelData.ParagraphData nowParagraph = savedData.novelData.paragraphList[index];
 
                 //通過したノードのセリフの立ち絵を全て確認する
                 for (int j = 0; j < nowParagraph.dialogueList.Count; j++)
@@ -76,22 +76,21 @@ namespace NovelEditor
 
                     SaveNext(data, nowDialogue);
 
-                    if (j == savedData.dialogueIndex && i == savedData.paragraphIndex)
+                    if (j == savedData.dialogueIndex && i == savedData.passedParagraphId.Count - 1)
                     {
-                        data.Name = nowDialogue.Name;
-                        data.text = nowDialogue.text;
-                        data.howBack = BackChangeStyle.FadeAll;
-                        data.backFadeColor = Color.black;
-                        data.backFadeSpeed = 1.0f;
-                        progress = 1;
-                        return data;
+                        break;
                     }
 
                     progress += (100 / savedData.passedParagraphId.Count) / nowParagraph.dialogueList.Count;
                 }
             }
-            Debug.Log("load failed");
-            return null;
+
+            data.howBack = BackChangeStyle.FadeAll;
+            data.backFadeColor = Color.black;
+            data.backFadeSpeed = 1.0f;
+
+            progress = 1;
+            return data;
         }
 
         internal NovelSaveData SaveDialogue(NovelData novelData, int paragraphIndex, int dialogueIndex, List<int> passedParagraphIdList, List<string> choiceName, List<string> ParagraphName)
@@ -244,7 +243,7 @@ namespace NovelEditor
             this.novelData = novelData;
             this.paragraphIndex = paragraphIndex;
             this.dialogueIndex = dialogueIndex;
-            this.passedParagraphId = passedParagraphId;
+            this.passedParagraphId = new List<int>(passedParagraphId);
             this.ParagraphName = new List<string>(ParagraphName);
             this.choiceName = new List<string>(choiceName);
         }

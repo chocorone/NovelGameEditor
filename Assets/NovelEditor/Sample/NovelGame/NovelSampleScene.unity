@@ -4227,7 +4227,7 @@ MonoBehaviour:
   _dialogueSprite: {fileID: 21300000, guid: 5f312266f9494ff4fa287a5417955836, type: 3}
   _nonameDialogueSprite: {fileID: 21300000, guid: e0adb5d54e03383479b3e66d40689bb3, type: 3}
   _playOnAwake: 1
-  _hideAfterPlay: 1
+  _hideAfterPlay: 0
   _hideFadeTime: 1
   _isDisplay: 1
   _charaFadeTime: 0.2
