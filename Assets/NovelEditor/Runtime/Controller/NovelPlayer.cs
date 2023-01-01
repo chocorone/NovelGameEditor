@@ -376,10 +376,13 @@ namespace NovelEditor
             _isLoading = true;
             _textCTS.Cancel();
             _choiceCTS.Cancel();
+
             SkipedData newData = SaveUtility.Instance.Skip(_novelData, _nowParagraph.index, _nextDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
-            UnPause();
             if (OnSkiped != null)
                 OnSkiped();
+
+            UnPause();
+
             if (newData.next == Next.Choice)
             {
                 _nowParagraph = novelData.paragraphList[newData.ParagraphIndex];
@@ -390,8 +393,8 @@ namespace NovelEditor
             {
                 end();
             }
-            _isLoading = false;
 
+            _isLoading = false;
         }
 
         /// <summary>
@@ -399,38 +402,41 @@ namespace NovelEditor
         /// </summary>
         public void SkipNextNode()
         {
-            if (!_isChoicing && !_isImageChangeing)
+            if (_isChoicing || _isImageChangeing)
             {
-                _isLoading = true;
-                _textCTS.Cancel();
-                _choiceCTS.Cancel();
-
-                NovelData.ParagraphData.Dialogue newData = SaveUtility.Instance.SkipNextNode(novelData, _nowParagraph, _nextDialogueNum, _novelUI.GetNowBack());
-                UnPause();
-                if (OnSkiped != null)
-                    OnSkiped();
-
-                switch (_nowParagraph.next)
-                {
-                    case Next.Choice:
-                        _nextDialogueNum = _nowParagraph.dialogueList.Count;
-                        break;
-                    case Next.Continue:
-                        _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
-                        _nextDialogueNum = 0;
-                        _passedParagraphID.Add(_nowParagraph.index);
-                        _ParagraphName.Add(_nowParagraph.nodeName);
-                        if (ParagraphNodeChanged != null)
-                            ParagraphNodeChanged(_nowParagraph.nodeName);
-                        break;
-                    case Next.End:
-                        end();
-                        return;
-                }
-
-                SetNextDialogue(newData);
-                _isLoading = false;
+                return;
             }
+            _isLoading = true;
+            _textCTS.Cancel();
+            _choiceCTS.Cancel();
+
+            NovelData.ParagraphData.Dialogue newData = SaveUtility.Instance.SkipNextNode(novelData, _nowParagraph, _nextDialogueNum, _novelUI.GetNowBack());
+
+            if (OnSkiped != null)
+                OnSkiped();
+
+            UnPause();
+            switch (_nowParagraph.next)
+            {
+                case Next.Choice:
+                    _nextDialogueNum = _nowParagraph.dialogueList.Count;
+                    break;
+                case Next.Continue:
+                    _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
+                    _nextDialogueNum = 0;
+                    _passedParagraphID.Add(_nowParagraph.index);
+                    _ParagraphName.Add(_nowParagraph.nodeName);
+                    if (ParagraphNodeChanged != null)
+                        ParagraphNodeChanged(_nowParagraph.nodeName);
+                    break;
+                case Next.End:
+                    end();
+                    return;
+            }
+
+            SetNextDialogue(newData);
+            _isLoading = false;
+
         }
 
         /// <summary>
