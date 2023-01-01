@@ -41,7 +41,7 @@ namespace NovelEditor
         private ChoiceManager _choiceManager;
 
         private NovelData.ParagraphData _nowParagraph;
-        private int _nowDialogueNum = 0;
+        private int _nextDialogueNum = 0;
 
         private bool _isReading = false;
         private bool _isImageChangeing = false;
@@ -307,7 +307,7 @@ namespace NovelEditor
 
             Reset(true);
 
-            _nowDialogueNum = saveData.dialogueIndex;
+            _nextDialogueNum = saveData.dialogueIndex;
             _nowParagraph = _novelData.paragraphList[saveData.paragraphIndex];
             _ParagraphName = saveData.ParagraphName;
             _choiceName = saveData.choiceName;
@@ -376,14 +376,14 @@ namespace NovelEditor
             _isLoading = true;
             _textCTS.Cancel();
             _choiceCTS.Cancel();
-            SkipedData newData = SaveUtility.Instance.Skip(_novelData, _nowParagraph.index, _nowDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
+            SkipedData newData = SaveUtility.Instance.Skip(_novelData, _nowParagraph.index, _nextDialogueNum, _passedParagraphID, _ParagraphName, _novelUI.GetNowBack());
             UnPause();
             if (OnSkiped != null)
                 OnSkiped();
             if (newData.next == Next.Choice)
             {
                 _nowParagraph = novelData.paragraphList[newData.ParagraphIndex];
-                _nowDialogueNum = _nowParagraph.dialogueList.Count;
+                _nextDialogueNum = _nowParagraph.dialogueList.Count;
                 SetNextDialogue(newData.dialogue);
             }
             else
@@ -405,7 +405,7 @@ namespace NovelEditor
                 _textCTS.Cancel();
                 _choiceCTS.Cancel();
 
-                NovelData.ParagraphData.Dialogue newData = SaveUtility.Instance.SkipNextNode(novelData, _nowParagraph, _nowDialogueNum, _novelUI.GetNowBack());
+                NovelData.ParagraphData.Dialogue newData = SaveUtility.Instance.SkipNextNode(novelData, _nowParagraph, _nextDialogueNum, _novelUI.GetNowBack());
                 UnPause();
                 if (OnSkiped != null)
                     OnSkiped();
@@ -413,11 +413,11 @@ namespace NovelEditor
                 switch (_nowParagraph.next)
                 {
                     case Next.Choice:
-                        _nowDialogueNum = _nowParagraph.dialogueList.Count;
+                        _nextDialogueNum = _nowParagraph.dialogueList.Count;
                         break;
                     case Next.Continue:
                         _nowParagraph = _novelData.paragraphList[_nowParagraph.nextParagraphIndex];
-                        _nowDialogueNum = 0;
+                        _nextDialogueNum = 0;
                         _passedParagraphID.Add(_nowParagraph.index);
                         _ParagraphName.Add(_nowParagraph.nodeName);
                         if (ParagraphNodeChanged != null)
@@ -439,7 +439,7 @@ namespace NovelEditor
         /// <returns>セーブデータ</returns>
         public NovelSaveData save()
         {
-            return SaveUtility.Instance.SaveDialogue(novelData, _nowParagraph.index, _nowDialogueNum - 1, _passedParagraphID, ChoiceName, ParagraphName);
+            return SaveUtility.Instance.SaveDialogue(novelData, _nowParagraph.index, _nextDialogueNum - 1, _passedParagraphID, ChoiceName, ParagraphName);
         }
 
 
@@ -599,8 +599,8 @@ namespace NovelEditor
                 _passedParagraphID.Add(_nowParagraph.index);
                 if (ParagraphNodeChanged != null)
                     ParagraphNodeChanged(_nowParagraph.nodeName);
-                _nowDialogueNum = 0;
-                SetNextDialogue(_nowParagraph.dialogueList[_nowDialogueNum]);
+                _nextDialogueNum = 0;
+                SetNextDialogue(_nowParagraph.dialogueList[_nextDialogueNum]);
             }
         }
 
@@ -609,7 +609,7 @@ namespace NovelEditor
         /// </summary>
         void SetNext()
         {
-            if (_nowDialogueNum >= _nowParagraph.dialogueList.Count)
+            if (_nextDialogueNum >= _nowParagraph.dialogueList.Count)
             {
                 switch (_nowParagraph.next)
                 {
@@ -626,7 +626,7 @@ namespace NovelEditor
             }
             else
             {
-                SetNextDialogue(_nowParagraph.dialogueList[_nowDialogueNum]);
+                SetNextDialogue(_nowParagraph.dialogueList[_nextDialogueNum]);
             }
         }
 
@@ -683,7 +683,7 @@ namespace NovelEditor
             //テキストを1文字ずつ再生
             _textCTS = new CancellationTokenSource();
             _isReading = true;
-            _nowDialogueNum++;
+            _nextDialogueNum++;
             if (OnDialogueChanged != null)
                 OnDialogueChanged(JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(newData)));
             _isReading = !await _novelUI.SetNextText(newData, _textCTS.Token);
