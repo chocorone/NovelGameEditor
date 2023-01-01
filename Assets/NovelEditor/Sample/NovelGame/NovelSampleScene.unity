@@ -2061,6 +2061,7 @@ GameObject:
   - component: {fileID: 881645467}
   - component: {fileID: 881645469}
   - component: {fileID: 881645468}
+  - component: {fileID: 881645470}
   m_Layer: 2
   m_Name: nameText
   m_TagString: Untagged
@@ -2085,7 +2086,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -97, y: 12.28}
+  m_AnchoredPosition: {x: -97, y: 12.279999}
   m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &881645468
@@ -2185,6 +2186,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881645466}
   m_CullTransparentMesh: 1
+--- !u!114 &881645470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881645466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98d764d75ae1492cac29624bdcacf83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &882359439
 GameObject:
   m_ObjectHideFlags: 0
@@ -4183,7 +4196,7 @@ MonoBehaviour:
   _backGround: {fileID: 1048097707}
   _dialogueImage: {fileID: 1201859865}
   _dialogueText: {fileID: 755978525}
-  _nameText: {fileID: 881645468}
+  _nameText: {fileID: 881645470}
   UIparents: {fileID: 1003131132}
 --- !u!225 &1860320039
 CanvasGroup:
