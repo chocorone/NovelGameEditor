@@ -410,12 +410,19 @@ namespace NovelEditor
             _textCTS.Cancel();
             _choiceCTS.Cancel();
 
+            if (_nowParagraph.next == Next.End || _nowParagraph.nextParagraphIndex == -1)
+            {
+                end();
+                return;
+            }
+
             NovelData.ParagraphData.Dialogue newData = SaveUtility.Instance.SkipNextNode(novelData, _nowParagraph, _nextDialogueNum, _novelUI.GetNowBack());
 
             if (OnSkiped != null)
                 OnSkiped();
 
             UnPause();
+
             switch (_nowParagraph.next)
             {
                 case Next.Choice:
@@ -429,9 +436,6 @@ namespace NovelEditor
                     if (ParagraphNodeChanged != null)
                         ParagraphNodeChanged(_nowParagraph.nodeName);
                     break;
-                case Next.End:
-                    end();
-                    return;
             }
 
             SetNextDialogue(newData);
