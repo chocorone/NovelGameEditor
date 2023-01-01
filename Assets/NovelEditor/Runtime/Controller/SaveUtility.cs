@@ -11,6 +11,10 @@ namespace NovelEditor
     /// </summary>
     internal class SaveUtility
     {
+        /// <summary>
+        /// ロードの進捗を0~1で返す
+        /// </summary>
+        /// <value>ロードの進捗</value>
         internal float progress { get; private set; } = 0;
 
         static SaveUtility instance;
@@ -30,9 +34,16 @@ namespace NovelEditor
         SaveUtility()
         { }
 
+        /// <summary>
+        /// セーブデータからロードを行う
+        /// </summary>
+        /// <param name="savedData">Save()で取得したデータ</param>
+        /// <returns>次のセリフのデータ</returns>
         internal NovelData.ParagraphData.Dialogue LoadDialogue(NovelSaveData savedData)
         {
             progress = 0;
+
+            //次のセリフを一番最初のセリフで初期化
             NovelData.ParagraphData.Dialogue first = savedData.novelData.paragraphList[0].dialogueList[0];
             NovelData.ParagraphData.Dialogue data = JsonUtility.FromJson<NovelData.ParagraphData.Dialogue>(JsonUtility.ToJson(first));
             if (data.BGMStyle == SoundStyle.UnChange)
@@ -52,9 +63,13 @@ namespace NovelEditor
                 if (data.charaEffects[i] == Effect.UnChange)
                     data.charaEffects[i] = Effect.None;
             }
+
+            //通過したノードを全て確認する
             foreach (var i in savedData.passedParagraphId)
             {
                 NovelData.ParagraphData nowParagraph = savedData.novelData.paragraphList[i];
+
+                //通過したノードのセリフの立ち絵を全て確認する
                 for (int j = 0; j < nowParagraph.dialogueList.Count; j++)
                 {
                     NovelData.ParagraphData.Dialogue nowDialogue = nowParagraph.dialogueList[j];

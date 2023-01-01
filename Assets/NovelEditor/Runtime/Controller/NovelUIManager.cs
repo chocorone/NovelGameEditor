@@ -22,7 +22,7 @@ namespace NovelEditor
         [SerializeField] NovelBackGround _backGround;
         [SerializeField] DialogueImage _dialogueImage;
         [SerializeField] DialogueText _dialogueText;
-        [SerializeField] TextMeshProUGUI _nameText;
+        [SerializeField] NameText _nameText;
         [SerializeField] CanvasGroup UIparents;
         public bool canFlush => _dialogueText.canFlush;
 
@@ -49,6 +49,7 @@ namespace NovelEditor
             imageManager.Init(data, isLoad);
             DeleteText();
             _dialogueText.SetDefaultFont();
+            _nameText.SetDefaultFont();
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace NovelEditor
         {
             //テキストを初期化
             _dialogueText.DeleteText();
-            _nameText.text = "";
+            _nameText.DeleteText();
         }
 
         /// <summary>
@@ -141,7 +142,8 @@ namespace NovelEditor
         /// <param name="token">使用するCancellationToken</param>
         internal async UniTask<bool> SetNextText(NovelData.ParagraphData.Dialogue data, CancellationToken token)
         {
-            UpdateNameText(data);
+
+            _nameText.UpdateNameText(data);
             return await _dialogueText.textUpdate(data, token);
         }
 
@@ -189,23 +191,6 @@ namespace NovelEditor
         internal Sprite GetNowBack()
         {
             return _backGround.image.sprite;
-        }
-
-        /// <summary>
-        /// 名前のテキストを設定する
-        /// </summary>
-        /// <param name="data">次のセリフのデータ</param>
-        void UpdateNameText(NovelData.ParagraphData.Dialogue data)
-        {
-            //名前のフォントなど変更
-            _nameText.text = data.Name;
-            if (data.changeNameFont)
-            {
-                _nameText.color = data.nameColor;
-
-                if (data.nameFont != null)
-                    _nameText.font = data.nameFont;
-            }
         }
     }
 }
