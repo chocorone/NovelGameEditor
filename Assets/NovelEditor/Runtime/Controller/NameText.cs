@@ -6,7 +6,7 @@ using TMPro;
 namespace NovelEditor
 {
     [RequireComponent(typeof(TextMeshProUGUI))]
-    public class NameText : MonoBehaviour
+    internal class NameText : MonoBehaviour
     {
         TextMeshProUGUI tmpro;
 
