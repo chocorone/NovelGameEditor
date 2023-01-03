@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 323227169}
   - component: {fileID: 323227171}
   - component: {fileID: 323227170}
+  - component: {fileID: 323227172}
   m_Layer: 5
   m_Name: nameText
   m_TagString: Untagged
@@ -258,6 +259,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 323227168}
   m_CullTransparentMesh: 1
+--- !u!114 &323227172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323227168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98d764d75ae1492cac29624bdcacf83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &374178774
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +329,7 @@ MonoBehaviour:
   _backGround: {fileID: 776367064}
   _dialogueImage: {fileID: 591621656}
   _dialogueText: {fileID: 1122345478}
-  _nameText: {fileID: 323227170}
+  _nameText: {fileID: 323227172}
   UIparents: {fileID: 1918509344}
 --- !u!225 &374178777
 CanvasGroup:
@@ -348,7 +361,7 @@ MonoBehaviour:
   _nonameDialogueSprite: {fileID: 21300000, guid: e0adb5d54e03383479b3e66d40689bb3, type: 3}
   _playOnAwake: 1
   _hideAfterPlay: 1
-  _hideFadeTime: 0.5
+  _hideFadeTime: 0.3
   _isDisplay: 1
   _charaFadeTime: 0.5
   _textSpeed: 6
