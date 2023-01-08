@@ -99,7 +99,7 @@ MonoBehaviour:
   _backGround: {fileID: 2895675694588182566}
   _dialogueImage: {fileID: 2895675694151052067}
   _dialogueText: {fileID: 2895675695380759997}
-  _nameText: {fileID: 2895675694330713553}
+  _nameText: {fileID: 3802022457115217652}
   UIparents: {fileID: 2895675695305542650}
 --- !u!1 &2895675694151052065
 GameObject:
@@ -240,6 +240,7 @@ GameObject:
   - component: {fileID: 2895675694330713552}
   - component: {fileID: 2895675694330713554}
   - component: {fileID: 2895675694330713553}
+  - component: {fileID: 3802022457115217652}
   m_Layer: 5
   m_Name: nameText
   m_TagString: Untagged
@@ -364,6 +365,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &3802022457115217652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2895675694330713519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b98d764d75ae1492cac29624bdcacf83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2895675694588182562
 GameObject:
   m_ObjectHideFlags: 0
