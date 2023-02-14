@@ -1,5 +1,5 @@
 {
-    "name": "com.usagi-meteor.rirunee.noveleditor",
+    "name": "com.usagi-meteor.noveleditor",
     "version": "1.0.0",
     "displayName": "Novel Editor",
     "description": "This is an editor to create dialogue system easily.",
@@ -18,5 +18,6 @@
         "name": "Rirunee",
         "email": "meeeeeeeeenya@yahoo.co.jp",
         "url": "https://usagi-meteor.com/"
-    }
+    },
+    "license": "MPL"
 }
