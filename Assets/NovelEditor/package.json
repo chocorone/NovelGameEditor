@@ -1,5 +1,5 @@
 {
-    "name": "rirunee.noveleditor",
+    "name": "com.usagi-meteor.rirunee.noveleditor",
     "version": "1.0.0",
     "displayName": "Novel Editor",
     "description": "This is an editor to create dialogue system easily.",
